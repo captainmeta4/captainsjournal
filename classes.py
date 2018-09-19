@@ -9,14 +9,14 @@ c=conn.cursor()
 c.execute("ROLLBACK TRANSACTION")
 
 #prepare parameterized sql statements
-c.execute("PREPARE GetUser(name) AS SELECT * FROM Users WHERE reddit_name=$1")
+c.execute("PREPARE GetUser(name) AS SELECT * FROM Users WHERE reddit_name = $1")
 
 class User():
 
     def __init__(self, name):
 
         #sanitize name
-        name=re.search("^[A-Za-z_-]+", name).group(0)
+        name=re.search("^[A-Za-z0-9_-]+", name).group(0)
 
         #check database
         c.execute("EXECUTE GetUser({})".format(name))
