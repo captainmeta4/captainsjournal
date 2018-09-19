@@ -41,7 +41,7 @@ def home():
     
 
 @app.route("/oauth/redirect")
-def redirect():
+def oauth_redirect():
     '''
     Handle incoming redirects from reddit oauth flow
     '''
