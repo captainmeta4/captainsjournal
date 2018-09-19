@@ -16,7 +16,7 @@ class User():
     def __init__(self, name):
 
         #sanitize name
-        name=re.search("^[A-Za-z_-]+", name).group[1]
+        name=re.search("^[A-Za-z_-]+", name).group(0)
 
         #check database
         c.execute("EXECUTE GetUser({})".format(name))
