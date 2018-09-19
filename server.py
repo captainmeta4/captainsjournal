@@ -30,8 +30,8 @@ def temporary_reddit(refresh_token):
 def check_token():
 
     token=request.cookies.get("cj_reddit")
-    if token=None:
-        return None
+    if token==None:
+        raise ValueError('not found')
     else:
         return temporary_reddit(token)
 
@@ -71,11 +71,11 @@ Handle incoming redirects from reddit oauth flow
 
 @app.route("/me")
 def me_page():
-    
-    q=check_token()
-    if q is None:
+    try:
+        q=check_token()
+    except ValueError:
         return redirect('/')
-
+    
     name=q.user.me().name
 
     return redirect('/user/{}'.format(name))
