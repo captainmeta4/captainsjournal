@@ -35,7 +35,7 @@ def check_token():
     else:
         return temporary_reddit(token)
 
-@app.route('/'):
+@app.route('/')
 def home():
     return make_response("home page")
     
@@ -81,7 +81,7 @@ def me_page():
     return redirect('/user/{}'.format(name))
             
 @app.route("/user/<name>")
-def userpage()
+def userpage(name)
 
     try:
         u=User(name)
