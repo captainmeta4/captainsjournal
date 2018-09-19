@@ -7,8 +7,6 @@ from classes import *
 
 #globals
 app=Flask(__name__)
-conn=psycopg2.connect(os.environ.get("DATABASE_URL"))
-c=conn.cursor()
 user_agent="Captain's Journal by /u/captainmeta4"
 r=praw.Reddit(client_id=os.environ.get('client_id'),
               client_secret=os.environ.get('client_secret'),
@@ -54,15 +52,7 @@ def oauth_redirect():
 
     name=q.user.me().name
 
-    #check database
-    s="SELECT * FROM Users WHERE reddit_name=@0"
-    c.execute(s, name)
-    result=c.fetchone()
 
-    if result is None:
-        s="INSERT INTO Users (reddit_name, created_utc, banned, posts, comments, google_analytics) VALUES (@0,NOW,0,'','','')"
-        c.execute(s,name)
-        conn.commit()
 
     resp=make_response(redirect('https://cj.captainmeta4.me/me'))
     resp.set_cookie("cj_reddit", value=token, domain="cj.captainmeta4.me")
@@ -83,8 +73,11 @@ def me_page():
 @app.route("/user/<name>")
 def userpage(name):
 
+    make=bool(request.args.get('make'))
+        
+    
     try:
-        u=User(name)
+        u=User(name, make=make)
     except KeyError:
         abort(404)
 
