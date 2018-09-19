@@ -81,7 +81,7 @@ def me_page():
     return redirect('/user/{}'.format(name))
             
 @app.route("/user/<name>")
-def userpage(name)
+def userpage(name):
 
     try:
         u=User(name)
