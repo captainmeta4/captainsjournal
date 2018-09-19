@@ -12,7 +12,7 @@ class User():
     def __init__(self, name):
 
         #check database
-        c.execute("GetUser({})".format(name))
+        c.execute("EXECUTE GetUser({})".format(name))
         result=c.fetchone()
 
         if result is None:
