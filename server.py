@@ -80,6 +80,8 @@ def userpage(name):
         u=User(name, make=make)
     except KeyError:
         abort(404)
+        
+    print(u.name, u.created, u.id, u.banned)
 
     return render_template("userpage.html", name=u.name, created=u.created, uid=u.id, banned=u.banned)
 
