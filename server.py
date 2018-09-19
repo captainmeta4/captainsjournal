@@ -42,9 +42,9 @@ def home():
 
 @app.route("/oauth/redirect")
 def redirect():
-'''
-Handle incoming redirects from reddit oauth flow
-'''
+    '''
+    Handle incoming redirects from reddit oauth flow
+    '''
 
     #get redditor name
     code = request.args.get('code')
