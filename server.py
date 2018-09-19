@@ -88,10 +88,5 @@ def userpage(name):
     except KeyError:
         abort(404)
 
-    output=("username: {}"
-            "created at: {}"
-            "id: {}"
-            "banned: {}")
-    output=output.format(name,u.created,u.id,str(u.banned))
-    return make_response(output)
+    return render_template("userpage.html", name=u.name, created=u.created, uid=u.id, banned=u.banned)
 

@@ -4,13 +4,15 @@ import os
 conn=psycopg2.connect(os.environ.get("DATABASE_URL"))
 c=conn.cursor()
 
+#prepare parameterized sql statements
+c.execute("PREPARE GetUser(name) AS SELECT * FROM Users WHERE reddit_name=$1")
+
 class User():
 
     def __init__(self, name):
 
         #check database
-        s="SELECT * FROM Users WHERE reddit_name=@0"
-        c.execute(s, name)
+        c.execute("GetUser({})".format(name))
         result=c.fetchone()
 
         if result is None:
