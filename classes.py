@@ -10,7 +10,7 @@ c.execute("ROLLBACK TRANSACTION")
 
 #prepare parameterized sql statements
 c.execute("PREPARE GetUser(name) AS SELECT * FROM Users WHERE reddit_name = $1")
-c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, banned, posts, comments, google_analytics) VALUES ($1,'NOW',0,'','','')")
+c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, banned, posts, comments, google_analytics) VALUES ($1,'NOW','false','','','')")
 
 class User():
 
