@@ -3,6 +3,7 @@ import psycopg2
 import Flask
 import os
 import time
+from classes import *
 
 #globals
 app=Flask.app(__name__)
@@ -69,7 +70,7 @@ Handle incoming redirects from reddit oauth flow
     return resp
 
 @app.route("/me")
-def userpage():
+def me_page():
     
     q=check_token()
     if q is None:
@@ -77,24 +78,20 @@ def userpage():
 
     name=q.user.me().name
 
-    #check database
-    s="SELECT * FROM Users WHERE reddit_name=@0"
-    c.execute(s, name)
-    result=c.fetchone()
+    return redirect('/user/{}'.format(name))
+            
+@app.route("/user/<name>")
+def userpage()
 
-    uid=str(result[0])
-    created=str(result[2])
-    banned=str(bool(result[3]))
+    try:
+        u=User(name)
+    except KeyError:
+        abort(404)
 
     output=("username: {}"
             "created at: {}"
             "id: {}"
             "banned: {}")
-    output=output.format(name,created,uid,banned)
+    output=output.format(name,u.created,u.id,str(u.banned))
     return make_response(output)
-            
-
-
-    
-    
 
