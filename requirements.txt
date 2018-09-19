@@ -1,3 +1,4 @@
 praw
 Flask
 Flask-Markdown
+psycopg2
