@@ -9,7 +9,7 @@ c=conn.cursor()
 c.execute("ROLLBACK TRANSACTION")
 
 #prepare parameterized sql statements
-c.execute("PREPARE GetUser(name) AS SELECT * FROM Users WHERE reddit_name = $1")
+c.execute("PREPARE GetUser(name) AS SELECT * FROM Users WHERE reddit_name = '$1'")
 
 class User():
 
