@@ -1,4 +1,5 @@
-praw
-Flask
-Flask-Markdown
-psycopg2
+praw==6.0.0
+Flask==0.12.2
+Flask-Markdown==0.3
+psycopg2==2.7.5
+gunicorn==19.9.0
