@@ -1,12 +1,12 @@
 import praw
 import psycopg2
-import Flask
+from flask import *
 import os
 import time
 from classes import *
 
 #globals
-app=Flask.app(__name__)
+app=Flask(__name__)
 conn=psycopg2.connect(os.environ.get("DATABASE_URL"))
 c=conn.cursor()
 user_agent="Captain's Journal by /u/captainmeta4"
