@@ -34,3 +34,5 @@ class User():
         self.id=str(result[0])
         self.created=str(result[2])
         self.banned=bool(result[3])
+
+        print(self.id, self.name, self.created)
