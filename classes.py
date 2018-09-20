@@ -48,8 +48,8 @@ class User():
         print(result)
         self.id=str(result[0])
         self.name=result[1]
-        self.created=str(result[2])
-        self.banned=bool(result[3])
+        self.created=result[2]
+        self.banned=bool(result[4])
 
     def render_userpage(self):
 
