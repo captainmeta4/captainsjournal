@@ -45,7 +45,7 @@ class User():
             result=c.fetchone()
         elif result is None:
             return None
-
+        print(result)
         self.id=str(result[0])
         self.name=result[1]
         self.created=str(result[2])
@@ -68,6 +68,7 @@ class Story():
 
         if result is None:
             raise KeyError('story with that id does not exist')
+
 
         self.id=int(result[0])
         self.author_id=int(result[7])
