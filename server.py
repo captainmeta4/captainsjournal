@@ -73,14 +73,22 @@ def me_page():
 
     return redirect('/user/{}'.format(name))
             
-@app.route("/user/<name>")
+@app.route("/u/<name>")
 def userpage(name):
-        
     
     try:
-        u=User(name)
+        u=User(name=name)
     except KeyError:
         abort(404)
 
     return u.render_userpage()
 
+@app.route("/s/<sid>")
+def storypage(sid):
+
+    try:
+        s=Story(sid)
+    except KeyError:
+        abort(404)
+
+    return s.render_storypage()

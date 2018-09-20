@@ -1,0 +1,19 @@
+{% extends "default.html" %}
+
+{% block content %}
+<h1>{{ s.title }}</h1>
+<p>by <a href="/u/{{ s.author.name }}">{{ s.author.name }}</a></p>
+{% if s.banned %}
+<p><b><span class="red">[This story has been removed by the site administrators.]</span></b></p>
+{% else %}
+{% if s.pre %}
+<p><b>Author's Note:<b> {% filter markdown %}{{ s.pre }}{% endfilter %}</p>
+<hr>
+{% endif %}
+{% filter markdown %}{{ story }}{% endfilter %}
+{% if post %}
+<hr>
+<p><b>Author's Note:<b> {% filter markdown %}{{ s.post }}{% endfilter %}</p>
+{% endif %}
+{% endif %}
+{% endblock %}
