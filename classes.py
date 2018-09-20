@@ -11,12 +11,12 @@ c.execute("ROLLBACK TRANSACTION")
 
 #prepare parameterized sql statements
 #for users
-c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, banned, posts, comments, google_analytics) VALUES ($1,'NOW','false','','','')")
+c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, banned, google_analytics) VALUES ($1,'NOW','false','')")
 c.execute("PREPARE GetUserByName(name) AS SELECT * FROM Users WHERE reddit_name = $1")
 c.execute("PREPARE GetUserById(uid) AS SELECT * FROM Users WHERE id = $1")
 
 #for stories
-c.execute("PREPARE MakeStory(id, pre, story, post) AS INSERT INTO Stories (author_id, created, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, 'false')")
+c.execute("PREPARE MakeStory(id, pre, story, post) AS INSERT INTO Stories (author, created, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, 'false')")
 c.execute("PREPARE GetStoryById(sid) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthorId(uid) AS SELECT * FROM Stories WHERE author_id = $1")
 
@@ -46,8 +46,8 @@ class User():
         elif result is None:
             return None
 
-        self.name=name
         self.id=str(result[0])
+        self.name=result[1]
         self.created=str(result[2])
         self.banned=bool(result[3])
 
@@ -70,15 +70,15 @@ class Story():
             raise KeyError('story with that id does not exist')
 
         self.id=int(result[0])
-        self.author_id=int(result[1])
-        self.created=result[2]
-        self.pre=result[3]
-        self.story=result[4]
-        self.post=result[5]
-        self.banned=bool(result[6])
-        self.title=result[7]
+        self.author=int(result[7])
+        self.created=result[1]
+        self.pre=result[2]
+        self.story=result[3]
+        self.post=result[4]
+        self.banned=bool(result[5])
+        self.title=result[6]
 
-        self.author=User(uid=self.id)
+        self.author=User(name=self.author)
 
     def render_storypage(self):
         return render_template('storypage.html', s=self)
