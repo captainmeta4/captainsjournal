@@ -11,6 +11,8 @@
 <ul>
 {% for story in stories|sort(attribute='id') %}
 <li><a href="{{ story.url }}">{{ story.title }}</a></li>
+{% else %}
+<li><em>None yet!</em>
 {% endfor %}
 </ul>
 {% endif %}
