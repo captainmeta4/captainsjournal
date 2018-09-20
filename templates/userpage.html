@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{{ u.name }}{% if u.banned %} <span class="red">is banned!</span>{% endif %}</h1>
 
-<p>User since: {{ str(u.created) }}</p>
+<p>User since: {{ u.created }}</p>
 <p>ID: {{ u.id }}</p>
 
 
