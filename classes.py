@@ -1,7 +1,7 @@
 import psycopg2
 import os
 import re
-from Flask import *
+from flask import *
 
 conn=psycopg2.connect(os.environ.get("DATABASE_URL"))
 c=conn.cursor()
