@@ -10,8 +10,8 @@
 		<p><b>Author's Note:</b> {% filter markdown %}{{ s.pre }}{% endfilter %}</p>
 		<hr>
 	{% endif %}
-	{% filter markdown %}{{ story }}{% endfilter %}
-	{% if post %}
+	{% filter markdown %}{{ s.story }}{% endfilter %}
+	{% if s.post %}
 		<hr>
 		<p><b>Author's Note:</b> {% filter markdown %}{{ s.post }}{% endfilter %}</p>
 	{% endif %}
