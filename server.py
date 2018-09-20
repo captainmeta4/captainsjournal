@@ -89,7 +89,7 @@ def userpage(name):
 def storypage(sid):
 
     try:
-        s=Story(sid)
+        s=Story(sid, load_author=True)
     except KeyError:
         abort(404)
 

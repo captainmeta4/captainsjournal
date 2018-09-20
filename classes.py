@@ -58,23 +58,30 @@ class User():
         return render_template('userpage.html', u=self, stories=self.stories())
 
     def stories(self):
+        
 
         c.execute("EXECUTE GetStoriesByAuthorId('{}')".format(self.id))
-        return c.fetchall()
+        output=[]
+        for l in c.fetchall():
+            output.append(Story(result=l))
+
+        return output
+            
 
 class Story():
 
-    def __init__(self, sid, make=False):
-
-        #sanitize id
-        sid=re.search("^[0-9]+", str(sid)).group(0)
-
-        #check database
-        c.execute("EXECUTE GetStoryById('{}')".format(sid))
-        result=c.fetchone()
+    def __init__(self, sid=0, result=None, make=False, load_author=False):
 
         if result is None:
-            raise KeyError('story with that id does not exist')
+            #sanitize id
+            sid=re.search("^[0-9]+", str(sid)).group(0)
+
+            #check database
+            c.execute("EXECUTE GetStoryById('{}')".format(sid))
+            result=c.fetchone()
+
+            if result is None:
+                raise KeyError('story with that id does not exist')
 
 
         self.id=int(result[0])
@@ -87,7 +94,11 @@ class Story():
         self.author_id=int(result[7])
         self.url="/s/{}".format(self.id)
         self.created_date=str(self.created).split()[0]
-        self.author=User(uid=self.author_id)
+
+        if load_author:
+            self.author=User(uid=self.author_id)
+        else:
+            self.author=None
 
     def render_storypage(self):
         return render_template('storypage.html', s=self, author=self.author)
