@@ -13,6 +13,10 @@ r=praw.Reddit(client_id=os.environ.get('client_id'),
               redirect_uri="https://cj.captainmeta4.me/oauth/redirect",
               user_agent=user_agent)
 
+@app.route('/assets/<path:path>')
+def static_service(path):
+    return send_from_directory('assets', path)
+
 def temporary_reddit(refresh_token):
 
     '''
@@ -80,8 +84,6 @@ def userpage(name):
         u=User(name, make=make)
     except KeyError:
         abort(404)
-        
-    print(u.name, u.created, u.id, u.banned)
 
     return render_template("userpage.html", name=u.name, created=u.created, uid=u.id, banned=u.banned)
 
