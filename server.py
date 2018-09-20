@@ -1,5 +1,4 @@
 import praw
-import psycopg2
 from flask import *
 import os
 import time
@@ -39,7 +38,7 @@ def check_token():
 
 @app.route('/')
 def home():
-    return make_response("home page")
+    return render_template('home.html')
     
 
 @app.route("/oauth/redirect")
