@@ -1,6 +1,7 @@
 import psycopg2
 import os
 import re
+from Flask import *
 
 conn=psycopg2.connect(os.environ.get("DATABASE_URL"))
 c=conn.cursor()
@@ -35,4 +36,6 @@ class User():
         self.created=str(result[2])
         self.banned=bool(result[3])
 
-        print(self.id, self.name, self.created)
+    def render_userpage(self):
+
+        return render_template('userpage.html', u=self)

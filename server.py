@@ -76,14 +76,12 @@ def me_page():
             
 @app.route("/user/<name>")
 def userpage(name):
-
-    make=bool(request.args.get('make'))
         
     
     try:
-        u=User(name, make=make)
+        u=User(name)
     except KeyError:
         abort(404)
 
-    return render_template("userpage.html", name=u.name, created=u.created, uid=u.id, banned=u.banned)
+    return u.render_userpage()
 

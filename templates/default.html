@@ -1,16 +1,23 @@
 <!doctype html>
 <head>
- <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-126102866-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-126102866-1');
+  </script>
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 </head>
 <body>
   <header>
-    <h1>Header</h1>
+    {% include "header.html" %}
   </header>
   <section>
-    <p>Content should go here</p>
     {% block content %}{% endblock %}
   </section>
   <footer>
-    <p>Footer</p>
+    {% include "footer.html" %}
   </footer>
 </body
