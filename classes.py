@@ -2,6 +2,7 @@ import psycopg2
 import os
 import re
 from flask import *
+from flaskext.markdown import Markdown
 
 conn=psycopg2.connect(os.environ.get("DATABASE_URL"))
 c=conn.cursor()
