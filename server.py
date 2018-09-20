@@ -7,6 +7,7 @@ from flaskext.markdown import Markdown
 
 #globals
 app=Flask(__name__)
+Markdown(app)
 user_agent="Captain's Journal by /u/captainmeta4"
 r=praw.Reddit(client_id=os.environ.get('client_id'),
               client_secret=os.environ.get('client_secret'),
