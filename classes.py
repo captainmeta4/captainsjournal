@@ -13,10 +13,11 @@ c.execute("ROLLBACK TRANSACTION")
 #for users
 c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, banned, google_analytics) VALUES ($1,'NOW','false','')")
 c.execute("PREPARE GetUserByName(name) AS SELECT * FROM Users WHERE reddit_name = $1")
+c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 
 #for stories
-c.execute("PREPARE MakeStory(id, pre, story, post) AS INSERT INTO Stories (author, created, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, 'false')")
-c.execute("PREPARE GetStoryById(sid) AS SELECT * FROM Stories WHERE id = $1")
+c.execute("PREPARE MakeStory(author_id, pre, story, post) AS INSERT INTO Stories (author_id, created, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, 'false')")
+c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthor(name) AS SELECT * FROM Stories WHERE author = $1")
 
 class User():
@@ -34,7 +35,7 @@ class User():
             name=re.search("^[A-Za-z0-9_-]+", name).group(0)
             c.execute("EXECUTE GetUserByName('{}')".format(name))
         elif uid:
-            c.execute("EXECUTE GetUserByName('{}')".format(str(uid)))
+            c.execute("EXECUTE GetUserById({})".format(str(uid)))
 
         result=c.fetchone()
 
@@ -69,7 +70,7 @@ class Story():
             raise KeyError('story with that id does not exist')
 
         self.id=int(result[0])
-        self.author=int(result[7])
+        self.author_id=int(result[7])
         self.created=result[1]
         self.pre=result[2]
         self.story=result[3]
@@ -77,7 +78,7 @@ class Story():
         self.banned=bool(result[5])
         self.title=result[6]
 
-        self.author=User(name=self.author)
+        self.author=User(uid=self.author_id)
 
     def render_storypage(self):
         return render_template('storypage.html', s=self)
