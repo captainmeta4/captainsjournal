@@ -13,12 +13,12 @@ c.execute("ROLLBACK TRANSACTION")
 #for users
 c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, banned, posts, comments, google_analytics) VALUES ($1,'NOW','false','','','')")
 c.execute("PREPARE GetUserByName(name) AS SELECT * FROM Users WHERE reddit_name = $1")
-c.execute("PREPARE GetUserById(id) AS SELECT * FROM Users WHERE id = $1")
+c.execute("PREPARE GetUserById(uid) AS SELECT * FROM Users WHERE id = $1")
 
 #for stories
 c.execute("PREPARE MakeStory(id, pre, story, post) AS INSERT INTO Stories (author_id, created, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, 'false')")
-c.execute("PREPARE GetStoryById(id) AS SELECT * FROM Stories WHERE id = $1")
-c.execute("PREPARE GetStoriesByAuthor(id) AS SELECT * FROM Stories WHERE author_id = $1")
+c.execute("PREPARE GetStoryById(sid) AS SELECT * FROM Stories WHERE id = $1")
+c.execute("PREPARE GetStoriesByAuthorId(uid) AS SELECT * FROM Stories WHERE author_id = $1")
 
 class User():
 
