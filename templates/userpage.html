@@ -8,7 +8,7 @@
 
 {% if not u.banned %}
 <hr>
-<h6>Stories:</h6>
+<p><b>Stories:</b></p>
 <ul>
 {% for story in stories|sort(attribute='id') %}
 <li><a href="{{ story.url }}">{{ story.title }}</a></li>
