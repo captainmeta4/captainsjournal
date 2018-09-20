@@ -55,7 +55,6 @@ class User():
 
     def render_userpage(self):
 
-
         return render_template('userpage.html', u=self, stories=self.stories())
 
     def stories(self):
@@ -85,6 +84,7 @@ class Story():
         self.post=result[4]
         self.banned=bool(result[5])
         self.title=result[6]
+        self.author_id=int(result[7])
         self.url="/s/{}".format(self.id)
         self.created_date=str(self.created).split()[0]
         self.author=User(uid=self.author_id)
