@@ -35,7 +35,7 @@ class User():
             name=re.search("^[A-Za-z0-9_-]+", name).group(0)
             c.execute("EXECUTE GetUserByName('{}')".format(name))
         elif uid:
-            c.execute("EXECUTE GetUserById({})".format(str(uid)))
+            c.execute("EXECUTE GetUserById('{}')".format(str(uid)))
 
         result=c.fetchone()
 
@@ -55,9 +55,8 @@ class User():
 
     def render_userpage(self):
 
-        stories=self.stories()
 
-        return render_template('userpage.html', u=self, stories=stories)
+        return render_template('userpage.html', u=self, stories=self.stories())
 
     def stories(self):
 
@@ -80,7 +79,6 @@ class Story():
 
 
         self.id=int(result[0])
-        self.author_id=int(result[7])
         self.created=result[1]
         self.pre=result[2]
         self.story=result[3]
@@ -89,10 +87,7 @@ class Story():
         self.title=result[6]
         self.url="/s/{}".format(self.id)
         self.created_date=str(self.created).split()[0]
-
-    def author(self):
-
-        return User(uid=self.author_id)
+        self.author=User(uid=self.author_id)
 
     def render_storypage(self):
-        return render_template('storypage.html', s=self)
+        return render_template('storypage.html', s=self, author=self.author)
