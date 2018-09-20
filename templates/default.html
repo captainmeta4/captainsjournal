@@ -15,15 +15,12 @@
         //toggle night mode
         var toggle = document.getElementById("night-toggle");
         var page = document.getElementById("body");
-	var widget = document.getElementById("discord-widget")
         if (toggle.checked == true){
           page.classList.add("night");
-	  widget.src="https://discordapp.com/widget?id=449916896117129237&theme=dark"
           setCookie("NightMode","true",365);
         }
         else {
           page.classList.remove("night");
-	  widget.src="https://discordapp.com/widget?id=449916896117129237&theme=light"
           setCookie("NightMode","false",365);
         }
       }
