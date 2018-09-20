@@ -3,8 +3,17 @@
 {% block content %}
 <h1>{{ u.name }}{% if u.banned %} <span class="red">is banned!</span>{% endif %}</h1>
 
-<p>User since: {{ u.created.split()[0] }}</p>
+<p>User since: {{ u.created_date }}</p>
 <p>ID: {{ u.id }}</p>
 
+{% if stories and not u.banned %}
+{% assign s = stories | sort: "id" %}
+<hr>
+<
+<ul>
+{% for story in s %}
+<li><a href="{{ story.url }}">{{ story.title }}</a></li>
+{% endfor %}
+</ul>
 
 {% endblock %}

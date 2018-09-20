@@ -18,7 +18,7 @@ c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text) AS INSERT INTO Stories (author_id, created, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, 'false')")
 c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
-c.execute("PREPARE GetStoriesByAuthor(int) AS SELECT * FROM Stories WHERE author_id = $1")
+c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE author_id = $1")
 
 class User():
 
@@ -45,15 +45,23 @@ class User():
             result=c.fetchone()
         elif result is None:
             return None
-        print(result)
+
         self.id=str(result[0])
         self.name=result[1]
         self.created=result[2]
         self.banned=bool(result[4])
+        self.url="/u/{}".format(self.id)
 
     def render_userpage(self):
 
-        return render_template('userpage.html', u=self)
+        stories=self.stories()
+
+        return render_template('userpage.html', u=self, stories=stories)
+
+    def stories(self):
+
+        c.execute("EXECUTE GetStoriesByAuthorId('{}')".format(self.id))
+        return c.fetchall()
 
 class Story():
 
@@ -78,8 +86,12 @@ class Story():
         self.post=result[4]
         self.banned=bool(result[5])
         self.title=result[6]
+        self.url="/s/{}".format(self.id)
+        self.created_date=str(self.created).split()[0]
 
-        self.author=User(uid=self.author_id)
+    def author(self):
+
+        return User(uid=self.author_id)
 
     def render_storypage(self):
         return render_template('storypage.html', s=self)
