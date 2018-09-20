@@ -6,14 +6,13 @@
 <p>User since: {{ u.created_date }}</p>
 <p>ID: {{ u.id }}</p>
 
-{% if stories and not u.banned %}
-{% assign s = stories | sort: "id" %}
+{% if not u.banned %}
 <hr>
-<
 <ul>
-{% for story in s %}
+{% for story in stories|sort(attribute='id') %}
 <li><a href="{{ story.url }}">{{ story.title }}</a></li>
 {% endfor %}
 </ul>
+{% endif %}
 
 {% endblock %}
