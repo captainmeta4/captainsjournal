@@ -16,7 +16,7 @@ c.execute("PREPARE GetUserByName(name) AS SELECT * FROM Users WHERE reddit_name 
 c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 
 #for stories
-c.execute("PREPARE MakeStory(int, pre, story, post) AS INSERT INTO Stories (author_id, created, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, 'false')")
+c.execute("PREPARE MakeStory(int, text, text, text) AS INSERT INTO Stories (author_id, created, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, 'false')")
 c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthor(name) AS SELECT * FROM Stories WHERE author = $1")
 
