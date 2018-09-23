@@ -4,3 +4,4 @@ Flask-Markdown==0.3
 psycopg2==2.7.5
 gunicorn==19.9.0
 bleach==2.1.4
+mistletoe==0.7.1
