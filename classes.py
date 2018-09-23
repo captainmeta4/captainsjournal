@@ -33,15 +33,15 @@ class User():
         if name:
             #sanitize name
             name=re.search("^[A-Za-z0-9_-]+", name).group(0)
-            c.execute("EXECUTE GetUserByName('@0')", (name,))
+            c.execute("EXECUTE GetUserByName('%s')", (name,))
         elif uid:
-            c.execute("EXECUTE GetUserById('@0')", (str(uid),))
+            c.execute("EXECUTE GetUserById('%s')", (str(uid),))
 
         result=c.fetchone()
 
         if result is None and make and name:
-            c.execute("EXECUTE MakeUser('@0')", (name,))
-            c.execute("EXECUTE GetUserByName('@0')", (name,))
+            c.execute("EXECUTE MakeUser('%s')", (name,))
+            c.execute("EXECUTE GetUserByName('%s')", (name,))
             result=c.fetchone()
         elif result is None:
             return None
@@ -60,7 +60,7 @@ class User():
     def stories(self):
         
 
-        c.execute("EXECUTE GetStoriesByAuthorId('@0')", (self.id,))
+        c.execute("EXECUTE GetStoriesByAuthorId('%s')", (self.id,))
         output=[]
         for l in c.fetchall():
             output.append(Story(result=l))
@@ -77,7 +77,7 @@ class Story():
             sid=re.search("^[0-9]+", str(sid)).group(0)
 
             #check database
-            c.execute("EXECUTE GetStoryById('@0')", (sid,))
+            c.execute("EXECUTE GetStoryById('%s')", (sid,))
             result=c.fetchone()
 
             if result is None:
