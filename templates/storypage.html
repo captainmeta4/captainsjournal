@@ -7,13 +7,13 @@
 	<p><b><span class="red">[This story has been removed by the site administrators.]</span></b></p>
 {% else %}
 	{% if s.pre %}
-		<p><b>Author's Note:</b> {% filter markdown %}{{ s.pre }}{% endfilter %}</p>
+		<p><b>Author's Note:</b> { s.pre }}</p>
 		<hr>
 	{% endif %}
-	{% filter markdown %}{{ s.story }}{% endfilter %}
+	{{ s.story }}
 	{% if s.post %}
 		<hr>
-		<p><b>Author's Note:</b> {% filter markdown %}{{ s.post }}{% endfilter %}</p>
+		<p><b>Author's Note:</b> {{ s.post }}</p>
 	{% endif %}
 {% endif %}
 {% endblock %}
