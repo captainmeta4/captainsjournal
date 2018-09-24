@@ -25,7 +25,7 @@ c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE auth
 c.execute("PREPARE GetNewestFromAuthor(int) AS SELECT * FROM Stories WHERE author_id = $1 ORDER BY id DESC LIMIT 1")
 
 #Module global
-Cleaner=bleach.sanitizer.Cleaner(strip=True)
+Cleaner=bleach.sanitizer.Cleaner(tags=bleach.sanitizer.ALLOWED_TAGS+['p'])
 
 class User():
 
