@@ -14,9 +14,14 @@ r=praw.Reddit(client_id=os.environ.get('client_id'),
               redirect_uri="https://cj.captainmeta4.me/oauth/redirect",
               user_agent=user_agent)
 
+#take care of static pages
 @app.route('/assets/<path:path>')
 def static_service(path):
     return send_from_directory('assets', path)
+
+@app.route('/submit')
+def create_submission():
+    return render_template('submit.html')
 
 def temporary_reddit(refresh_token):
 
@@ -32,11 +37,26 @@ def temporary_reddit(refresh_token):
 
 def check_token():
 
-    token=request.cookies.get("cj_reddit")
+    token=request.cookies.get("logbook_reddit")
     if token==None:
-        raise ValueError('not found')
+        raise KeyError('not found')
     else:
         return temporary_reddit(token)
+
+def auth_required(f):
+
+    def wrapper():
+
+        try:
+            q=check_token()
+            name=q.user.me().name
+        except:
+            abort(401)
+
+        return f(q, name)
+
+    wrapper.__name__=f.__name__
+    return wrapper
 
 @app.route('/')
 def home():
@@ -59,8 +79,8 @@ def oauth_redirect():
 
 
 
-    resp=make_response(redirect('https://cj.captainmeta4.me/me'))
-    resp.set_cookie("cj_reddit", value=token, domain="cj.captainmeta4.me")
+    resp=make_response(redirect('/'))
+    resp.set_cookie("logbook_reddit", value=token, domain="captainslogbook.org")
 
     return resp
 
@@ -94,3 +114,25 @@ def storypage(sid):
         abort(404)
 
     return s.render_storypage()
+
+#API hits
+@app.route('/api/submit', methods=["POST"])
+@auth_required
+def create_story(q, name):
+    title_md=request.form.get('form-title',"")
+    pre_md=request.form.get('form-pre',"")
+    story_md=request.form.get('form-story',"")
+    post_md=request.form.get('form-post')
+
+    author=user(name=name)
+
+    #assemble data for story object and save it
+    data=(-1,0,pre_md,story_md,post_md, False, title_md, author.id,None)
+    story=Story(result=data)
+    return story.save()
+    
+    
+
+    
+    
+    

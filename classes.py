@@ -2,6 +2,8 @@ import psycopg2
 import os
 import re
 from flask import *
+import mistletoe
+import bleach
 
 conn=psycopg2.connect(os.environ.get("DATABASE_URL"))
 c=conn.cursor()
@@ -16,9 +18,14 @@ c.execute("PREPARE GetUserByName(name) AS SELECT * FROM Users WHERE reddit_name 
 c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 
 #for stories
-c.execute("PREPARE MakeStory(int, text, text, text) AS INSERT INTO Stories (author_id, created, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, 'false')")
+c.execute("PREPARE MakeStory(int, text, text, text, text) AS INSERT INTO Stories (author_id, created, title, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, $5, 'false')")
+c.execute("PREPARE EditStory(int, text, text, text) AS UPDATE Stories pre=$2, story=$3, post=$4 WHERE id=$1")
 c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE author_id = $1")
+c.execute("PREPARE GetNewestFromAuthor(int) AS SELECT * FROM Stories WHERE author_id = $1 ORDER BY id DESC LIMIT 1")
+
+#Module global
+Cleaner=bleach.sanitizer.Cleaner(strip=True)
 
 class User():
 
@@ -100,5 +107,44 @@ class Story():
         else:
             self.author=None
 
+    def process(self):
+        
+        #render markdown
+        self.pre=mistletoe.markdown(self.pre)
+        self.story=mistletoe.markdown(self.story)
+        self.post=mistletoe.markdown(self.post)
+
+        #sanitize html
+        self.title=Cleaner.clean(self.title)
+        self.pre=Cleaner.clean(self.pre)
+        self.story=Cleaner.clean(self.story)
+        self.post=Cleaner.clean(self.post)
+
+    def save(self):
+
+        if self.id!=-1:
+            raise Exception("This story seems to already exist. Use `edit()` instead.")
+
+        self.process()
+        c.execute("MakeStory(%s,%s,%s,%s,%s)", (self.author_id, self.title, self.pre, self.story, self.post))
+        conn.commit()
+
+        c.execute("GetNewestFromAuthor(%s)",(self.author_id,))
+        sid=c.fetchone()[0]
+
+        return redirect('/s/{}'.format(sid))
+
+    def edit(self):
+        
+        if self.id==-1:
+            raise KeyError("This story does not yet exist. Use `save()` instead.")
+
+        self.process()
+        c.execute("EditStory(%s,%s,%s,%s)",  (self.author_id, self.pre, self.story, self.post))
+        conn.commit()
+
+        
+        
+
     def render_storypage(self):
-        return render_template('storypage.html', s=self, author=self.author)
+        return render_template('storypage.html', s=self)
