@@ -125,10 +125,10 @@ def create_story(q, name):
     post_md=request.form.get('post')
 
     #validate info
-    if len(title_md)<5:
-        abort(400)
-    if len(story_md)<10:
-        abort(400)
+    #if len(title_md)<5:
+    #    abort(400)
+    #if len(story_md)<10:
+    #    abort(400)
 
     author=User(name=name)
 
