@@ -93,7 +93,7 @@ def me_page():
     
     name=q.user.me().name
 
-    return redirect('/user/{}'.format(name))
+    return redirect('/u/{}'.format(name))
             
 @app.route("/u/<name>")
 def userpage(name):

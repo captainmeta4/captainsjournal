@@ -100,6 +100,7 @@ class Story():
         self.banned=bool(result[5])
         self.title=result[6]
         self.author_id=int(result[7])
+        self.deleted=bool(result[8])
         self.url="/s/{}".format(self.id)
         self.created_date=str(self.created).split()[0]
 
