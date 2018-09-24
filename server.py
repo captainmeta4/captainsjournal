@@ -119,15 +119,15 @@ def storypage(sid):
 @app.route('/api/submit', methods=["POST"])
 @auth_required
 def create_story(q, name):
-    title_md=request.form.get('form-title',"")
-    pre_md=request.form.get('form-pre',"")
-    story_md=request.form.get('form-story',"")
-    post_md=request.form.get('form-post')
+    title_md=request.form.get('title',"")
+    pre_md=request.form.get('pre',"")
+    story_md=request.form.get('story',"")
+    post_md=request.form.get('post')
 
     #validate info
     if len(title_md)<5:
         abort(400)
-    if len(story_md)<100:
+    if len(story_md)<10:
         abort(400)
 
     author=User(name=name)

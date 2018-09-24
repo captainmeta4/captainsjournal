@@ -126,10 +126,10 @@ class Story():
             raise Exception("This story seems to already exist. Use `edit()` instead.")
 
         self.process()
-        c.execute("MakeStory(%s,%s,%s,%s,%s)", (self.author_id, self.title, self.pre, self.story, self.post))
+        c.execute("EXECUTE MakeStory(%s,%s,%s,%s,%s)", (self.author_id, self.title, self.pre, self.story, self.post))
         conn.commit()
 
-        c.execute("GetNewestFromAuthor(%s)",(self.author_id,))
+        c.execute("EXECUTE GetNewestFromAuthor(%s)",(self.author_id,))
         sid=c.fetchone()[0]
 
         return redirect('/s/{}'.format(sid))
