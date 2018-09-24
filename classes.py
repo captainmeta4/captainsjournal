@@ -19,7 +19,7 @@ c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text) AS INSERT INTO Stories (author_id, created, title, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, $5, 'false')")
-c.execute("PREPARE EditStory(int, text, text, text) AS UPDATE Stories pre=$2, story=$3, post=$4 WHERE id=$1")
+c.execute("PREPARE EditStory(int, text, text, text) AS UPDATE Stories SET pre=$2, story=$3, post=$4 WHERE id=$1")
 c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE author_id = $1")
 c.execute("PREPARE GetNewestFromAuthor(int) AS SELECT * FROM Stories WHERE author_id = $1 ORDER BY id DESC LIMIT 1")
