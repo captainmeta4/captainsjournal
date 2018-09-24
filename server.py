@@ -124,7 +124,13 @@ def create_story(q, name):
     story_md=request.form.get('form-story',"")
     post_md=request.form.get('form-post')
 
-    author=user(name=name)
+    #validate info
+    if len(title_md)<5:
+        abort(400)
+    if len(story_md)<100:
+        abort(400)
+
+    author=User(name=name)
 
     #assemble data for story object and save it
     data=(-1,0,pre_md,story_md,post_md, False, title_md, author.id,None)
