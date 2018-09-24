@@ -11,7 +11,7 @@ Markdown(app)
 user_agent="Captain's Journal by /u/captainmeta4"
 r=praw.Reddit(client_id=os.environ.get('client_id'),
               client_secret=os.environ.get('client_secret'),
-              redirect_uri="https://cj.captainmeta4.me/oauth/redirect",
+              redirect_uri="https://captainslogbook.org/oauth/redirect",
               user_agent=user_agent)
 
 #take care of static pages
