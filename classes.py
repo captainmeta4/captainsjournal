@@ -13,12 +13,12 @@ c.execute("ROLLBACK TRANSACTION")
 
 #prepare parameterized sql statements
 #for users
-c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, banned, google_analytics) VALUES ($1,'NOW','false','')")
+c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, google_analytics) VALUES ($1,'NOW','')")
 c.execute("PREPARE GetUserByName(name) AS SELECT * FROM Users WHERE reddit_name = $1")
 c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 
 #for stories
-c.execute("PREPARE MakeStory(int, text, text, text, text) AS INSERT INTO Stories (author_id, created, title, pre, story, post, banned) VALUES ($1,'NOW', $2, $3, $4, $5, 'false')")
+c.execute("PREPARE MakeStory(int, text, text, text, text) AS INSERT INTO Stories (author_id, created, title, pre, story, post) VALUES ($1,'NOW', $2, $3, $4, $5)")
 c.execute("PREPARE EditStory(int, text, text, text) AS UPDATE Stories SET pre=$2, story=$3, post=$4 WHERE id=$1")
 c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE author_id = $1")
@@ -57,6 +57,7 @@ class User():
         self.name=result[1]
         self.created=result[2]
         self.banned=bool(result[4])
+        self.admin=bool(result[5])
         self.url="/u/{}".format(self.id)
         self.created_date=str(self.created).split()[0]
 
