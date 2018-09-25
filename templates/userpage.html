@@ -1,11 +1,11 @@
 {% extends "default.html" %}
 
 {% block content %}
-<h1>{{ u.name }}{% if u.banned %} <span class="red">is banned!</span>{% endif %}</h1>
-
-<p>User since: {{ u.created_date }}</p>
+<h1>{{ u.name }}</h1>
+{% if u.banned %} <p><span class="red"><b>[This user is banned.]</b></span></p>{% endif %}
 
 {% if v.admin or not u.banned %}
+<p>User since: {{ u.created_date }}</p>
 <hr>
 <p><b>Stories:</b></p>
 <ul>
