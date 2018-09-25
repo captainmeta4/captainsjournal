@@ -66,7 +66,7 @@ class User():
 
     def render_userpage(self, v=None):
 
-        return render_template('userpage.html', u=self, v=v)
+        return render_template('userpage.html', u=self, stories=self.stories(), v=v)
 
     def stories(self):
         

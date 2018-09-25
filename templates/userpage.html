@@ -6,12 +6,12 @@
 <p>User since: {{ u.created_date }}</p>
 <p>ID: {{ u.id }}</p>
 
-{% if not u.banned %}
+{% if v.admin or not u.banned %}
 <hr>
 <p><b>Stories:</b></p>
 <ul>
-{% for story in stories|sort(attribute='id') %}
-<li><a href="{{ story.url }}">{{ story.title }}</a></li>
+{% for s in stories|sort(attribute='id') %}
+{% if v.admin or not s.banned %}<li><a href="{{ s.url }}">{% if s.banned %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
 {% else %}
 <li><em>None yet!</em></li>
 {% endfor %}
