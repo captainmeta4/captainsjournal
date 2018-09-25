@@ -28,7 +28,7 @@ def static_service(path):
 
 #take care of error pages
 @app.errorhandler(404)
-def error_404():
+def error_404(e):
     return render_template('404.html'), 404
 
 def temporary_reddit(refresh_token):
@@ -52,6 +52,9 @@ def check_token():
         return temporary_reddit(token)
 
 def auth_required(f):
+    '''
+    wrapper for returning 401 if user not logged in
+    '''
 
     def wrapper(*args, **kwargs):
 
@@ -67,6 +70,10 @@ def auth_required(f):
     return wrapper
 
 def auth_desired(f): #but not necessary
+    '''
+    wrapper for passing logged in user to function
+    passes None if not logged in
+    '''
 
     def wrapper(*args, **kwargs):
 
@@ -82,6 +89,10 @@ def auth_desired(f): #but not necessary
     return wrapper
 
 def admin_required(f):
+    '''
+    wrapper that aborts 403 if user is not admin
+    use for admin api calls
+    '''
 
     def wrapper(q, v, *args, **kwargs):
 
