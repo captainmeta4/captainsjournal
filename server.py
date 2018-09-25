@@ -60,7 +60,7 @@ def auth_required(f):
     wrapper.__name__=f.__name__
     return wrapper
 
-def auth_desired(f): #(but not necessary)
+def auth_desired(f): #but not necessary
 
     def wrapper(*args, **kwargs):
 
