@@ -5,6 +5,12 @@ import time
 from classes import *
 from flaskext.markdown import Markdown
 
+### NAMING CONVENTIONS ###
+# s - Story object
+# v - viewer (the person browsing) - User object
+# u - target user - User object
+# q - Temporary reddit object
+
 #globals
 app=Flask(__name__)
 Markdown(app)
@@ -53,11 +59,38 @@ def auth_required(f):
         except:
             abort(401)
 
-        return f(q, name)
+        return f(q=q, v=User(name=name))
 
     wrapper.__name__=f.__name__
     return wrapper
 
+def auth_desired(f): #(but not necessary)
+
+    def wrapper():
+
+        try:
+            q=check_token()
+            name=q.user.me().name
+        except:
+            return f(v=None)
+
+        return f(v=User(name=name))
+
+    wrapper.__name__=f.__name__
+    return wrapper
+
+def admin_required(f):
+
+    def wrapper(q, v):
+
+        if not v.admin:
+            abort(403)
+
+        return f(q=q, v=v)
+
+    wrapper.__name__==f.__name__
+    return wrapper
+        
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -77,14 +110,13 @@ def oauth_redirect():
 
     name=q.user.me().name
 
-
-
     resp=make_response(redirect('/'))
     resp.set_cookie("logbook_reddit", value=token, domain="captainslogbook.org")
 
     return resp
 
 @app.route("/me")
+@auth_required
 def me_page():
     try:
         q=check_token()
@@ -96,29 +128,31 @@ def me_page():
     return redirect('/u/{}'.format(name))
             
 @app.route("/u/<name>")
-def userpage(name):
+@auth_desired
+def userpage(name, v=None):
     
     try:
         u=User(name=name)
     except KeyError:
         abort(404)
 
-    return u.render_userpage()
+    return u.render_userpage(v=v)
 
 @app.route("/s/<sid>")
-def storypage(sid):
+@auth_desired
+def storypage(sid, v=None):
 
     try:
         s=Story(sid, load_author=True)
     except KeyError:
         abort(404)
 
-    return s.render_storypage()
+    return s.render_storypage(v=v)
 
 #API hits
 @app.route('/api/submit', methods=["POST"])
 @auth_required
-def create_story(q, name):
+def create_story(q, v):
     title_md=request.form.get('title',"")
     pre_md=request.form.get('pre',"")
     story_md=request.form.get('story',"")
@@ -130,15 +164,38 @@ def create_story(q, name):
     #if len(story_md)<10:
     #    abort(400)
 
-    author=User(name=name)
-
     #assemble data for story object and save it
-    data=(-1,0,pre_md,story_md,post_md, False, title_md, author.id,None)
+    data=(-1,0,pre_md,story_md,post_md, False, title_md, v.id,None)
     story=Story(result=data)
     return story.save()
     
+@app.route('/api/banuser/<uid>', methods=["POST"])
+@auth_required
+@admin_required
+def ban_user(q, v, uid):
+    u=User(uid=uid)
+    u.ban()
+    return redirect(u.url)
     
-
+@app.route('/api/unbanuser/<uid>', methods=["POST"])
+@auth_required
+@admin_required
+def unban_user(q, v, uid):
+    u=User(uid=uid)
+    u.unban()
+    return redirect(u.url)
     
+@app.route('/api/banstory/<sid>', methods=["POST"])
+@auth_required
+@admin_required
+def ban_story(q, v, sid):
+    s=Story(sid=sid)
+    s.ban()
+    return redirect(s.url)
     
-    
+@app.route('/api/unbanuser/<sid>', methods=["POST"])
+@auth_required
+@admin_required
+def unban_story(q, v, sid):
+    s=Story(sid=sid)
+    return redirect(s.url)

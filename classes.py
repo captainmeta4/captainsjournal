@@ -16,13 +16,16 @@ c.execute("ROLLBACK TRANSACTION")
 c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, google_analytics) VALUES ($1,'NOW','')")
 c.execute("PREPARE GetUserByName(name) AS SELECT * FROM Users WHERE reddit_name = $1")
 c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
+c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
+c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1")
 
 #for stories
-c.execute("PREPARE MakeStory(int, text, text, text, text) AS INSERT INTO Stories (author_id, created, title, pre, story, post) VALUES ($1,'NOW', $2, $3, $4, $5)")
+c.execute("PREPARE MakeStory(int, text, text, text, text) AS INSERT INTO Stories (author_id, created, title, pre, story, post) VALUES ($1,'NOW', $2, $3, $4, $5) RETURNING *")
 c.execute("PREPARE EditStory(int, text, text, text) AS UPDATE Stories SET pre=$2, story=$3, post=$4 WHERE id=$1")
 c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE author_id = $1")
-c.execute("PREPARE GetNewestFromAuthor(int) AS SELECT * FROM Stories WHERE author_id = $1 ORDER BY id DESC LIMIT 1")
+c.execute("PREPARE BanStory(int) AS UPDATE Stories SET banned='true' WHERE id=$1")
+c.execute("PREPARE UnbanStory(int) AS UPDATE Stories Set banned='false' WHERE id=$1")
 
 #Module global
 Cleaner=bleach.sanitizer.Cleaner(tags=bleach.sanitizer.ALLOWED_TAGS+['p'])
@@ -61,9 +64,9 @@ class User():
         self.url="/u/{}".format(self.id)
         self.created_date=str(self.created).split()[0]
 
-    def render_userpage(self):
+    def render_userpage(self, v=None):
 
-        return render_template('userpage.html', u=self, stories=self.stories())
+        return render_template('userpage.html', u=self, v=v)
 
     def stories(self):
         
@@ -74,7 +77,16 @@ class User():
             output.append(Story(result=l))
 
         return output
-            
+
+    def ban(self):
+
+        c.execute("EXECUTE BanUser(%s)", (self.id,))
+        conn.commit()
+
+    def unban(self):
+
+        c.execute("EXECUTE UnbanUser(%s)", (self.id,))
+        conn.commit()
 
 class Story():
 
@@ -129,12 +141,10 @@ class Story():
 
         self.process()
         c.execute("EXECUTE MakeStory(%s,%s,%s,%s,%s)", (self.author_id, self.title, self.pre, self.story, self.post))
+        data=c.fetchone()
         conn.commit()
-
-        c.execute("EXECUTE GetNewestFromAuthor(%s)",(self.author_id,))
-        sid=c.fetchone()[0]
-
-        return redirect('/s/{}'.format(sid))
+        s=Story(result=data)
+        return redirect(s.url)
 
     def edit(self):
         
@@ -144,9 +154,16 @@ class Story():
         self.process()
         c.execute("EditStory(%s,%s,%s,%s)",  (self.author_id, self.pre, self.story, self.post))
         conn.commit()
-
         
-        
+    def render_storypage(self, v=None):
+        return render_template('storypage.html', s=self, v=v)
 
-    def render_storypage(self):
-        return render_template('storypage.html', s=self)
+    def ban(self):
+
+        c.execute("EXECUTE BanStory(%s)", (self.id,))
+        conn.commit()
+
+    def unban(self):
+
+        c.execute("EXECUTE UnbanStory(%s)", (self.id,))
+        conn.commit()
