@@ -47,6 +47,7 @@ class User():
             name=re.search("^[A-Za-z0-9_-]+", name).group(0)
         if make and name:
             c.execute("EXECUTE MakeUser(%s)", (name,))
+            conn.commit()
         if name:
             c.execute("EXECUTE GetUserByName(%s)", (name,))
         elif uid:
