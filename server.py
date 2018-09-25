@@ -27,7 +27,7 @@ def static_service(path):
     return send_from_directory('assets', path)
 
 #take care of error pages
-@app.errorhandler(404);
+@app.errorhandler(404)
 def 404():
     return render_template('404.html'), 404
 
