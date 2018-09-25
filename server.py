@@ -265,7 +265,7 @@ def undelete_story(q, v, sid):
     s.undelete()
     return redirect(s.url)
 
-@app.route("/api/edit/<sid>")
+@app.route("/api/edit/<sid>", methods=["POST"])
 @auth_required
 def post_edit_story(sid, v):
     try:
