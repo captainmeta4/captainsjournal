@@ -171,7 +171,7 @@ class Story():
 class Listing():
 
     def __init__(self, kind="new"):
-        if kind='new':
+        if kind=='new':
             c.execute("SELECT * FROM Stories WHERE banned='false' ORDER BY id DESC LIMIT 10")
         self.raw=c.fetchall()
 
