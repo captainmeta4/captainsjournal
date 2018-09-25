@@ -26,6 +26,11 @@ r=praw.Reddit(client_id=os.environ.get('client_id'),
 def static_service(path):
     return send_from_directory('assets', path)
 
+#take care of error pages
+@app.errorhandler(404);
+def 404():
+    return render_template('404.html'), 404
+
 def temporary_reddit(refresh_token):
 
     '''
