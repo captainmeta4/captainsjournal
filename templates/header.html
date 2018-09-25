@@ -3,7 +3,7 @@
 <label for="night-toggle">Night Mode</label>
 <hr>
 {% if v %}
-<p><a href="/u/{{ v.name }}">{{ v.name }}</a></p>
+<p><a href="{{ v.url }}">{{ v.name }}</a></p>
 <p><a href="/submit">Create Story</a></p>
 {% if v.admin %}
 {% include "adminpanel.html" %}
