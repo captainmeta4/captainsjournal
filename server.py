@@ -72,7 +72,7 @@ def auth_desired(f): #(but not necessary)
             q=check_token()
             name=q.user.me().name
         except:
-            return f(v=None)
+            return f(*args, v=None, **kwargs)
 
         return f(*args, v=User(name=name), **kwargs)
 
