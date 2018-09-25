@@ -54,7 +54,7 @@ def auth_required(f):
             q=check_token()
             name=q.user.me().name
         except:
-            abort(401)
+            return render_template('auth_required.html'), 401
 
         return f(*args, q=q, v=User(name=name), **kwargs)
 
