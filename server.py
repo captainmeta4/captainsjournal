@@ -88,7 +88,7 @@ def admin_required(f):
 
         return f(q=q, v=v)
 
-    wrapper.__name__==f.__name__
+    wrapper.__name__=f.__name__
     return wrapper
         
 @app.route('/')
