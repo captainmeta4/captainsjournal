@@ -28,7 +28,7 @@ c.execute("PREPARE BanStory(int) AS UPDATE Stories SET banned='true' WHERE id=$1
 c.execute("PREPARE UnbanStory(int) AS UPDATE Stories Set banned='false' WHERE id=$1")
 
 #Module global
-Cleaner=bleach.sanitizer.Cleaner(tags=bleach.sanitizer.ALLOWED_TAGS+['p'])
+Cleaner=bleach.sanitizer.Cleaner(tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr'])
 
 class User():
 
