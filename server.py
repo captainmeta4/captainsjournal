@@ -193,4 +193,5 @@ def ban_story(q, v, sid):
 @admin_required
 def unban_story(q, v, sid):
     s=Story(sid=sid)
+    s.unban()
     return redirect(s.url)
