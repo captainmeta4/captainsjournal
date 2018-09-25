@@ -122,7 +122,11 @@ def create_submission(q, v):
 def home(v):
     l=Listing(kind='new')
     return render_template('home.html', v=v, l=l)
-    
+
+@app.route('/rules')
+@auth_desired
+def rules(v):
+    return render_template('rules.html',v=v)
 
 @app.route("/oauth/redirect")
 def oauth_redirect():
