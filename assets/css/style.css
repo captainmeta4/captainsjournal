@@ -3,6 +3,16 @@ textarea {
     height: 200px;
 }
 
+input[type=text] {
+    width: 100%;
+}
+
+.night textarea,
+.night input[type=text] {
+    backgroud-color: black;
+    color: #ddd
+}
+
 input[type='text'] {
     width:100%;
 }
