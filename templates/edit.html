@@ -8,11 +8,11 @@
 <b>{{ s.title }}</b><br>
 Markdown is supported in all fields below.<br>
 Pre-story author note:<br>
-<textarea name="pre" value="{{ s._pre_raw }}"></textarea><br>
+<textarea name="pre">{{ s._pre_raw }}</textarea><br>
 Story Contents:<br>
-<textarea name="story" value="{{ s._story_raw }}"></textarea><br>
+<textarea name="story">{{ s._story_raw }}</textarea><br>
 Post-story author note:<br>
-<textarea name="post" value="{{ s._post_raw }}"></textarea><br>
+<textarea name="post">{{ s._post_raw }}</textarea><br>
 <input type="submit" value="Save">
 </form>
 {% endblock %}
