@@ -48,6 +48,7 @@ class User():
         if make and name:
             c.execute("EXECUTE MakeUser(%s)", (name,))
             conn.commit()
+            c.execute("EXECUTE GetUserByName(%s)", (name,))
         if name:
             c.execute("EXECUTE GetUserByName(%s)", (name,))
         elif uid:
