@@ -4,7 +4,7 @@
 <hr>
 {% if v %}
 <p><a href="{{ v.url }}">{{ v.name }}</a></p>
-<p><a href="/submit">Create Story</a></p>
+{% if not v.banned %} <p><a href="/submit">Create Story</a></p>{% endif %}
 {% if v.admin %}
 {% include "adminpanel.html" %}
 {% endif %}

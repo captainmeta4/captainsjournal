@@ -198,6 +198,10 @@ def edit_story(sid, q, v):
 @app.route('/api/submit', methods=["POST"])
 @auth_required
 def create_story(q, v):
+
+    if v.banned:
+        abort(403)
+    
     title_md=request.form.get('title',"")
     pre_md=request.form.get('pre',"")
     story_md=request.form.get('story',"")
