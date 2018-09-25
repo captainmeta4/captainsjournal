@@ -2,7 +2,7 @@
 <input id="night-toggle" type="checkbox" onClick="nightToggle()"></input>
 <label for="night-toggle">Night Mode</label>
 {% if v %}
-<p><a href="{{ v.id }}">{{ v.name }}</a></p>
+<p><a href="/u/{{ v.name }}">{{ v.name }}</a></p>
 {% if v.admin %}
 {% include "adminpanel.html" %}
 {% endif %}
