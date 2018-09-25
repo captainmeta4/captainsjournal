@@ -89,7 +89,7 @@ def admin_required(f):
 
 @app.route('/submit')
 @auth_required
-def create_submission(v):
+def create_submission(q, v):
     return render_template('submit.html', v=v)
 
 @app.route('/')
