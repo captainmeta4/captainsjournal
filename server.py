@@ -25,11 +25,6 @@ r=praw.Reddit(client_id=os.environ.get('client_id'),
 def static_service(path):
     return send_from_directory('assets', path)
 
-@app.route('/submit')
-@auth_required
-def create_submission():
-    return render_template('submit.html', v=v)
-
 def temporary_reddit(refresh_token):
 
     '''
@@ -91,7 +86,12 @@ def admin_required(f):
 
     wrapper.__name__=f.__name__
     return wrapper
-        
+
+@app.route('/submit')
+@auth_required
+def create_submission():
+    return render_template('submit.html', v=v)
+
 @app.route('/')
 @auth_desired
 def home():
