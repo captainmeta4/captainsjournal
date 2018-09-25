@@ -9,6 +9,7 @@
 {% include "adminpanel.html" %}
 {% endif %}
 {% if s %}
+<p>{{ s.title }}</p>
 {% if s.author_id == v.id %}
 {% include "authorpanel.html" %}
 {% endif %}
