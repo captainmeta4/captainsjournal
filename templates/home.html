@@ -13,7 +13,7 @@
 <p><b>Newest Stories</b></p>
 <ul>
 {% for s in l %}
-<li><a href={{ s.url }}>{{ s.title }}</a></li>
+<li><a href={{ s.url }}>{{ s.title }}</a> by <a href="{{ s.author.url }}">{{ s.author.name }}</li>
 {% endfor %}
 </ul>
 {% endblock %}

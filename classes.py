@@ -201,5 +201,5 @@ class Listing():
 
     def __iter__(self):
         for entry in self.raw:
-            yield Story(result=entry)
+            yield Story(result=entry, load_author=True)
             
