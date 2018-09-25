@@ -26,8 +26,9 @@ def static_service(path):
     return send_from_directory('assets', path)
 
 @app.route('/submit')
+@auth_required
 def create_submission():
-    return render_template('submit.html')
+    return render_template('submit.html', v=v)
 
 def temporary_reddit(refresh_token):
 
@@ -92,8 +93,9 @@ def admin_required(f):
     return wrapper
         
 @app.route('/')
+@auth_desired
 def home():
-    return render_template('home.html')
+    return render_template('home.html', v=v)
     
 
 @app.route("/oauth/redirect")
