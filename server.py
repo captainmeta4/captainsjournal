@@ -28,7 +28,7 @@ def static_service(path):
 
 #take care of error pages
 @app.errorhandler(404)
-def 404():
+def error_404():
     return render_template('404.html'), 404
 
 def temporary_reddit(refresh_token):
