@@ -188,7 +188,7 @@ def ban_story(q, v, sid):
     s.ban()
     return redirect(s.url)
     
-@app.route('/api/unbanuser/<sid>', methods=["POST"])
+@app.route('/api/unbanstory/<sid>', methods=["POST"])
 @auth_required
 @admin_required
 def unban_story(q, v, sid):
