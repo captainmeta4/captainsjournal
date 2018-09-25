@@ -152,6 +152,10 @@ def userpage(name, v=None):
     except KeyError:
         abort(404)
 
+    #redirection for case insensitivity purposes
+    if not name == u.name:
+        return redirect(u.url)
+
     return u.render_userpage(v=v)
 
 @app.route("/s/<sid>")
