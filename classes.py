@@ -57,7 +57,7 @@ class User():
         elif result is None:
             raise KeyError("User not found")
 
-        self.id=str(result[0])
+        self.id=int(result[0])
         self.name=result[1]
         self.created=result[2]
         self.banned=bool(result[4])
