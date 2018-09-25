@@ -161,7 +161,7 @@ class Story():
         self._post_raw=post
         self.process()
         
-        c.execute("EXECUTE EditStory(%s,%s,%s,%s,%s,%s,%s)",  (self.author_id, self.pre, self.story, self.post, self._pre_raw, self._story_raw, self._post_raw))
+        c.execute("EXECUTE EditStory(%s,%s,%s,%s,%s,%s,%s)",  (self.id, self.pre, self.story, self.post, self._pre_raw, self._story_raw, self._post_raw))
         conn.commit()
         
     def render_storypage(self, v=None):

@@ -192,7 +192,7 @@ def edit_story(sid, q, v):
     if not v.id == s.author_id:
         abort(403)
 
-    return render_template('edit.html', s=s)
+    return render_template('edit.html', s=s, v=v)
     
 #API hits
 @app.route('/api/submit', methods=["POST"])
@@ -281,7 +281,5 @@ def post_edit_story(q, v, sid):
     post_md=request.form.get("post","")
 
     s.edit(pre_md, story_md, post_md)
-
-    
 
     return redirect(s.url)
