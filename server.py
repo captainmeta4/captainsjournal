@@ -115,7 +115,7 @@ def oauth_redirect():
     name=q.user.me().name
 
     resp=make_response(redirect('/'))
-    resp.set_cookie("logbook_reddit", value=token, domain="captainslogbook.org captainlogbook-staging.herokuapp.com")
+    resp.set_cookie("logbook_reddit", value=token, domain="captainslogbook.org")
 
     return resp
 
