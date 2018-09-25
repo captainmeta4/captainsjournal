@@ -61,7 +61,7 @@ class User():
         self.created=result[2]
         self.banned=bool(result[4])
         self.admin=bool(result[5])
-        self.url="/u/{}".format(self.id)
+        self.url="/u/{}".format(self.name)
         self.created_date=str(self.created).split()[0]
 
     def render_userpage(self, v=None):
