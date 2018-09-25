@@ -7,5 +7,11 @@
 <p>This is a place to host your creative writing, outside of reddit's intellectual property grab.</p>
 <p>To get started, authenticate with reddit. Then post a story, and share it.</p>
 
-
+<hr>
+<p><b>Newest Stories</b></p>
+<ul>
+{% for s in l %}
+<li><a href={{ s.url }}>{{ s.title }}</a></li>
+{% endfor %}
+</ul>
 {% endblock %}

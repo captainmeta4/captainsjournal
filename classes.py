@@ -167,3 +167,15 @@ class Story():
 
         c.execute("EXECUTE UnbanStory(%s)", (self.id,))
         conn.commit()
+
+class Listing(kind="new"):
+
+    def __init__(self):
+        if kind='new':
+            c.execute("SELECT * FROM Stories WHERE banned='false' ORDER BY id DESC LIMIT 10")
+        self.raw=c.fetchall()
+
+    def __iter__(self):
+        for entry in self.raw:
+            yield Story(result=entry)
+            

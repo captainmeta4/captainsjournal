@@ -10,6 +10,7 @@ from flaskext.markdown import Markdown
 # v - viewer (the person browsing) - User object
 # u - target user - User object
 # q - Temporary reddit object
+# l - Listing object for homepages
 
 #globals
 app=Flask(__name__)
@@ -95,7 +96,8 @@ def create_submission(q, v):
 @app.route('/')
 @auth_desired
 def home(v):
-    return render_template('home.html', v=v)
+    l=Listing(kind='new')
+    return render_template('home.html', v=v, l=l)
     
 
 @app.route("/oauth/redirect")
