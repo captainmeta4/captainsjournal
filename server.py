@@ -27,6 +27,14 @@ def static_service(path):
     return send_from_directory('assets', path)
 
 #take care of error pages
+@app.errorhandler(401)
+def error_401(e):
+    return render_template('401.html'), 401
+
+@app.errorhandler(403)
+def error_403(e):
+    return render_template('403.html'), 403
+
 @app.errorhandler(404)
 def error_404(e):
     return render_template('404.html'), 404
@@ -62,7 +70,7 @@ def auth_required(f):
             q=check_token()
             name=q.user.me().name
         except:
-            return render_template('auth_required.html'), 401
+            return abort(401)
 
         return f(*args, q=q, v=User(name=name), **kwargs)
 
