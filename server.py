@@ -119,6 +119,9 @@ def oauth_redirect():
 
     name=q.user.me().name
 
+    #create user if it doesn't yet exist
+    v=User(name=name, make=True)
+
     resp=make_response(redirect('/'))
     resp.set_cookie("logbook_reddit", value=token, domain="captainslogbook.org")
 

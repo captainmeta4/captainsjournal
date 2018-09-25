@@ -13,7 +13,7 @@ c.execute("ROLLBACK TRANSACTION")
 
 #prepare parameterized sql statements
 #for users
-c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, google_analytics) VALUES ($1,'NOW','')")
+c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, google_analytics) VALUES ($1,'NOW','') RETURNING *")
 c.execute("PREPARE GetUserByName(name) AS SELECT * FROM Users WHERE reddit_name = $1")
 c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
@@ -51,10 +51,9 @@ class User():
 
         if result is None and make and name:
             c.execute("EXECUTE MakeUser(%s)", (name,))
-            c.execute("EXECUTE GetUserByName(%s)", (name,))
             result=c.fetchone()
         elif result is None:
-            return None
+            raise KeyError("User not found")
 
         self.id=str(result[0])
         self.name=result[1]
