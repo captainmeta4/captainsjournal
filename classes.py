@@ -45,10 +45,8 @@ class User():
         #sanitize name
         if name:
             name=re.search("^[A-Za-z0-9_-]+", name).group(0)
-        if make and name:
-            c.execute("EXECUTE MakeUser(%s)", (name,))
-            conn.commit()
-            c.execute("EXECUTE GetUserByName(%s)", (name,))
+
+
         if name:
             c.execute("EXECUTE GetUserByName(%s)", (name,))
         elif uid:
@@ -57,7 +55,12 @@ class User():
         result=c.fetchone()
 
         if result is None:
-            raise KeyError("User not found")
+            if make and name:
+                c.execute("EXECUTE MakeUser(%s)", (name,))
+                conn.commit()
+                result=c.fetchone()
+            else:
+                raise KeyError("User not found")
 
         self.id=int(result[0])
         self.name=result[1]

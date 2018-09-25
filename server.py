@@ -91,7 +91,7 @@ def auth_desired(f): #but not necessary
         except:
             return f(*args, v=None, **kwargs)
 
-        return f(*args, v=User(name=name), **kwargs)
+        return f(*args, v=User(name=name, make=True), **kwargs)
 
     wrapper.__name__=f.__name__
     return wrapper
