@@ -42,19 +42,19 @@ class User():
             raise ValueError("Only one of name or uid can be provided")
 
         #check database
+        #sanitize name
         if name:
-            #sanitize name
             name=re.search("^[A-Za-z0-9_-]+", name).group(0)
+        if make and name:
+            c.execute("EXECUTE MakeUser(%s)", (name,))
+        if name:
             c.execute("EXECUTE GetUserByName(%s)", (name,))
         elif uid:
             c.execute("EXECUTE GetUserById(%s)", (str(uid),))
 
         result=c.fetchone()
 
-        if result is None and make and name:
-            c.execute("EXECUTE MakeUser(%s)", (name,))
-            result=c.fetchone()
-        elif result is None:
+        if result is None:
             raise KeyError("User not found")
 
         self.id=int(result[0])
