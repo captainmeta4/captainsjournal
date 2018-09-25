@@ -1,0 +1,10 @@
+{% if not s.deleted %}
+<form action="/api/deletestory/{{ s.id }}" method="post">
+<input type="submit" value="Unpublish Story">
+</form>
+{% endif %}
+{% if s.deleted %}
+<form action="/api/undeletestory/{{ s.id }}" method="post">
+<input type="submit" value="Re-publish Story">
+</form>
+{% endif %}

@@ -220,3 +220,22 @@ def unban_story(q, v, sid):
     s=Story(sid=sid)
     s.unban()
     return redirect(s.url)
+
+
+@app.route('/api/deletestory/<sid>', methods=["POST"])
+@auth_required
+def delete_story(q, v, sid):
+    s=Story(sid=sid)
+    if not v.id==s.author_id:
+        abort(403)
+    s.delete()
+    return redirect(s.url)
+    
+@app.route('/api/undeletestory/<sid>', methods=["POST"])
+@auth_required
+def undelete_story(q, v, sid):
+    s=Story(sid=sid)
+    if not v.id==s.author_id:
+        abort(403)
+    s.undelete()
+    return redirect(s.url)

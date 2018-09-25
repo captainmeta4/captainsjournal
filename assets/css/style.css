@@ -319,7 +319,6 @@ a {
 
 a:hover,a:focus {
     color: #069;
-    font-weight: bold
 }
 
 a small {
@@ -426,7 +425,6 @@ header ul a {
 
 header ul a:hover,header ul a:focus {
     color: #675C5C;
-    font-weight: bold
 }
 
 header ul a:active {
@@ -546,10 +544,6 @@ footer {
         font-size: 12pt;
         color: #444
     }
-}
-
-a:hover {
-    font-weight: inherit
 }
 
 body section img {

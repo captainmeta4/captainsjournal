@@ -26,6 +26,8 @@ c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE author_id = $1")
 c.execute("PREPARE BanStory(int) AS UPDATE Stories SET banned='true' WHERE id=$1")
 c.execute("PREPARE UnbanStory(int) AS UPDATE Stories Set banned='false' WHERE id=$1")
+c.execute("PREPARE DeleteStory(int) AS UPDATE Stories SET deleted='true' WHERE id=$1")
+c.execute("PREPARE UndeleteStory(int) AS UPDATE Stories Set deleted='false' WHERE id=$1")
 
 #Module global
 Cleaner=bleach.sanitizer.Cleaner(tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr'])
@@ -165,6 +167,15 @@ class Story():
     def unban(self):
 
         c.execute("EXECUTE UnbanStory(%s)", (self.id,))
+        conn.commit()
+
+    def delete(self):
+        c.execute("EXECUTE DeleteStory(%s)", (self.id,))
+        conn.commit()
+
+    def undelete(self):
+
+        c.execute("EXECUTE UndeleteStory(%s)", (self.id,))
         conn.commit()
 
 class Listing():

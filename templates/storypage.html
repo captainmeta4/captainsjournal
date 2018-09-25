@@ -6,7 +6,10 @@
 {% if s.banned %}
 	<p><b><span class="red">[This story has been removed by the site administrators.]</span></b></p>
 {% endif %}
-{% if v.admin or not s.banned %}
+{% if s.deleted %}
+	<p><b><span class="red">[This story has been unpublished by its author.]</span></b></p>
+{% endif %}
+{% if v.admin or (not s.banned and not s.deleted) %}
 	{% if s.pre %}
 		<p><b>Author's Note:</b> {{ s.pre|safe }}</p>
 		<hr>
