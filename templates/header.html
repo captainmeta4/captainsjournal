@@ -1,8 +1,10 @@
 <h1>The Captain's Logbook</h1>
 <input id="night-toggle" type="checkbox" onClick="nightToggle()"></input>
 <label for="night-toggle">Night Mode</label>
+<hr>
 {% if v %}
 <p><a href="/u/{{ v.name }}">{{ v.name }}</a></p>
+<p><a href="/submit">Create Story</a></p>
 {% if v.admin %}
 {% include "adminpanel.html" %}
 {% endif %}
