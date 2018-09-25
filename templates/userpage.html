@@ -4,14 +4,13 @@
 <h1>{{ u.name }}{% if u.banned %} <span class="red">is banned!</span>{% endif %}</h1>
 
 <p>User since: {{ u.created_date }}</p>
-<p>ID: {{ u.id }}</p>
 
 {% if v.admin or not u.banned %}
 <hr>
 <p><b>Stories:</b></p>
 <ul>
 {% for s in stories|sort(attribute='id') %}
-{% if v.admin or not s.banned %}<li><a href="{{ s.url }}">{% if s.banned %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
+{% if v.admin or (not s.banned and not s.deleted) %}<li><a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
 {% else %}
 <li><em>None yet!</em></li>
 {% endfor %}
