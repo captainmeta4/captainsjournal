@@ -13,8 +13,8 @@ c.execute("ROLLBACK TRANSACTION")
 
 #prepare parameterized sql statements
 #for users
-c.execute("PREPARE MakeUser(name) AS INSERT INTO Users (reddit_name, created_utc, google_analytics) VALUES ($1,'NOW','') RETURNING *")
-c.execute("PREPARE GetUserByName(name) AS SELECT * FROM Users WHERE UPPER(reddit_name) = UPPER($1)")
+c.execute("PREPARE MakeUser(text) AS INSERT INTO Users (reddit_name, created_utc, google_analytics) VALUES ($1,'NOW','') RETURNING *")
+c.execute("PREPARE GetUserByName(text) AS SELECT * FROM Users WHERE UPPER(reddit_name) = UPPER($1)")
 c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
 c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1")
@@ -52,7 +52,7 @@ class User():
         if name:
             c.execute("EXECUTE GetUserByName(%s)", (name,))
         elif uid:
-            c.execute("EXECUTE GetUserById(%s)", (str(uid),))
+            c.execute("EXECUTE GetUserById(%s)", (uid,))
 
         result=c.fetchone()
 
