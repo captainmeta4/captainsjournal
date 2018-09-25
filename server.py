@@ -89,12 +89,12 @@ def admin_required(f):
 
 @app.route('/submit')
 @auth_required
-def create_submission():
+def create_submission(v):
     return render_template('submit.html', v=v)
 
 @app.route('/')
 @auth_desired
-def home():
+def home(v):
     return render_template('home.html', v=v)
     
 
@@ -119,15 +119,8 @@ def oauth_redirect():
 
 @app.route("/me")
 @auth_required
-def me_page():
-    try:
-        q=check_token()
-    except ValueError:
-        return redirect('/')
-    
-    name=q.user.me().name
-
-    return redirect('/u/{}'.format(name))
+def me_page(v):
+    return redirect('/u/{}'.format(v.name))
             
 @app.route("/u/<name>")
 @auth_desired
