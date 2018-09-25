@@ -6,13 +6,14 @@
 
 <form action="/api/submit" method="post">
 Title:<br>
-<input type="text" name="title" style="width:100%"><br>
+<input type="text" name="title"><br>
+Markdown is supported in all fields below.<br>
 Pre-story author note:<br>
-<textarea name="pre" style="height:auto; min-height:200px; width=300px; max-width=100%"></textarea><br>
+<textarea name="pre"></textarea><br>
 Story Contents:<br>
-<textarea name="story" style="height:auto; min-height:200px; width=300px; max-width=100%"></textarea><br>
+<textarea name="story"></textarea><br>
 Post-story author note:<br>
-<textarea name="post" style="height:auto; min-height:200px; width=300px; max-width=100%"></textarea><br>
+<textarea name="post"></textarea><br>
 <input type="submit" value="Save">
 </form>
 {% endblock %}

@@ -1,7 +1,14 @@
-textarea {
+textarea,
+input[type='text'] {
     width: 100%;
     height: auto;
 }
+.night textarea,
+.night input[type='text'] {
+    background-color: black;
+    color: #ddd
+}
+
 
 .highlight table td {
     padding: 5px
