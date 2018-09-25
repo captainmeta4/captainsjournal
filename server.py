@@ -177,6 +177,19 @@ def storypage(sid, v=None):
 
     return s.render_storypage(v=v)
 
+@app.route("/edit/<sid>")
+@auth_required
+def edit_story(sid, v):
+    try:
+        s=Story(sid=sid)
+    except KeyError:
+        abort(404)
+
+    if not v.id == s.author_id:
+        abort(403)
+
+    return render_template('edit.html', s=s)
+    
 #API hits
 @app.route('/api/submit', methods=["POST"])
 @auth_required
@@ -193,7 +206,7 @@ def create_story(q, v):
     #    abort(400)
 
     #assemble data for story object and save it
-    data=(-1,0,pre_md,story_md,post_md, False, title_md, v.id,None)
+    data=(-1,0,"","","", False, title_md, v.id,None,pre_md,story_md,post_md)
     story=Story(result=data)
     return story.save()
     
@@ -246,4 +259,25 @@ def undelete_story(q, v, sid):
     if not v.id==s.author_id:
         abort(403)
     s.undelete()
+    return redirect(s.url)
+
+@app.route("/api/edit/<sid>")
+@auth_required
+def post_edit_story(sid, v):
+    try:
+        s=Story(sid=sid)
+    except KeyError:
+        abort(404)
+
+    if not v.id == s.author_id:
+        abort(403)
+
+    pre_md=request.form.get("pre","")
+    story_md=request.form.get("story","")
+    post_md=request.form.get("post","")
+
+    s.edit(pre_md, story_md, post_md)
+
+    
+
     return redirect(s.url)

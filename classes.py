@@ -20,8 +20,8 @@ c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
 c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1")
 
 #for stories
-c.execute("PREPARE MakeStory(int, text, text, text, text) AS INSERT INTO Stories (author_id, created, title, pre, story, post) VALUES ($1,'NOW', $2, $3, $4, $5) RETURNING *")
-c.execute("PREPARE EditStory(int, text, text, text) AS UPDATE Stories SET pre=$2, story=$3, post=$4 WHERE id=$1")
+c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8) RETURNING *")
+c.execute("PREPARE EditStory(int, text, text, text, text, text, text) AS UPDATE Stories SET pre=$2, story=$3, post=$4, pre_raw=$5, story_raw=$6, post_raw=$7 WHERE id=$1")
 c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE author_id = $1")
 c.execute("PREPARE BanStory(int) AS UPDATE Stories SET banned='true' WHERE id=$1")
@@ -114,6 +114,10 @@ class Story():
         self.title=result[6]
         self.author_id=int(result[7])
         self.deleted=bool(result[8])
+        self._pre_raw=result[9]
+        self._story_raw=result[10]
+        self._post_raw=result[11]
+        
         self.url="/s/{}".format(self.id)
         self.created_date=str(self.created).split()[0]
 
@@ -125,9 +129,9 @@ class Story():
     def process(self):
         
         #render markdown
-        self.pre=mistletoe.markdown(self.pre)
-        self.story=mistletoe.markdown(self.story)
-        self.post=mistletoe.markdown(self.post)
+        self.pre=mistletoe.markdown(self._pre_raw)
+        self.story=mistletoe.markdown(self._story_raw)
+        self.post=mistletoe.markdown(self._post_raw)
 
         #sanitize html
         self.title=Cleaner.clean(self.title)
@@ -141,19 +145,23 @@ class Story():
             raise Exception("This story seems to already exist. Use `edit()` instead.")
 
         self.process()
-        c.execute("EXECUTE MakeStory(%s,%s,%s,%s,%s)", (self.author_id, self.title, self.pre, self.story, self.post))
+        c.execute("EXECUTE MakeStory(%s,%s,%s,%s,%s,%s,%s,%s)", (self.author_id, self.title, self.pre, self.story, self.post, self._pre_raw, self._story_raw, self._post_raw))
         data=c.fetchone()
         conn.commit()
         s=Story(result=data)
         return redirect(s.url)
 
-    def edit(self):
+    def edit(self, pre, story, post):
         
         if self.id==-1:
             raise KeyError("This story does not yet exist. Use `save()` instead.")
 
+        self._pre_raw=pre
+        self._story_raw=story
+        self._post_raw=post
         self.process()
-        c.execute("EditStory(%s,%s,%s,%s)",  (self.author_id, self.pre, self.story, self.post))
+        
+        c.execute("EditStory(%s,%s,%s,%s,%s,%s,%s)",  (self.author_id, self.pre, self.story, self.post, self._pre_raw, self._story_raw, self._post_raw))
         conn.commit()
         
     def render_storypage(self, v=None):
