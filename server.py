@@ -51,7 +51,7 @@ def check_token():
 
 def auth_required(f):
 
-    def wrapper():
+    def wrapper(*args, **kwargs):
 
         try:
             q=check_token()
@@ -59,14 +59,14 @@ def auth_required(f):
         except:
             abort(401)
 
-        return f(q=q, v=User(name=name))
+        return f(*args, q=q, v=User(name=name), **kwargs)
 
     wrapper.__name__=f.__name__
     return wrapper
 
 def auth_desired(f): #(but not necessary)
 
-    def wrapper():
+    def wrapper(*args, **kwargs):
 
         try:
             q=check_token()
@@ -74,19 +74,19 @@ def auth_desired(f): #(but not necessary)
         except:
             return f(v=None)
 
-        return f(v=User(name=name))
+        return f(*args, v=User(name=name), **kwargs)
 
     wrapper.__name__=f.__name__
     return wrapper
 
 def admin_required(f):
 
-    def wrapper(q, v):
+    def wrapper(q, v, *args, **kwargs):
 
         if not v.admin:
             abort(403)
 
-        return f(q=q, v=v)
+        return f(*args, q=q, v=v, **kwargs)
 
     wrapper.__name__=f.__name__
     return wrapper
