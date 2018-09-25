@@ -157,6 +157,8 @@ class Story():
         conn.commit()
         
     def render_storypage(self, v=None):
+        print ('s.author_id', s.author_id)
+        print ('v.id', getattr(v, 'id', None))
         return render_template('storypage.html', s=self, v=v)
 
     def ban(self):
