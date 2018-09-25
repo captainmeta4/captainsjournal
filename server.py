@@ -183,7 +183,7 @@ def storypage(sid, v=None):
 
 @app.route("/edit/<sid>")
 @auth_required
-def edit_story(sid, v):
+def edit_story(sid, q, v):
     try:
         s=Story(sid=sid)
     except KeyError:
