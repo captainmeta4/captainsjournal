@@ -208,10 +208,8 @@ def create_story(q, v):
     post_md=request.form.get('post')
 
     #validate info
-    #if len(title_md)<5:
-    #    abort(400)
-    #if len(story_md)<10:
-    #    abort(400)
+    if len(title_md)<5 or len(story_md)<10:
+        return render_template('badstory.html')
 
     #assemble data for story object and save it
     data=(-1,0,"","","", False, title_md, v.id,None,pre_md,story_md,post_md)
