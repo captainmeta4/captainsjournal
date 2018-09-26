@@ -28,6 +28,12 @@ c.execute("PREPARE BanStory(int) AS UPDATE Stories SET banned='true' WHERE id=$1
 c.execute("PREPARE UnbanStory(int) AS UPDATE Stories Set banned='false' WHERE id=$1")
 c.execute("PREPARE DeleteStory(int) AS UPDATE Stories SET deleted='true' WHERE id=$1")
 c.execute("PREPARE UndeleteStory(int) AS UPDATE Stories Set deleted='false' WHERE id=$1")
+c.execute("PREPARE GetStoriesByBook(int) AS SELECT * FROM Stories WHERE book_id=%1")
+
+#for books
+c.execute("PREPARE MakeBook(text, int) AS INSERT INTO Books (name, author_id) VALUES ($1, $2) RETURNING *")
+c.execute("PREPARE GetBookById(int) AS SELECT * FROM Books WHERE id=$1")
+
 
 #Module global
 Cleaner=bleach.sanitizer.Cleaner(tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre'])
@@ -204,3 +210,27 @@ class Listing():
         for entry in self.raw:
             yield Story(result=entry, load_author=True)
             
+class Book():
+
+	def __init__(self, bid=0, name="", uid=0, make=False):
+
+		if make and not bid:
+			c.execute("EXECUTE MakeBook(%s,%s)",(name, uid))
+		else:
+			c.execute("EXECUTE GetBookById(%s)",(bid,))
+
+		result=c.fetchone()
+
+		self.id=int(result[0])
+		self.title=result[1]
+		self.author_id=result[2]
+
+		self.url="/b/{}".format(str(self.id))
+
+
+	def stories(self):
+
+		c.execute("EXECUTE GetStoriesByBook(%s)",(self.id,))
+
+		for entry in c.fetchall():
+			yield Story(result=entry)
