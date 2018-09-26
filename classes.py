@@ -30,7 +30,7 @@ c.execute("PREPARE DeleteStory(int) AS UPDATE Stories SET deleted='true' WHERE i
 c.execute("PREPARE UndeleteStory(int) AS UPDATE Stories Set deleted='false' WHERE id=$1")
 
 #Module global
-Cleaner=bleach.sanitizer.Cleaner(tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody'])
+Cleaner=bleach.sanitizer.Cleaner(tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot'])
 
 class User():
 
