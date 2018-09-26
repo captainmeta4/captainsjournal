@@ -122,6 +122,7 @@ class Story():
         self._pre_raw=result[9]
         self._story_raw=result[10]
         self._post_raw=result[11]
+        self.book_id=int(result[12])
         
         self.url="/s/{}".format(self.id)
         self.created_date=str(self.created).split()[0]
