@@ -4,7 +4,6 @@
 <h1>{{ u.name }}</h1>
 {% if u.banned %} <p><span class="red"><b>[This user is banned.]</b></span></p>{% endif %}
 
-{% if v.admin or not u.banned %}
 <p>User since: {{ u.created_date }}</p>
 <hr>
 <p><b>Stories:</b></p>
@@ -15,6 +14,5 @@
 <li><em>None yet!</em></li>
 {% endfor %}
 </ul>
-{% endif %}
 
 {% endblock %}
