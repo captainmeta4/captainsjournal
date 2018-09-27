@@ -174,9 +174,9 @@ class Story():
         return redirect(s.url)
 
     def edit(self, title, pre, story, post):
-        
-        if self.id==-1:
-            raise KeyError("This story does not yet exist. Use `save()` instead.")
+		
+		if self.id==-1:
+			raise KeyError("This story does not yet exist. Use `save()` instead.")
 	
 		self.title=title
 	
