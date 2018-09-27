@@ -76,6 +76,8 @@ class User():
         self.admin=bool(result[5])
         self.url="/u/{}".format(self.name)
         self.created_date=str(self.created).split()[0]
+	
+	self.books=self.get_books()
 
     def render_userpage(self, v=None):
 
@@ -91,7 +93,7 @@ class User():
 
         return output
 
-    def books(self):
+    def get_books(self):
 
         c.execute("EXECUTE GetBooksByAuthorId(%s)", (self.id,))
         output=[]
@@ -237,10 +239,8 @@ class Book():
         self.id=int(result[0])
         self.title=result[1]
         self.author_id=result[2]
-
         self.url="/b/{}".format(str(self.id))
-	
-	self.stories=self.get_stories()
+        self.stories=self.get_stories()
 
 
     def get_stories(self):
