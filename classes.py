@@ -239,9 +239,11 @@ class Book():
         self.author_id=result[2]
 
         self.url="/b/{}".format(str(self.id))
+	
+	self.stories=self.get_stories()
 
 
-    def stories(self):
+    def get_stories(self):
 
         c.execute("EXECUTE GetStoriesByBook(%s)",(self.id,))
         output=[]
