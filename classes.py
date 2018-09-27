@@ -77,7 +77,7 @@ class User():
         self.url="/u/{}".format(self.name)
         self.created_date=str(self.created).split()[0]
 	
-	self.books=self.get_books()
+        self.books=self.get_books()
 
     def render_userpage(self, v=None):
 
