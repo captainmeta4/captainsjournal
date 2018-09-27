@@ -18,6 +18,7 @@ c.execute("PREPARE GetUserByName(text) AS SELECT * FROM Users WHERE UPPER(reddit
 c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
 c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1")
+c.execute("PREPARE GetBooksByAuthorId(int) AS SELECT * FROM Books WHERE id=$1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8) RETURNING *")
@@ -87,6 +88,15 @@ class User():
         output=[]
         for l in c.fetchall():
             output.append(Story(result=l))
+
+        return output
+
+    def books(self):
+
+        c.execute("EXECUTE GetBooksByAuthorId(%s)", (self.id,))
+        output=[]
+        for l in c.fetchall():
+            output.append(Book(result=l))
 
         return output
 
@@ -212,25 +222,27 @@ class Listing():
             
 class Book():
 
-	def __init__(self, bid=0, name="", uid=0, make=False):
+    def __init__(self, bid=0, name="", uid=0, result=None, make=False):
 
-		if make and not bid:
-			c.execute("EXECUTE MakeBook(%s,%s)",(name, uid))
-		else:
-			c.execute("EXECUTE GetBookById(%s)",(bid,))
+        if result is None:
+            if make and not bid:
+                c.execute("EXECUTE MakeBook(%s,%s)",(name, uid))
+            else:
+                c.execute("EXECUTE GetBookById(%s)",(bid,))
 
-		result=c.fetchone()
+            result=c.fetchone()
 
-		self.id=int(result[0])
-		self.title=result[1]
-		self.author_id=result[2]
+        self.id=int(result[0])
+        self.title=result[1]
+        self.author_id=result[2]
 
-		self.url="/b/{}".format(str(self.id))
+        self.url="/b/{}".format(str(self.id))
 
 
-	def stories(self):
+    def stories(self):
 
-		c.execute("EXECUTE GetStoriesByBook(%s)",(self.id,))
-
-		for entry in c.fetchall():
-			yield Story(result=entry)
+        c.execute("EXECUTE GetStoriesByBook(%s)",(self.id,))
+        output=[]
+        for entry in c.fetchall():
+            output.append(Story(result=entry))
+        return output
