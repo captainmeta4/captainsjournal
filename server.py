@@ -205,9 +205,9 @@ def create_story(q, v):
     title_md=request.form.get('title',"")
     pre_md=request.form.get('pre',"")
     story_md=request.form.get('story',"")
-    post_md=request.form.get('post')
+    post_md=request.form.get('post',"")
 
-    honeypot=request.form.get('subtitle')
+    honeypot=request.form.get('subtitle',"")
     if honeypot:
         abort(418)
 
@@ -282,10 +282,15 @@ def post_edit_story(q, v, sid):
     if not v.id == s.author_id:
         abort(403)
 
+    honeypot=request.form.get("subtitle","")
+    if honeypot:
+        abort(418)
+    
+    title=request.form.get("title","")
     pre_md=request.form.get("pre","")
     story_md=request.form.get("story","")
     post_md=request.form.get("post","")
 
-    s.edit(pre_md, story_md, post_md)
+    s.edit(title, pre_md, story_md, post_md)
 
     return redirect(s.url)
