@@ -22,7 +22,7 @@ c.execute("PREPARE GetBooksByAuthorId(int) AS SELECT * FROM Books WHERE id=$1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8) RETURNING *")
-c.execute("PREPARE EditStory(int, text, text, text, text, text, text) AS UPDATE Stories SET pre=$2, story=$3, post=$4, pre_raw=$5, story_raw=$6, post_raw=$7 WHERE id=$1")
+c.execute("PREPARE EditStory(int, text, text, text, text, text, text, text) AS UPDATE Stories SET pre=$2, story=$3, post=$4, pre_raw=$5, story_raw=$6, post_raw=$7, title=$8 WHERE id=$1")
 c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE author_id = $1 ORDER BY id DESC")
 c.execute("PREPARE BanStory(int) AS UPDATE Stories SET banned='true' WHERE id=$1")
@@ -173,17 +173,19 @@ class Story():
         s=Story(result=data)
         return redirect(s.url)
 
-    def edit(self, pre, story, post):
+    def edit(self, title, pre, story, post):
         
         if self.id==-1:
             raise KeyError("This story does not yet exist. Use `save()` instead.")
+			
+			self.title=title
 
         self._pre_raw=pre
         self._story_raw=story
         self._post_raw=post
         self.process()
         
-        c.execute("EXECUTE EditStory(%s,%s,%s,%s,%s,%s,%s)",  (self.id, self.pre, self.story, self.post, self._pre_raw, self._story_raw, self._post_raw))
+        c.execute("EXECUTE EditStory(%s,%s,%s,%s,%s,%s,%s,%s)",  (self.id, self.pre, self.story, self.post, self._pre_raw, self._story_raw, self._post_raw, self.title))
         conn.commit()
         
     def render_storypage(self, v=None):
