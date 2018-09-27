@@ -207,6 +207,10 @@ def create_story(q, v):
     story_md=request.form.get('story',"")
     post_md=request.form.get('post')
 
+    honeypot=request.form.get('subtitle')
+    if honeypot:
+        abort(418)
+
     #validate info
     if len(title_md)<5 or len(story_md)<10:
         return render_template('badstory.html')
