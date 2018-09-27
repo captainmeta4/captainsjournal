@@ -172,20 +172,20 @@ class Story():
         conn.commit()
         s=Story(result=data)
         return redirect(s.url)
-	
-	def edit(self, title, pre, story, post):
+    
+    def edit(self, title, pre, story, post):
 		
-		if self.id==-1:
-			raise KeyError("This story does not yet exist. Use `save()` instead.")
+        if self.id==-1:
+            raise KeyError("This story does not yet exist. Use `save()` instead.")
 	
-		self.title=title
+        self.title=title
 	
-		self._pre_raw=pre
-		self._story_raw=story
-		self._post_raw=post
-		self.process()
+        self._pre_raw=pre
+        self._story_raw=story
+        self._post_raw=post
+        self.process()
         
-		c.execute("EXECUTE EditStory(%s,%s,%s,%s,%s,%s,%s,%s)",  (self.id, self.pre, self.story, self.post, self._pre_raw, self._story_raw, self._post_raw, self.title))
+        c.execute("EXECUTE EditStory(%s,%s,%s,%s,%s,%s,%s,%s)",  (self.id, self.pre, self.story, self.post, self._pre_raw, self._story_raw, self._post_raw, self.title))
         conn.commit()
 
     def render_storypage(self, v=None):
