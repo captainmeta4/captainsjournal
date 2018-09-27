@@ -178,7 +178,7 @@ class Story():
         if self.id==-1:
             raise KeyError("This story does not yet exist. Use `save()` instead.")
 			
-			self.title=title
+	self.title=title
 
         self._pre_raw=pre
         self._story_raw=story
