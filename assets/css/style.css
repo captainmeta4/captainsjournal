@@ -17,6 +17,11 @@ input[type='text'] {
     width:100%;
 }
 
+/*Honeypot for bots*/
+input[name="subtitle"] {
+    display: none
+}
+
 .highlight table td {
     padding: 5px
 }
