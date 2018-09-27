@@ -28,7 +28,7 @@ c.execute("PREPARE BanStory(int) AS UPDATE Stories SET banned='true' WHERE id=$1
 c.execute("PREPARE UnbanStory(int) AS UPDATE Stories Set banned='false' WHERE id=$1")
 c.execute("PREPARE DeleteStory(int) AS UPDATE Stories SET deleted='true' WHERE id=$1")
 c.execute("PREPARE UndeleteStory(int) AS UPDATE Stories Set deleted='false' WHERE id=$1")
-c.execute("PREPARE GetStoriesByBook(int) AS SELECT * FROM Stories WHERE book_id=%1")
+c.execute("PREPARE GetStoriesByBook(int) AS SELECT * FROM Stories WHERE book_id=$1")
 
 #for books
 c.execute("PREPARE MakeBook(text, int) AS INSERT INTO Books (name, author_id) VALUES ($1, $2) RETURNING *")
