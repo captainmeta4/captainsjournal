@@ -10,7 +10,7 @@ Title:<br>
 <input type="text" name="subtitle"><br>
 Markdown is supported in all fields below.<br>
 Series Description:<br>
-<textarea name="desc">{{ b.description }}</textarea><br>
+<textarea name="desc">{{ b._description_raw }}</textarea><br>
 {% if not v.agreed %}<input id="agree-box" type="checkbox" name="agreed" required><label for="agree-box" required>I have read and agree to <a href="/rules">the rules.</a></label>{% endif %}
 <input type="submit" value="Save">
 </form>
