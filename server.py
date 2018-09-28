@@ -158,7 +158,7 @@ def admin_required(f):
 def create_submission(q, v):
     return render_template('submit.html', v=v)
 
-@app.route("/makebook", methods=["POST"])
+@app.route("/makebook")
 @auth_required
 @not_banned
 def create_book(q, v):
@@ -267,6 +267,7 @@ def create_story(q, v):
     pre_md=request.form.get('pre',"")
     story_md=request.form.get('story',"")
     post_md=request.form.get('post',"")
+    bid=request.form.get("book",0)
 
     honeypot=request.form.get('subtitle',"")
     if honeypot:
@@ -275,6 +276,10 @@ def create_story(q, v):
     #validate info
     if len(title_md)<5 or len(story_md)<10:
         return render_template('badstory.html')
+    if bid!=0:
+        b=Book(bid=bid)
+        if b.author_id != v.id:
+            abort(403)
 
     #assemble data for story object and save it
     data=(-1,0,"","","", False, title_md, v.id,None,pre_md,story_md,post_md)
@@ -348,6 +353,8 @@ def post_edit_story(q, v, sid):
     honeypot=request.form.get("subtitle","")
     if honeypot:
         abort(418)
+
+    bid=int(request.form.get("book",0))
     
     title=request.form.get("title","")
     pre_md=request.form.get("pre","")
@@ -355,6 +362,7 @@ def post_edit_story(q, v, sid):
     post_md=request.form.get("post","")
 
     s.edit(title, pre_md, story_md, post_md)
+    s.set_book(bid)
 
     return redirect(s.url)
 
@@ -370,10 +378,11 @@ def make_book(q, v):
 
     title=request.form.get('title',"")
     description=request.form.get('desc',"")
-
+    
     result=(0,title,v.id,"",description)
 
     b=Book(result=result)
+    
     return b.save()
 
 @app.route("/api/editbook/<bid>", methods=["POST"])
