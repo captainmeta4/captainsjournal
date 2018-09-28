@@ -286,6 +286,7 @@ class Book():
         self._description_raw=result[4]
         self.created=result[5]
         self.banned=result[6]
+        self.deleted=result[7]
 
         self.created_date=str(self.created).split()[0]
         self.url="/b/{}".format(str(self.id))

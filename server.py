@@ -252,6 +252,20 @@ def edit_story(q, v, sid):
         abort(403)
 
     return render_template('edit.html', s=s, v=v)
+
+@app.route("/editbook/<bid>")
+@auth_required
+@not_banned
+def edit_story(q, v, bid):
+    try:
+        b=Book(bid=bid)
+    except KeyError:
+        abort(404)
+
+    if not v.id == b.author_id:
+        abort(403)
+
+    return render_template('editbook.html', b=b, v=v)
     
 #API hits
 @app.route('/api/submit', methods=["POST"])
@@ -379,7 +393,7 @@ def make_book(q, v):
     title=request.form.get('title',"")
     description=request.form.get('desc',"")
     
-    result=(0,title,v.id,"",description,0,False)
+    result=(0,title,v.id,"",description,0,False,False)
 
     b=Book(result=result)
     
@@ -408,3 +422,41 @@ def post_edit_book(q, v, bid):
     b.edit(title, description)
 
     return redirect(s.url)
+
+###
+@app.route('/api/banbook/<bid>', methods=["POST"])
+@auth_required
+@admin_required
+def ban_book(q, v, bid):
+    b=Book(bid=bid)
+    b.ban()
+    return redirect(b.url)
+    
+@app.route('/api/unbanbook/<bid>', methods=["POST"])
+@auth_required
+@admin_required
+def unban_book(q, v, bid):
+    b=Book(bid=bid)
+    b.unban()
+    return redirect(b.url)
+
+
+@app.route('/api/deletebook/<bid>', methods=["POST"])
+@auth_required
+def delete_book(q, v, bid):
+    b=Book(bid=bid)
+    if not v.id==b.author_id:
+        abort(403)
+    b.delete()
+    return redirect(b.url)
+    
+@app.route('/api/undeletebook/<bid>', methods=["POST"])
+@auth_required
+def undelete_book(q, v, bid):
+    b=Book(bid=bid)
+    if not v.id==b.author_id:
+        abort(403)
+    b.undelete()
+    return redirect(b.url)
+
+

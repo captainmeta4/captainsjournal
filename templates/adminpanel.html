@@ -22,3 +22,15 @@
 </form>
 {% endif %}
 {% endif %}
+{% if b %}
+{% if not b.banned %}
+<form action="/api/banbook/{{ b.id }}" method="post">
+<input type="submit" value="Ban Book">
+</form>
+{% endif %}
+{% if b.banned %}
+<form action="/api/unbanbook/{{ b.id }}" method="post">
+<input type="submit" value="Unban Book">
+</form>
+{% endif %}
+{% endif %}
