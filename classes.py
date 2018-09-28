@@ -169,7 +169,7 @@ class Story():
         if self.book_id==0:
             return None
 
-        c.execute("SELECT * FROM Stories WHERE book_id=%s AND id<%s ORDER BY id ASC LIMIT 1", (self.book_id, self.id))
+        c.execute("SELECT * FROM Stories WHERE book_id=%s AND id<%s ORDER BY id DESC LIMIT 1", (self.book_id, self.id))
         result=c.fetchone()
         if result is None:
             return None
