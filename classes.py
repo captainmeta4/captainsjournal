@@ -154,7 +154,7 @@ class Story():
 
     def book(self):
 
-        if self.book_id=0:
+        if self.book_id==0:
             return None
         
         return Book(bid=self.book_id)       
