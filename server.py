@@ -96,6 +96,44 @@ def auth_desired(f): #but not necessary
     wrapper.__name__=f.__name__
     return wrapper
 
+def agree_required(f):
+    '''
+    wrapper for ensuring user has agreed to rules
+    wrap inside auth_required
+    '''
+
+    def wrapper(q, v, *args, **kwargs):
+
+        if not v.agreed:
+            try:
+                agreed=request.form.get('agreed', False)
+                if agreed:
+                    v.tos_agree()
+                
+        if v.agreed;
+            return f(q, v, *args, **kwargs)
+        else:
+            abort(403)       
+
+    wrapper.__name__=f.__name__
+    return wrapper
+
+def not_banned(f):
+    '''
+    wrapper for ensuring user is not banned
+    wrap inside auth_required
+    '''
+
+    def wrapper(q, v, *args, **kwargs):
+
+        if v.banned:
+            abort(403)
+            
+        return f(q, v, *args, **kwargs)
+    
+    wrapper.__name__=f.__name__
+    return wrapper
+
 def admin_required(f):
     '''
     wrapper that aborts 403 if user is not admin
@@ -116,6 +154,12 @@ def admin_required(f):
 @auth_required
 def create_submission(q, v):
     return render_template('submit.html', v=v)
+
+@app.route("/makebook", methods=["POST"])
+@auth_required
+@not_banned
+def create_book(q, v):
+    return render_template('submitbook.html',v=v)
 
 @app.route('/')
 @auth_desired
@@ -181,8 +225,20 @@ def storypage(sid, v=None):
 
     return s.render_storypage(v=v)
 
+@app.route("/b/<bid>")
+@auth_desired
+def bookpage(bid, v=None)
+
+    try:
+        b=Book(bid, load_author=True)
+    except KeyError:
+        abort(404)
+
+    return b.render_bookpage(v=v)
+
 @app.route("/edit/<sid>")
 @auth_required
+@not_banned
 def edit_story(sid, q, v):
     try:
         s=Story(sid=sid)
@@ -197,17 +253,12 @@ def edit_story(sid, q, v):
 #API hits
 @app.route('/api/submit', methods=["POST"])
 @auth_required
+@not_banned
+@agree_required
 def create_story(q, v):
 
     if v.banned:
         abort(403)
-
-    if not v.agreed:
-        agreed=request.form.get('agreed',None)
-        if not agreed:
-            abort(401)
-        v.tos_agree()
-    
     
     title_md=request.form.get('title',"")
     pre_md=request.form.get('pre',"")
@@ -280,6 +331,8 @@ def undelete_story(q, v, sid):
 
 @app.route("/api/edit/<sid>", methods=["POST"])
 @auth_required
+@not_banned
+@agree_requied
 def post_edit_story(q, v, sid):
     try:
         s=Story(sid=sid)
@@ -299,5 +352,47 @@ def post_edit_story(q, v, sid):
     post_md=request.form.get("post","")
 
     s.edit(title, pre_md, story_md, post_md)
+
+    return redirect(s.url)
+
+@app.route("/api/makebook", methods=["POST"])
+@auth_required
+@not_banned
+@agree_required
+def make_book(q, v):
+
+    honeypot=request.form.get("subtitle","")
+    if honeypot:
+        abort(418)
+
+    title=request.form.get('title',"")
+    description=request.form.get('desc',"")
+
+    result=(0,title,v.id,"",description)
+
+    b=Book(result=result)
+    return b.save()
+
+@app.route("/api/editbook/<bid>", methods=["POST"])
+@auth_required
+@not_banned
+@agree_requied
+def post_edit_story(q, v, bid):
+    try:
+        b=Book(bid=bid)
+    except KeyError:
+        abort(404)
+
+    if not v.id == b.author_id:
+        abort(403)
+
+    honeypot=request.form.get("subtitle","")
+    if honeypot:
+        abort(418)
+    
+    title=request.form.get("title","")
+    description=request.form.get("desc","")
+
+    b.edit(title, description)
 
     return redirect(s.url)

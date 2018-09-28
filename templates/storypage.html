@@ -12,7 +12,7 @@
 {% if s.author.banned %}
 	<p><b><span class="red">[This story’s author is banned.]</span></b></p>
 {% endif %}
-{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and not s.author.banned) %}
+{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted) %}
 	<hr>
 	{% if s.pre %}
 		<p><b>Author's Note:</b> {{ s.pre|safe }}</p>

@@ -32,7 +32,7 @@ c.execute("PREPARE UndeleteStory(int) AS UPDATE Stories Set deleted='false' WHER
 c.execute("PREPARE GetStoriesByBook(int) AS SELECT * FROM Stories WHERE book_id=$1")
 
 #for books
-c.execute("PREPARE MakeBook(text, int) AS INSERT INTO Books (name, author_id) VALUES ($1, $2) RETURNING *")
+c.execute("PREPARE MakeBook(text, int, text, text) AS INSERT INTO Books (name, author_id, description, description_raw, timestamp) VALUES ($1, $2, $3, $4, 'NOW') RETURNING *")
 c.execute("PREPARE GetBookById(int) AS SELECT * FROM Books WHERE id=$1")
 
 
@@ -121,7 +121,7 @@ class User():
 
 class Story():
 
-    def __init__(self, sid=0, result=None, make=False, load_author=False):
+    def __init__(self, sid=0, result=None, load_author=False):
 
         if result is None:
             #sanitize id
@@ -233,22 +233,53 @@ class Listing():
             
 class Book():
 
-    def __init__(self, bid=0, name="", uid=0, result=None, make=False):
+    def __init__(self, bid=0, result=None):
 
         if result is None:
-            if make and not bid:
-                c.execute("EXECUTE MakeBook(%s,%s)",(name, uid))
-            else:
-                c.execute("EXECUTE GetBookById(%s)",(bid,))
+            #sanitize id
+            sid=re.search("^[0-9]+", str(bid)).group(0)
 
+            #check database
+            c.execute("EXECUTE GetBookyById(%s)", (bid,))
             result=c.fetchone()
 
+            if result is None:
+                raise KeyError('book with that id does not exist')
+            
         self.id=int(result[0])
         self.title=result[1]
         self.author_id=result[2]
+        self.description=result[3]
+        self._description_raw=result[4]
+        self.created=result[5]
+        self.banned=result[6]
+
+        self.created_date=str(self.created).split()[0]
         self.url="/b/{}".format(str(self.id))
         self.stories=self.get_stories()
 
+        if load_author:
+            self.author=User(uid=self.author_id)
+
+    def save(self)
+    
+        self.title=Cleaner.clean(self.title)
+        self.description=Cleaner.clean(mistletoe.markdown(self._description_raw))
+
+        c.execute("EXECUTE MakeBook(%s,%s,%s,%s)",(name, self.author_id, self.description, self._description_raw))
+        data=c.fetchone()
+        conn.commit()
+        b=Book(result=data)
+        return redirect(b.url)
+
+    def edit(self, title, description):
+
+        self.title=Cleaner.clean(title)
+        self._description_raw=description
+        self.description=Cleaner.clean(mistletoe.markdown(self._description_raw))
+
+        c.execute("UPDATE Books SET title=%s, description=%s, description_raw=%s WHERE id=%s", (self.title, self.description, self._description_raw))
+    
 
     def get_stories(self):
 
@@ -257,3 +288,7 @@ class Book():
         for entry in c.fetchall():
             output.append(Story(result=entry))
         return output
+
+    def render_bookpage(self, v=None):
+        
+        return render_template('bookpage.html', b=self, v=v)
