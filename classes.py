@@ -18,7 +18,6 @@ c.execute("PREPARE GetUserByName(text) AS SELECT * FROM Users WHERE UPPER(reddit
 c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
 c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1")
-c.execute("PREPARE GetBooksByAuthorId(int) AS SELECT * FROM Books WHERE id=$1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *")
@@ -34,6 +33,7 @@ c.execute("PREPARE GetStoriesByBook(int) AS SELECT * FROM Stories WHERE book_id=
 #for books
 c.execute("PREPARE MakeBook(text, int, text, text) AS INSERT INTO Books (name, author_id, description, description_raw, timestamp) VALUES ($1, $2, $3, $4, 'NOW') RETURNING *")
 c.execute("PREPARE GetBookById(int) AS SELECT * FROM Books WHERE id=$1")
+c.execute("PREPARE GetBooksByAuthorId(int) AS SELECT * FROM Books WHERE author_id=$1")
 
 
 #Module global
