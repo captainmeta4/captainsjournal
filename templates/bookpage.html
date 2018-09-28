@@ -14,7 +14,7 @@
 {{ b.description|safe }}
 <hr>
 <ol>
-{% for s in b.stories() %}
+{% for s in b.stories()|sort:"id" %}
 {% if ((v.admin or v.id==b.author_id) or (not s.banned and not s.deleted)) %}<li><a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
 {% endfor %}
 </ol>

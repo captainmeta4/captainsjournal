@@ -78,8 +78,6 @@ class User():
         
         self.url="/u/{}".format(self.name)
         self.created_date=str(self.created).split()[0]
-	
-        self.books=self.get_books()
 
     def tos_agree(self):
         c.execute("UPDATE Users SET agreed='true' WHERE id=%s",(self.id,))
@@ -100,14 +98,11 @@ class User():
 
         return output
 
-    def get_books(self):
+    def books(self):
 
         c.execute("EXECUTE GetBooksByAuthorId(%s)", (self.id,))
-        output=[]
         for l in c.fetchall():
-            output.append(Book(result=l))
-
-        return output
+            yield Book(result=l)
 
     def ban(self):
 
@@ -283,10 +278,8 @@ class Book():
     def stories(self):
 
         c.execute("EXECUTE GetStoriesByBook(%s)",(self.id,))
-        output=[]
         for entry in c.fetchall():
-            output.append(Story(result=entry))
-        return output
+            yield Story(result=entry)
 
     def render_bookpage(self, v=None):
         
