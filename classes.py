@@ -34,7 +34,7 @@ c.execute("PREPARE GetStoriesByBook(int) AS SELECT * FROM Stories WHERE book_id=
 c.execute("PREPARE MakeBook(text, int, text, text) AS INSERT INTO Books (name, author_id, description, description_raw, timestamp) VALUES ($1, $2, $3, $4, 'NOW') RETURNING *")
 c.execute("PREPARE GetBookById(int) AS SELECT * FROM Books WHERE id=$1")
 c.execute("PREPARE GetBooksByAuthorId(int) AS SELECT * FROM Books WHERE author_id=$1")
-
+c.execute("PREPARE EditBook(text, text, text, int) AS UPDATE Books SET name=$1, description=$2, description_raw=$3 WHERE id=$4")
 
 #Module global
 Cleaner=bleach.sanitizer.Cleaner(tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre'])
@@ -318,7 +318,7 @@ class Book():
         self._description_raw=description
         self.description=Cleaner.clean(mistletoe.markdown(self._description_raw))
 
-        c.execute("UPDATE Books SET name=%s, description=%s, description_raw=%s WHERE id=%s", (self.title, self.description, self._description_raw, self.id))
+        c.execute("EXECUTE EditBook(%s, %s, %s, %s)", (self.title, self.description, self._description_raw, self.id))
     
 
     def stories(self):
