@@ -4,7 +4,7 @@
 <h1>{{ u.name }}</h1>
 {% if u.banned %} <p><span class="red"><b>[This user is banned.]</b></span></p>{% endif %}
 
-<p>User since: {{ u.created_date }}</p>
+<p>{% if u.admin %}<span class="red">[A]</span>{% endif %}User since: {{ u.created_date }}</p>
 <hr>
 <h2><b>Stories</b></h2>
 
