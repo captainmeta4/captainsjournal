@@ -333,20 +333,20 @@ class Book():
 
     def ban(self):
 
-        c.execute("UPDATE Books SET banned='true' WHERE id=%",(self.id,))
+        c.execute("UPDATE Books SET banned='true' WHERE id=%s",(self.id,))
         conn.commit()
 
     def unban(self):
 
-        c.execute("UPDATE Books SET banned='false' WHERE id=%",(self.id,))
+        c.execute("UPDATE Books SET banned='false' WHERE id=%s",(self.id,))
         conn.commit()
 
     def delete(self):
 
-        c.execute("UPDATE Books SET deleted='true' WHERE id=%",(self.id,))
+        c.execute("UPDATE Books SET deleted='true' WHERE id=%s",(self.id,))
         conn.commit()
 
     def undelete(self):
 
-        c.execute("UPDATE Books SET deleted='false' WHERE id=%",(self.id,))
+        c.execute("UPDATE Books SET deleted='false' WHERE id=%s",(self.id,))
         conn.commit()
