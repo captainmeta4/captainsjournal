@@ -335,7 +335,7 @@ def undelete_story(q, v, sid):
 @app.route("/api/edit/<sid>", methods=["POST"])
 @auth_required
 @not_banned
-@agree_requied
+@agree_required
 def post_edit_story(q, v, sid):
     try:
         s=Story(sid=sid)
