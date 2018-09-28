@@ -299,7 +299,7 @@ class Book():
         self.title=Cleaner.clean(self.title)
         self.description=Cleaner.clean(mistletoe.markdown(self._description_raw))
 
-        c.execute("EXECUTE MakeBook(%s,%s,%s,%s)",(name, self.author_id, self.description, self._description_raw))
+        c.execute("EXECUTE MakeBook(%s,%s,%s,%s)",(self.title, self.author_id, self.description, self._description_raw))
         data=c.fetchone()
         conn.commit()
         b=Book(result=data)
