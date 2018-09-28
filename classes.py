@@ -21,7 +21,7 @@ c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1
 c.execute("PREPARE GetBooksByAuthorId(int) AS SELECT * FROM Books WHERE id=$1")
 
 #for stories
-c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, %9) RETURNING *")
+c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *")
 c.execute("PREPARE EditStory(int, text, text, text, text, text, text, text) AS UPDATE Stories SET pre=$2, story=$3, post=$4, pre_raw=$5, story_raw=$6, post_raw=$7, title=$8 WHERE id=$1")
 c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE author_id = $1 ORDER BY id DESC")
