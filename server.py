@@ -110,7 +110,7 @@ def agree_required(f):
                 if agreed:
                     v.tos_agree()
                 
-        if v.agreed;
+        if v.agreed:
             return f(q, v, *args, **kwargs)
         else:
             abort(403)       
