@@ -421,7 +421,7 @@ def post_edit_book(q, v, bid):
 
     b.edit(title, description)
 
-    return redirect(s.url)
+    return redirect(b.url)
 
 ###
 @app.route('/api/banbook/<bid>', methods=["POST"])
