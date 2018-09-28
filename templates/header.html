@@ -15,6 +15,10 @@
 {% if s.author_id == v.id %}
 {% include "authorpanel.html" %}
 {% endif %}
+{% elif b %}
+{% if b.author_id == v.id %}
+{% include "bookpanel.html" %}
+{% endif %}
 {% endif %}
 {% else %}
 <p><a href="https://www.reddit.com/api/v1/authorize?client_id=mZOtvt3nHg8KoQ&duration=permanent&redirect_uri=http://www.captainslogbook.org/oauth/redirect&response_type=code&scope=identity+submit&state=x" target="_blank">Log in with Reddit</a></p>
