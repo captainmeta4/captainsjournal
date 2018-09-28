@@ -15,6 +15,7 @@ Story Contents:<br>
 <textarea name="story">{{ s._story_raw }}</textarea><br>
 Post-story author note:<br>
 <textarea name="post">{{ s._post_raw }}</textarea><br>
+{% if not v.agreed %}<input id="agree-box" type="checkbox" name="agreed" required><label for="agree-box" required>I have read and agree to <a href="/rules">the rules.</a></label>{% endif %}
 <input type="submit" value="Save">
 </form>
 {% endblock %}
