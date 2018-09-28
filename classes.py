@@ -152,6 +152,13 @@ class Story():
         else:
             self.author=None
 
+    def book(self):
+
+        if self.book_id=0:
+            return None
+        
+        return Book(bid=self.book_id)       
+
     def next(self):
 
         if self.book_id==0:
@@ -323,3 +330,23 @@ class Book():
     def render_bookpage(self, v=None):
         
         return render_template('bookpage.html', b=self, v=v)
+
+    def ban(self):
+
+        c.execute("UPDATE Books SET banned='true' WHERE id=%",(self.id,))
+        conn.commit()
+
+    def unban(self):
+
+        c.execute("UPDATE Books SET banned='false' WHERE id=%",(self.id,))
+        conn.commit()
+
+    def delete(self):
+
+        c.execute("UPDATE Books SET deleted='true' WHERE id=%",(self.id,))
+        conn.commit()
+
+    def undelete(self):
+
+        c.execute("UPDATE Books SET deleted='false' WHERE id=%",(self.id,))
+        conn.commit()

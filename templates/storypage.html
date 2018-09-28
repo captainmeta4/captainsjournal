@@ -3,6 +3,10 @@
 {% block content %}
 <h1>{{ s.title }}</h1>
 <p>by <a href="/u/{{ s.author.name }}">{{ s.author.name }}</a> on {{ s.created_date }}</p>
+{% if s.book_id %}
+{% set b=s.book() %}
+<p>Part of <em><a href="{{ b.url }}">{{ b.title }}</a></em></p>
+{% endif %}
 {% if s.banned %}
 	<p><b><span class="red">[This story has been removed by the site administrators.]</span></b></p>
 {% endif %}
