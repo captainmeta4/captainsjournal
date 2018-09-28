@@ -282,7 +282,7 @@ def create_story(q, v):
             abort(403)
 
     #assemble data for story object and save it
-    data=(-1,0,"","","", False, title_md, v.id,None,pre_md,story_md,post_md)
+    data=(-1,0,"","","", False, title_md, v.id,None,pre_md,story_md,post_md, bid)
     story=Story(result=data)
     return story.save()
     
