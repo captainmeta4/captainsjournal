@@ -380,7 +380,7 @@ def make_book(q, v):
 @auth_required
 @not_banned
 @agree_required
-def post_edit_story(q, v, bid):
+def post_edit_book(q, v, bid):
     try:
         b=Book(bid=bid)
     except KeyError:
