@@ -256,7 +256,6 @@ class Book():
 
         self.created_date=str(self.created).split()[0]
         self.url="/b/{}".format(str(self.id))
-        self.stories=self.get_stories()
 
         if load_author:
             self.author=User(uid=self.author_id)
@@ -281,7 +280,7 @@ class Book():
         c.execute("UPDATE Books SET title=%s, description=%s, description_raw=%s WHERE id=%s", (self.title, self.description, self._description_raw))
     
 
-    def get_stories(self):
+    def stories(self):
 
         c.execute("EXECUTE GetStoriesByBook(%s)",(self.id,))
         output=[]
