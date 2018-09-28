@@ -256,7 +256,7 @@ def edit_story(q, v, sid):
 @app.route("/editbook/<bid>")
 @auth_required
 @not_banned
-def edit_story(q, v, bid):
+def edit_book(q, v, bid):
     try:
         b=Book(bid=bid)
     except KeyError:
