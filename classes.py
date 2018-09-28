@@ -240,7 +240,7 @@ class Book():
             sid=re.search("^[0-9]+", str(bid)).group(0)
 
             #check database
-            c.execute("EXECUTE GetBookyById(%s)", (bid,))
+            c.execute("EXECUTE GetBookById(%s)", (bid,))
             result=c.fetchone()
 
             if result is None:
