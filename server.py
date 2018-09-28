@@ -107,8 +107,11 @@ def agree_required(f):
         if not v.agreed:
             try:
                 agreed=request.form.get('agreed', False)
-                if agreed:
-                    v.tos_agree()
+            except:
+                abort(400)
+                
+            if agreed:
+                v.tos_agree()
                 
         if v.agreed:
             return f(q, v, *args, **kwargs)
