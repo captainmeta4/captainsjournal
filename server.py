@@ -230,7 +230,7 @@ def storypage(sid, v=None):
 
 @app.route("/b/<bid>")
 @auth_desired
-def bookpage(bid, v=None)
+def bookpage(bid, v=None):
 
     try:
         b=Book(bid, load_author=True)
