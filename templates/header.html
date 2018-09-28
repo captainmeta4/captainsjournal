@@ -4,6 +4,12 @@
 <hr>
 {% if v %}
 <p><a href="{{ v.url }}">{{ v.name }}</a>{% if not v.banned %} | <a href="/submit">Create Story</a> | <a href="/makebook">Create Book</a></p>{% endif %}
+{% if s %}
+{% set n=s.next() %}
+{% set p=s.previous() %}
+{% if p or n %}
+<p>{% if p %}<a href="{{ p.url }}">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}">Next</a>{% endif %}</p>
+{% endif %}
 {% if v.admin %}
 {% include "adminpanel.html" %}
 {% endif %}
@@ -18,11 +24,5 @@
 {% endif %}
 {% else %}
 <p><a href="https://www.reddit.com/api/v1/authorize?client_id=mZOtvt3nHg8KoQ&duration=permanent&redirect_uri=http://www.captainslogbook.org/oauth/redirect&response_type=code&scope=identity+submit&state=x" target="_blank">Log in with Reddit</a></p>
-{% endif %}
-{% if s %}
-{% set n=s.next() %}
-{% set p=s.previous() %}
-{% if p or n %}
-<p>{% if p %}<a href="{{ p.url }}">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}">Next</a>{% endif %}</p>
 {% endif %}
 {% endif %}
