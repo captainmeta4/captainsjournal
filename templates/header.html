@@ -3,11 +3,7 @@
 <label for="night-toggle">Night Mode</label>
 <hr>
 {% if v %}
-<p><a href="{{ v.url }}">{{ v.name }}</a></p>
-{% if not v.banned %}
-<p><a href="/submit">Create Story</a></p>
-<p><a href="/makebook">Create Book</a></p>
-{% endif %}
+<p><a href="{{ v.url }}">{{ v.name }}</a>{% if not v.banned %} | <a href="/submit">Create Story</a> | <a href="/makebook">Create Book</a></p>{% endif %}
 {% if v.admin %}
 {% include "adminpanel.html" %}
 {% endif %}
