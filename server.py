@@ -146,7 +146,7 @@ def oauth_redirect():
     v=User(name=name, make=True)
 
     resp=make_response(redirect('/'))
-    resp.set_cookie("logbook_reddit", value=token, domain="captainslogbook.org")
+    resp.set_cookie("logbook_reddit", value=token, domain=".captainslogbook.org")
 
     return resp
 
