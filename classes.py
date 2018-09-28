@@ -318,7 +318,7 @@ class Book():
         self._description_raw=description
         self.description=Cleaner.clean(mistletoe.markdown(self._description_raw))
 
-        c.execute("UPDATE Books SET title=%s, description=%s, description_raw=%s WHERE id=%s", (self.title, self.description, self._description_raw, self.id))
+        c.execute("UPDATE Books SET name=%s, description=%s, description_raw=%s WHERE id=%s", (self.title, self.description, self._description_raw, self.id))
     
 
     def stories(self):
