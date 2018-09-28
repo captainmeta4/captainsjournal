@@ -11,7 +11,7 @@
 {% for b in u.books() %}
 <h3><a href="{{ b.url }}">{{ b.title }}</a></h3>
 <ol>
-{% for s in b.stories()|sort:"id" %}
+{% for s in b.stories() | sort(attribute="id") %}
 {% if (v.admin or v.id==u.id) or (not s.banned and not s.deleted) %}<li><a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
 {% endfor %}
 </ol>
