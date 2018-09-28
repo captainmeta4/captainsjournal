@@ -233,7 +233,7 @@ class Listing():
             
 class Book():
 
-    def __init__(self, bid=0, result=None):
+    def __init__(self, bid=0, result=None, load_author=None):
 
         if result is None:
             #sanitize id
