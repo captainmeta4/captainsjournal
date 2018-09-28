@@ -281,7 +281,7 @@ def create_story(q, v):
     pre_md=request.form.get('pre',"")
     story_md=request.form.get('story',"")
     post_md=request.form.get('post',"")
-    bid=request.form.get("book",0)
+    bid=int(request.form.get("book",0))
 
     honeypot=request.form.get('subtitle',"")
     if honeypot:
@@ -290,7 +290,7 @@ def create_story(q, v):
     #validate info
     if len(title_md)<5 or len(story_md)<10:
         return render_template('badstory.html')
-    print(bid)
+
     if bid:
         b=Book(bid=bid)
         if b.author_id != v.id:
