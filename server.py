@@ -379,7 +379,7 @@ def make_book(q, v):
     title=request.form.get('title',"")
     description=request.form.get('desc',"")
     
-    result=(0,title,v.id,"",description)
+    result=(0,title,v.id,"",description,0,False)
 
     b=Book(result=result)
     
