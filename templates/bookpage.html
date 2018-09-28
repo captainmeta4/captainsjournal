@@ -15,7 +15,7 @@
 <hr>
 <ol>
 {% for s in b.stories() %}
-{% if ((v.admin or v.id==b.author_id) or (not s.banned and not s.deleted)) and (s.book_id == 0) %}<li><a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
+{% if ((v.admin or v.id==b.author_id) or (not s.banned and not s.deleted)) %}<li><a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
 {% endfor %}
 </ol>
 {% endif %}
