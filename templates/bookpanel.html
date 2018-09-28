@@ -9,5 +9,5 @@
 <input type="submit" value="Re-publish Book">
 </form>
 {% endif %}
-<a href="/editbook/{{ b.id }}"><button>Edit Book</button></a>
+{% if not b.author.banned %}<a href="/editbook/{{ b.id }}"><button>Edit Book</button></a>{% endif %}
 {% endif %}

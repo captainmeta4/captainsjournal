@@ -9,5 +9,7 @@
 <input type="submit" value="Re-publish Story">
 </form>
 {% endif %}
+{% if not s.author.banned %}
 <a href="/edit/{{ s.id }}"><button>Edit Story</button></a>
+{% endif %}
 {% endif %}
