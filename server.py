@@ -290,7 +290,7 @@ def create_story(q, v):
     #validate info
     if len(title_md)<5 or len(story_md)<10:
         return render_template('badstory.html')
-    
+    print(bid)
     if bid:
         b=Book(bid=bid)
         if b.author_id != v.id:
