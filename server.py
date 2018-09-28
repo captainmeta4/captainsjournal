@@ -379,7 +379,7 @@ def make_book(q, v):
 @app.route("/api/editbook/<bid>", methods=["POST"])
 @auth_required
 @not_banned
-@agree_requied
+@agree_required
 def post_edit_story(q, v, bid):
     try:
         b=Book(bid=bid)
