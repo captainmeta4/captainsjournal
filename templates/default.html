@@ -10,7 +10,21 @@
     gtag('config', 'UA-126102866-1');
   </script>
   <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
-  <title>{% if s %}{{ s.title }}{% elif b %}{{ b.title }}{% elif u %}{{ u.name }}{% else %}Captain's Logbook{% endif %}</title>
+  
+  {% if s %}
+  <title>{{ s.title }}</title>
+  <meta name="description" content="{{ s.title }}">
+  {% elif b %}
+  <title>{{ b.title }}</title>
+  <meta name="description" content="{{ b.title }}">
+  {% elif u %}
+  <title>{{ u.name }}</title>
+  <meta name="description" content="{{ u.name }}">
+  {% else %}
+  <title>Captain's Logbook</title>
+  <meta name="description" content="Captain's Logbook">
+  {% endif %}
+  
     <script>
       function nightToggle() {
         //toggle night mode
