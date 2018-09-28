@@ -201,6 +201,13 @@ def create_story(q, v):
 
     if v.banned:
         abort(403)
+
+    if not v.agreed:
+        agreed=request.form.get('agreed',None)
+        if not agreed:
+            abort(401)
+        v.tos_agree()
+    
     
     title_md=request.form.get('title',"")
     pre_md=request.form.get('pre',"")
