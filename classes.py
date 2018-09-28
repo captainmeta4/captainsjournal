@@ -261,7 +261,7 @@ class Book():
         if load_author:
             self.author=User(uid=self.author_id)
 
-    def save(self)
+    def save(self):
     
         self.title=Cleaner.clean(self.title)
         self.description=Cleaner.clean(mistletoe.markdown(self._description_raw))
