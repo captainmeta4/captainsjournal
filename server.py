@@ -242,7 +242,7 @@ def bookpage(bid, v=None):
 @app.route("/edit/<sid>")
 @auth_required
 @not_banned
-def edit_story(sid, q, v):
+def edit_story(q, v, sid):
     try:
         s=Story(sid=sid)
     except KeyError:
