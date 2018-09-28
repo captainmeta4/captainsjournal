@@ -269,6 +269,30 @@ class Book():
         if load_author:
             self.author=User(uid=self.author_id)
 
+    def next(self):
+
+        if self.book_id==0:
+            return None
+
+        c.execute("SELECT * FROM Stories WHERE book_id=%s AND id>%s ORDER BY id ASC LIMIT 1", (self.book_id, self.id))
+        result=c.fechone()
+        if result is None:
+            return None
+
+        return Story(result=result)
+
+    def previous(self):
+
+        if self.book_id==0:
+            return None
+
+        c.execute("SELECT * FROM Stories WHERE book_id=%s AND id<%s ORDER BY id ASC LIMIT 1", (self.book_id, self.id))
+        result=c.fechone()
+        if result is None:
+            return None
+
+        return Story(result=result)
+
     def save(self):
     
         self.title=Cleaner.clean(self.title)

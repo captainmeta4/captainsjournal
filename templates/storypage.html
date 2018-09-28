@@ -1,5 +1,13 @@
 {% extends "default.html" %}
 
+{% block navigation %}
+{% set n=s.next() %}
+{% set p=s.previous() %}
+{% if p or n %}
+<p>{% if p %}<a href="{{ p.url }}">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}">Next</a>{% endif %}</p>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <h1>{{ s.title }}</h1>
 <p>by <a href="/u/{{ s.author.name }}">{{ s.author.name }}</a> on {{ s.created_date }}</p>
