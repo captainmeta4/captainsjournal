@@ -213,7 +213,7 @@ def oauth_redirect():
     #create user if it doesn't yet exist
     v=User(name=name, make=True)
 
-    resp=make_response(redirect('/'))
+    resp=make_response(redirect(v.url))
     resp.set_cookie("logbook_reddit", value=token, domain=".captainslogbook.org")
 
     return resp
