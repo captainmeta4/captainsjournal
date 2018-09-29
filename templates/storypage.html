@@ -4,6 +4,19 @@
 <title>{{ s.title }}</title>
 {% endblock %}
 
+{% block authoranalytics %}
+{$ if s.author.google_analytics != "              " %}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ s.author.google_analytics }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ s.author.google_analytics }}');
+  </script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <h1>{{ s.title }}</h1>
 <p>by <a href="/u/{{ s.author.name }}">{{ s.author.name }}</a> on {{ s.created_date }}</p>
