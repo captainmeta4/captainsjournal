@@ -18,6 +18,7 @@ c.execute("PREPARE GetUserByName(text) AS SELECT * FROM Users WHERE UPPER(reddit
 c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
 c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1")
+c.execute("PREPARE GetUserByToken(text) AS SELECT * FROM Users WHERE token=$1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *")
@@ -41,7 +42,7 @@ Cleaner=bleach.sanitizer.Cleaner(tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','
 
 class User():
 
-    def __init__(self, name="", uid=0, make=False):
+    def __init__(self, name="", uid=0, token=None, make=False):
 
         if not(name or uid):
             raise ValueError("One of name or uid must be provided")
@@ -49,12 +50,13 @@ class User():
             raise ValueError("Only one of name or uid can be provided")
 
         #check database
-        #sanitize name
+        #sanitize name and token
         if name:
             name=re.search("^[A-Za-z0-9_-]+", name).group(0)
-
-
-        if name:
+        
+		if token:
+            c.execute("EXECUTE GetUserByToken(%s)", (token,))    
+        elif name:
             c.execute("EXECUTE GetUserByName(%s)", (name,))
         elif uid:
             c.execute("EXECUTE GetUserById(%s)", (uid,))
