@@ -19,6 +19,7 @@ c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
 c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1")
 c.execute("PREPARE GetUserByToken(text) AS SELECT * FROM Users WHERE token=$1")
+c.execute("PREPARE UpdateToken(int, text) AS UPDATE Users SET token=$2 WHERE id=$1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *")
@@ -85,6 +86,9 @@ class User():
         c.execute("UPDATE Users SET agreed='true' WHERE id=%s",(self.id,))
         self.agreed=True
         conn.commit()
+	
+    def update_token(self, token):
+        c.execute("UpdateToken(%s,%s)", (self.id, token))
 
     def render_userpage(self, v=None):
 
