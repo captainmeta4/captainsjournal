@@ -84,24 +84,19 @@ def auth_desired(f): #but not necessary
 
         try:
             token=check_token()
-            print(token)
         except:
-            print("no cookie")
             return f(*args, v=None, **kwargs)
   
         try:
             v=User(token=token)
-            print(v.name+" by token")
         except:
             try:
                 q=temporary_reddit(token)
                 name=q.user.me().name
-                print(name+" by praw")
                 v=User(name=name, make=True)
+                v.update_token(token)
             except:
-                print('bad token')
                 return f(*args, v=None, **kwargs)
-            v.update_token(token)
 
         return f(*args, v=v, **kwargs)
 
