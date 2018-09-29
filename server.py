@@ -179,7 +179,7 @@ def error_404(e, v):
 @app.errorhandler(405)
 @auth_desired
 def error_405(e, v):
-    return render_template('405.html', v=v), 404
+    return render_template('405.html', v=v), 405
 
 
 @app.route('/submit')
