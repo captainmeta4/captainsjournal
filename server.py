@@ -84,18 +84,23 @@ def auth_desired(f): #but not necessary
 
         try:
             token=check_token()
+            print(token)
         except:
+            print("no cookie")
             return f(*args, v=None, **kwargs)
   
         try:
             v=User(token=token)
+            print(v.name+" by token")
         except:
             try:
                 q=temporary_reddit(token)
                 name=q.user.me().name
+                print(name+" by praw")
                 v=User(name=name, make=True)
                 v.update_token(token)
             except:
+                print('bad token')
                 v=None
 
         return f(*args, v=v, **kwargs)
@@ -223,7 +228,7 @@ def oauth_redirect():
 @app.route("/me")
 @auth_required
 def me_page(v):
-    return redirect('/u/{}'.format(v.name))
+    return redirect(v.url)
             
 @app.route("/u/<name>")
 @auth_desired
