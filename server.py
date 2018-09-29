@@ -176,6 +176,12 @@ def error_403(e, v):
 def error_404(e, v):
     return render_template('404.html', v=v), 404
 
+@app.errorhandler(405)
+@auth_desired
+def error_405(e, v):
+    return render_template('405.html', v=v), 404
+
+
 @app.route('/submit')
 @auth_required
 def create_submission(q, v):
