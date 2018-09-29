@@ -75,6 +75,7 @@ class User():
         self.id=int(result[0])
         self.name=result[1]
         self.created=result[2]
+        self.google_analytics=result[3]
         self.banned=bool(result[4])
         self.admin=bool(result[5])
         self.agreed=bool(result[6])
