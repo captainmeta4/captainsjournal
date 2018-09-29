@@ -89,6 +89,7 @@ class User():
 	
     def update_token(self, token):
         c.execute("UpdateToken(%s,%s)", (self.id, token))
+        conn.commit()
 
     def render_userpage(self, v=None):
 
