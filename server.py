@@ -100,7 +100,7 @@ def auth_desired(f): #but not necessary
                 v=User(name=name, make=True)
             except:
                 print('bad token')
-                v=None
+                return f(*args, v=None, **kwargs)
             v.update_token(token)
 
         return f(*args, v=v, **kwargs)
