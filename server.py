@@ -44,7 +44,7 @@ def check_token():
     if token==None:
         raise KeyError('not found')
     else:
-        return temporary_reddit(token)
+        return token
 
 def auth_required(f):
     '''
@@ -54,12 +54,21 @@ def auth_required(f):
     def wrapper(*args, **kwargs):
 
         try:
-            q=check_token()
-            name=q.user.me().name
+            token=check_token()
         except:
             return abort(401)
+          
+        try:
+            v=User(token=token)
+        except:
+            try:
+                q=temporary_reddit(token)
+                name=q.user.me().name
+                v=User(name=name, make=True)
+            except:
+                abort(401)
 
-        return f(*args, q=q, v=User(name=name), **kwargs)
+        return f(*args, q=q, v=v, **kwargs)
 
     wrapper.__name__=f.__name__
     return wrapper
@@ -73,12 +82,21 @@ def auth_desired(f): #but not necessary
     def wrapper(*args, **kwargs):
 
         try:
-            q=check_token()
-            name=q.user.me().name
+            token=check_token()
         except:
             return f(*args, v=None, **kwargs)
+  
+        try:
+            v=User(token=token)
+        except:
+            try:
+                q=temporary_reddit(token)
+                name=q.user.me().name
+                v=User(name=name, make=True)
+            except:
+                v=None
 
-        return f(*args, v=User(name=name, make=True), **kwargs)
+        return f(*args, v=v, **kwargs)
 
     wrapper.__name__=f.__name__
     return wrapper
