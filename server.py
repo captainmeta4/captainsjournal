@@ -219,7 +219,7 @@ def userpage(name, v=None):
 
 @app.route("/uid/<uid>")
 @auth_desired
-def user_by_id(uid, v=none):
+def user_by_id(uid, v=None):
     try:
         u=User(uid=uid)
     except KeyError:
