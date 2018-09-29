@@ -54,7 +54,7 @@ class User():
         if name:
             name=re.search("^[A-Za-z0-9_-]+", name).group(0)
         
-		if token:
+        if token:
             c.execute("EXECUTE GetUserByToken(%s)", (token,))    
         elif name:
             c.execute("EXECUTE GetUserByName(%s)", (name,))
