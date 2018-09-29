@@ -1,5 +1,9 @@
 {% extends "default.html" %}
 
+{% block title %}
+<title>{{ u.name }}</title>
+{% endblock %}
+
 {% block content %}
 <h1>{{ u.name }}</h1>
 {% if u.banned %} <p><span class="red"><b>[This user is banned.]</b></span></p>{% endif %}

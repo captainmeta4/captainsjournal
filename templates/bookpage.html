@@ -1,5 +1,9 @@
 {% extends "default.html" %}
 
+{% block title %}
+<title>{{ b.title }}</title>
+{% endblock %}
+
 {% block content %}
 <h1>{{ b.title }}</h1>
 <p>by <a href="/u/{{ b.author.name }}">{{ b.author.name }}</a> on {{ b.created_date }}</p>

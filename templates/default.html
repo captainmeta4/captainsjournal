@@ -11,19 +11,7 @@
   </script>
   <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
   
-  {% if s %}
-  <title>{{ s.title }}</title>
-  <meta name="description" content="{{ s.title }}">
-  {% elif b %}
-  <title>{{ b.title }}</title>
-  <meta name="description" content="{{ b.title }}">
-  {% elif u %}
-  <title>{{ u.name }}</title>
-  <meta name="description" content="{{ u.name }}">
-  {% else %}
-  <title>Captain's Logbook</title>
-  <meta name="description" content="Captain's Logbook">
-  {% endif %}
+  {% block title %}{% endblock %}
   
     <script>
       function nightToggle() {

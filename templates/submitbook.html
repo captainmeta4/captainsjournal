@@ -1,18 +1,19 @@
 {% extends "default.html" %}
 
+{% block title %}
+<title>Create Book</title>
+{% endblock %}
+
 {% block content %}
-
 <h1>Create Book</h1>
-
 <p>Books are a way to group stories together in a series.</p>
-
 <form action="/api/makebook" method="post">
 Title:<br>
-<input type="text" name="title"><br>
+<input type="text" name="title" required><br>
 <input type="text" name="subtitle"><br>
 Markdown is supported in all fields below.<br>
 Series Description:<br>
-<textarea name="desc"></textarea><br>
+<textarea name="desc" required></textarea><br>
 {% if not v.agreed %}<input id="agree-box" type="checkbox" name="agreed" required><label for="agree-box" required>I have read and agree to <a href="/rules">the rules.</a></label><br>{% endif %}
 <input type="submit" value="Save">
 </form>
