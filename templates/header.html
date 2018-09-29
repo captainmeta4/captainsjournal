@@ -2,14 +2,16 @@
 <input id="night-toggle" type="checkbox" onClick="nightToggle()"></input>
 <label for="night-toggle">Night Mode</label>
 <hr>
-{% if v %}
-  <p><a href="{{ v.url }}">{{ v.name }}</a>{% if not v.banned %} | <a href="/submit">Create Story</a> | <a href="/makebook">Create Book</a></p>{% endif %}
-  {% if s %}
+{% if s %}
     {% set n=s.next() %}
     {% set p=s.previous() %}
     {% if p or n %}
       <p>{% if p %}<a href="{{ p.url }}">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}">Next</a>{% endif %}</p>
     {% endif %}
+{% endif %}
+{% if v %}
+  <p><a href="{{ v.url }}">{{ v.name }}</a>{% if not v.banned %} | <a href="/submit">Create Story</a> | <a href="/makebook">Create Book</a></p>{% endif %}
+  {% if s %}
     {% if v.admin %}
       {% include "adminpanel.html" %}
     {% endif %}
