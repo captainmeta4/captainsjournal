@@ -26,19 +26,6 @@ r=praw.Reddit(client_id=os.environ.get('client_id'),
 def static_service(path):
     return send_from_directory('assets', path)
 
-#take care of error pages
-@app.errorhandler(401)
-def error_401(e):
-    return render_template('401.html'), 401
-
-@app.errorhandler(403)
-def error_403(e):
-    return render_template('403.html'), 403
-
-@app.errorhandler(404)
-def error_404(e):
-    return render_template('404.html'), 404
-
 def temporary_reddit(refresh_token):
 
     '''
@@ -152,6 +139,22 @@ def admin_required(f):
 
     wrapper.__name__=f.__name__
     return wrapper
+  
+#take care of error pages
+@app.errorhandler(401)
+@auth_desired
+def error_401(e, v):
+    return render_template('401.html', v=v), 401
+
+@app.errorhandler(403)
+@auth_desired
+def error_403(e, v):
+    return render_template('403.html', v=v), 403
+
+@app.errorhandler(404)
+@auth_desired
+def error_404(e, v):
+    return render_template('404.html', v=v), 404
 
 @app.route('/submit')
 @auth_required
