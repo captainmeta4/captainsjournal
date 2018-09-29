@@ -17,10 +17,10 @@
       {% if s.author_id == v.id %}
         {% include "authorpanel.html" %}
       {% endif %}
-    {% elif b %}
-      {% if b.author_id == v.id %}
-        {% include "bookpanel.html" %}
-      {% endif %}
+    {% endif %}
+  {% elif b %}
+    {% if b.author_id == v.id %}
+      {% include "bookpanel.html" %}
     {% endif %}
   {% endif %}
 {% else %}
