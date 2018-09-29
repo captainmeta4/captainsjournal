@@ -65,6 +65,7 @@ def auth_required(f):
                 q=temporary_reddit(token)
                 name=q.user.me().name
                 v=User(name=name, make=True)
+                v.update_token(token)
             except:
                 abort(401)
 
@@ -93,6 +94,7 @@ def auth_desired(f): #but not necessary
                 q=temporary_reddit(token)
                 name=q.user.me().name
                 v=User(name=name, make=True)
+                v.update_token(token)
             except:
                 v=None
 
