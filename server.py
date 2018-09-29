@@ -291,7 +291,7 @@ def edit_story(q, v, sid):
 @not_banned
 def edit_book(q, v, bid):
     try:
-        b=Book(bid=bid)
+        b=Book(bid=bid, load_author=True)
     except KeyError:
         abort(404)
 
