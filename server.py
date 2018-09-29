@@ -98,10 +98,10 @@ def auth_desired(f): #but not necessary
                 name=q.user.me().name
                 print(name+" by praw")
                 v=User(name=name, make=True)
-                v.update_token(token)
             except:
                 print('bad token')
                 v=None
+            v.update_token(token)
 
         return f(*args, v=v, **kwargs)
 
