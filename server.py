@@ -217,6 +217,16 @@ def userpage(name, v=None):
 
     return u.render_userpage(v=v)
 
+@app.route("/uid/<uid>")
+@auth_desired
+dev user_by_id(uid, v=none):
+    try:
+        u=User(uid=uid)
+    except KeyError:
+        abort(404)
+
+    return redirect(u.url)
+
 @app.route("/s/<sid>")
 @auth_desired
 def storypage(sid, v=None):
