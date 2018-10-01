@@ -80,7 +80,7 @@ class User():
         self.banned=bool(result[4])
         self.admin=bool(result[5])
         self.agreed=bool(result[6])
-        self.patreon=result[7]
+        self.patreon=result[8]
         
         self.url="/u/{}".format(self.name)
         self.created_date=str(self.created).split()[0]
