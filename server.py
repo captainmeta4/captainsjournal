@@ -181,6 +181,10 @@ def error_404(e, v):
 def error_405(e, v):
     return render_template('405.html', v=v), 405
 
+@app.errorhandler(500)
+@auth_desired
+def error_500(e, v):
+    return render_template('500.html', v=v), 500
 
 @app.route('/submit')
 @auth_required
