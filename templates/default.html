@@ -76,6 +76,13 @@
  <div class="wrapper">
   <header>
     {% include "header.html" %}
+    {% block storynav %}{% endblock %}
+    {% if v %}
+      {% if v.admin %}
+         {% block adminpanel %}{% endblock %}
+      {% endif %}
+      {% block authorpanel %}{% endblock %}
+    {% endif %}
   </header>
   <section>
     <article>

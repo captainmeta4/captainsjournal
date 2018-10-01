@@ -4,6 +4,47 @@
 <title>{{ s.title }}</title>
 {% endblock %}
 
+{% block storynav %}
+{% set n=s.next() %}
+{% set p=s.previous() %}
+{% if p or n %}
+  <p>{% if p %}<a href="{{ p.url }}">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}">Next</a>{% endif %}</p>
+{% endif %}
+{% endblock %}
+
+{% block adminpanel %}
+{% if v.admin %}
+{% if not s.banned %}
+<form action="/api/banstory/{{ s.id }}" method="post">
+<input type="submit" value="Ban Story">
+</form>
+{% endif %}
+{% if s.banned %}
+<form action="/api/unbanstory/{{ s.id }}" method="post">
+<input type="submit" value="Unban Story">
+</form>
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block authorpanel %}
+  {% if v.id == s.author_id %}
+    {% if not s.deleted %}
+      <form action="/api/deletestory/{{ s.id }}" method="post">
+      <input type="submit" value="Unpublish Story">
+      </form>
+    {% endif %}
+    {% if s.deleted %}
+      <form action="/api/undeletestory/{{ s.id }}" method="post">
+      <input type="submit" value="Re-publish Story">
+      </form>
+    {% endif %}
+    {% if not s.author.banned %}
+      <a href="/edit/{{ s.id }}"><button>Edit Story</button></a>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
 {% block content %}
 <h1>{{ s.title }}</h1>
 <p>by <a href="/u/{{ s.author.name }}">{{ s.author.name }}</a> on {{ s.created_date }}</p>

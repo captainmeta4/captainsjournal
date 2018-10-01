@@ -4,9 +4,25 @@
 <title>{{ u.name }}</title>
 {% endblock %}
 
+{% block adminpanel %}
+{% if v.admin %}
+{% if not u.banned %}
+<form action="/api/banuser/{{ u.id }}" method="post">
+<input type="submit" value="Ban User">
+</form>
+{% endif %}
+{% if u.banned %}
+<form action="/api/unbanuser/{{ u.id }}" method="post">
+<input type="submit" value="Unban User">
+</form>
+{% endif %}
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <h1>{{ u.name }}</h1>
 {% if u.banned %} <p><span class="red"><b>[This user is banned.]</b></span></p>{% endif %}
+{% if v.admin or v.id==u.id or not u.banned %}
 <p>{% if u.admin %}<span class="red">[A]</span> {% endif %}User since: {{ u.created_date }}</p>
 <hr>
 <h2><b>Stories</b></h2>
@@ -26,5 +42,5 @@
 <li><em>None yet!</em></li>
 {% endfor %}
 </ul>
-
+{% endif %}
 {% endblock %}
