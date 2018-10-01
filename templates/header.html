@@ -11,14 +11,12 @@
 {% endif %}
 {% if v %}
   <p><a href="{{ v.url }}">{{ v.name }}</a>{% if not v.banned %} | <a href="/submit">Create Story</a> | <a href="/makebook">Create Book</a></p>{% endif %}
+  {% if v.admin %}
+    {% include "adminpanel.html" %}
+  {% endif %}
   {% if s %}
-    {% if v.admin %}
-      {% include "adminpanel.html" %}
-    {% endif %}
-    {% if s %}
-      {% if s.author_id == v.id %}
-        {% include "authorpanel.html" %}
-      {% endif %}
+    {% if s.author_id == v.id %}
+      {% include "authorpanel.html" %}
     {% endif %}
   {% elif b %}
     {% if b.author_id == v.id %}
