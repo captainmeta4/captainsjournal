@@ -17,7 +17,8 @@
 <p><b>Newest Stories</b></p>
 <ul>
 {% for s in l %}
-<li><a href={{ s.url }}>{{ s.title }}</a> by <a href="{{ s.author.url }}">{{ s.author.name }}</li>
+{% set b=s.book() %}
+<li>{% if b %}[<a href="{{ b.url }}">{{ b.title }}</a>] {% endif %}<a href={{ s.url }}>{{ s.title }}</a> by <a href="{{ s.author.url }}">{{ s.author.name }}</li>
 {% endfor %}
 </ul>
 {% endblock %}
