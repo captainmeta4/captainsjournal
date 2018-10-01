@@ -247,8 +247,7 @@ def patreon_redirect(q, v):
     api_client = patreon.API(access_token)
     user_response = api_client.fetch_user()
     user = user_response.data()
-    print(user.attributes())
-    name = user.attributes()['name']
+    name = user.attributes()['vanity']
 
     v.set_patreon(name)
     
