@@ -23,7 +23,7 @@
 <h1>{{ u.name }}</h1>
 {% if u.banned %} <p><span class="red"><b>[This user is banned.]</b></span></p>{% endif %}
 {% if v.admin or v.id==u.id or not u.banned %}
-<p>{% if u.admin %}<span class="red">[A]</span> {% endif %}User since: {{ u.created_date }}</p>
+<p>{% if u.admin %}<span class="red">[A]</span> {% endif %}User since: {{ u.created_date }}{% if v.id==u.id or v.patreon %} | {% endif %}{% if u.patreon %}<a href="https://patreon.com/{{ u.patreon }}">Patreon</a>{% elif v.id==u.id %}<a href="https://www.patreon.com/oauth2/authorize?client_id=Fy0C97RAlAGmKPtdxZT_Q4GiGoVks4zRqT9jrGmtf27Q02_UAUkTDZtOdZax8Scd&scope=users&state=x&response_type=code&redirect_uri=https://staging.captainslogbook.org/oauth/patreon">Connect Patreon</a>{% endif %}</p>
 <hr>
 <h2><b>Stories</b></h2>
 {% for b in u.books() if ((v.admin or v.id==u.id) or (not b.banned and not b.deleted)) %}

@@ -20,6 +20,7 @@ c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
 c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1")
 c.execute("PREPARE GetUserByToken(text) AS SELECT * FROM Users WHERE token=$1")
 c.execute("PREPARE UpdateToken(int, text) AS UPDATE Users SET token=$2 WHERE id=$1")
+c.execute("PREPARE SetPatreon(int, text) AS UPDATE USERS SET patreon=$2 WHERE id=$1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *")
@@ -79,10 +80,15 @@ class User():
         self.banned=bool(result[4])
         self.admin=bool(result[5])
         self.agreed=bool(result[6])
+        self.patreon=result[7]
         
         self.url="/u/{}".format(self.name)
         self.created_date=str(self.created).split()[0]
 
+    def set_patreon(self, name):
+        c.execute("EXECUTE SetPatreon(%s, %s)", (self.id, name))
+        conn.commit()
+        
     def tos_agree(self):
         c.execute("UPDATE Users SET agreed='true' WHERE id=%s",(self.id,))
         self.agreed=True

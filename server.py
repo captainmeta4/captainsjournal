@@ -4,6 +4,7 @@ import os
 import time
 from classes import *
 from flaskext.markdown import Markdown
+import patreon
 
 ### NAMING CONVENTIONS ###
 # s - Story object
@@ -20,6 +21,9 @@ r=praw.Reddit(client_id=os.environ.get('client_id'),
               client_secret=os.environ.get('client_secret'),
               redirect_uri="http://www.captainslogbook.org/oauth/redirect",
               user_agent=user_agent)
+
+patreon_id=os.environ.get('patreon_id')
+patreon_secret=os.environ.get('patreon_secret')
 
 #take care of static pages
 @app.route('/assets/<path:path>')
@@ -229,6 +233,25 @@ def oauth_redirect():
     resp.set_cookie("logbook_reddit", value=token, domain=".captainslogbook.org")
 
     return resp
+
+@app.route("/oauth/patreon")
+@auth_required
+def patreon_redirect(q, v):
+    '''
+    Handle incoming redirects from patreon oauth flow
+    '''
+
+    oauth_client = patreon.OAuth(patreon_id, patreon_secret)
+    tokens = oauth_client.get_tokens(request.args.get('code'), 'https://www.captainslogbook.org/oauth/redirect')
+    access_token = tokens['access_token']
+    api_client = patreon.API(access_token)
+    user_response = api_client.fetch_user()
+    user = user_response.data()
+    name = user.attributes()['full_name']
+
+    v.set_patreon(name)
+    
+    return redirect(v.url)
 
 @app.route("/me")
 @auth_required
