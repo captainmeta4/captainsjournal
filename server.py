@@ -184,7 +184,7 @@ def error_405(e, v):
 @app.errorhandler(500)
 @auth_desired
 def error_500(e, v):
-    return render_template('500.html', v=v), 500
+    return render_template('500.html', v=v, e=e), 500
 
 @app.route('/submit')
 @auth_required

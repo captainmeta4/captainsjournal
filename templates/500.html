@@ -7,4 +7,9 @@
 {% block content %}
 <h1>500 Internal Server Error</h1>
 <p>Something has broken, but a master dwarven computersmith is trying to fix it.</p>
+{% if v.admin %}
+<pre>
+{{ e }}
+</pre>
+{% endif %}
 {% endblock %}
