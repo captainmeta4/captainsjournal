@@ -225,6 +225,7 @@ def oauth_redirect():
 
     #get redditor name
     code = request.args.get('code')
+    print(code)
     token=r.auth.authorize(code)
 
     q=temporary_reddit(token)
