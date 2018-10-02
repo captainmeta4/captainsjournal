@@ -284,7 +284,7 @@ class Listing():
 
     def __init__(self, kind="new"):
         if kind=='new':
-            c.execute("SELECT * FROM Stories WHERE banned='false' AND deleted='false' ORDER BY id DESC LIMIT 10")
+            c.execute("SELECT * FROM Stories WHERE banned='false' AND deleted='false' ORDER BY id DESC LIMIT 30")
         self.raw=c.fetchall()
 
     def __iter__(self):

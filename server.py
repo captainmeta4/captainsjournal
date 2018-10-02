@@ -545,4 +545,8 @@ def settings_api(q,v):
     google=request.form.get('analytics')
     v.set_google(google)
 
+    unlink_patreon=request.form.get('unlink-patreon')
+    if unlink_patreon:
+        v.set_patreon("")
+
     return redirect(v.url)

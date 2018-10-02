@@ -7,7 +7,8 @@
 {% block content %}
 <h1>Settings</h1>
 <form action="/api/settings" method="post">
-Google Analytics tracking code:<input type="text" name="analytics" value="{{ v.google_analytics }}"><br>
+Google Analytics tracking code:<input type="text" name="analytics" value="{{ v.google_analytics }}" style="width:100px"><br>
+Patreon: {{ v.patreon | default: "Not Connected }}{% if v.patreon %} | <input id="unlink-patreon" type="checkbox" name="unlink-patreon"><label for="unlink-patreon">Un-link Patreon</label>
 <input type="submit" value="Save">
 </form>
 {% endblock %}
