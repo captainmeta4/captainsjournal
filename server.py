@@ -247,7 +247,7 @@ def patreon_redirect(q, v):
     '''
 
     oauth_client = patreon.OAuth(patreon_id, patreon_secret)
-    tokens = oauth_client.get_tokens(request.args.get('code'), 'https://www.captainslogbook.org/oauth/patreon')
+    tokens = oauth_client.get_tokens(request.args.get('code'), os.environ.get('reddit_uri'))
     access_token = tokens['access_token']
     api_client = patreon.API(access_token)
     user_response = api_client.fetch_user()
