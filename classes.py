@@ -43,8 +43,9 @@ c.execute("PREPARE EditBook(text, text, text, int) AS UPDATE Books SET name=$1, 
 #Module global
 tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre','div','span']
 attrs=bleach.sanitizer.ALLOWED_ATTRIBUTES
-attrs['*']=["class"]
-Cleaner=bleach.sanitizer.Cleaner(tags=tags, attributes=attrs)
+attrs['*']=["class","style"]
+styles=['white-space',"border","border-radius","text-align"]
+Cleaner=bleach.sanitizer.Cleaner(tags=tags, attributes=attrs, styles=styles)
 
 class User():
 
