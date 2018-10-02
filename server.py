@@ -5,7 +5,6 @@ import time
 from classes import *
 from flaskext.markdown import Markdown
 import patreon
-import jinja_mods
 
 ### NAMING CONVENTIONS ###
 # s - Story object
@@ -25,6 +24,11 @@ r=praw.Reddit(client_id=os.environ.get('client_id'),
 
 patreon_id=os.environ.get('patreon_id')
 patreon_secret=os.environ.get('patreon_secret')
+
+#define jinja2 custom filters
+@app.template_filter("os_get")
+def os_get(key):
+    return os.environ.get(key)
 
 #take care of static pages
 @app.route('/assets/<path:path>')
