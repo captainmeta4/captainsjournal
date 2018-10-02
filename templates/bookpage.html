@@ -40,14 +40,14 @@
 {% endblock %}
 
 {% block authortracking %}
-{% if u.google_analytics %}
+{% if s.author.google_analytics %}
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{ u.google_analytics }}"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ s.author.google_analytics }}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', '{{ u.google_analytics }}');
+    gtag('config', '{{ s.author.google_analytics }}');
   </script>
 {% endif %}
 {% endblock %}
