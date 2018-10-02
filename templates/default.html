@@ -10,9 +10,13 @@
     gtag('config', 'UA-126102866-1');
   </script>
 
+  {% block authortracking %}{% endblock %}
+
   <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
   
-  {% block title %}{% endblock %}
+  {% block title %}
+  <title>Captain's Logbook</title>
+  {% endblock %}
   
     <script>
       function nightToggle() {

@@ -39,6 +39,19 @@
 {% endif %}
 {% endblock %}
 
+{% block authortracking %}
+{% if u.google_analytics %}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ u.google_analytics }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ u.google_analytics }}');
+  </script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <h1>{{ b.title }}</h1>
 <p>by <a href="/u/{{ b.author.name }}">{{ b.author.name }}</a> on {{ b.created_date }}</p>

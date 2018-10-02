@@ -21,6 +21,7 @@ c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1
 c.execute("PREPARE GetUserByToken(text) AS SELECT * FROM Users WHERE token=$1")
 c.execute("PREPARE UpdateToken(int, text) AS UPDATE Users SET token=$2 WHERE id=$1")
 c.execute("PREPARE SetPatreon(int, text) AS UPDATE USERS SET patreon=$2 WHERE id=$1")
+c.execute("PREPARE SetGoogle(int, text) AS UPDATE USERS SET google_analytics=$2 WHERE id=$1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *")
@@ -88,6 +89,11 @@ class User():
     def set_patreon(self, name):
         c.execute("EXECUTE SetPatreon(%s, %s)", (self.id, name))
         conn.commit()
+
+    def set_google(self, tracking_id):
+
+        tracking_id=tracking_id[0:14]
+        c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, tracking_id))
         
     def tos_agree(self):
         c.execute("UPDATE Users SET agreed='true' WHERE id=%s",(self.id,))

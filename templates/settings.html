@@ -1,0 +1,13 @@
+{% extends "default.html %}
+
+{% block title %}
+<title>Settings</title>
+{% endblock %}
+
+{% block content %}
+<h1>Settings</h1>
+<form action="/api/settings" method="post">
+Google Analytics tracking code: <input type="text" name="analytics"><br>
+<input type="submit" value="Save">
+</form>
+{% endblock %}

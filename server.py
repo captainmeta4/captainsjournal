@@ -5,6 +5,7 @@ import time
 from classes import *
 from flaskext.markdown import Markdown
 import patreon
+import jinja_mods
 
 ### NAMING CONVENTIONS ###
 # s - Story object
@@ -19,7 +20,7 @@ Markdown(app)
 user_agent="Captain's Journal by /u/captainmeta4"
 r=praw.Reddit(client_id=os.environ.get('client_id'),
               client_secret=os.environ.get('client_secret'),
-              redirect_uri="http://www.captainslogbook.org/oauth/redirect",
+              redirect_uri=os.environ.get('reddit_uri'),
               user_agent=user_agent)
 
 patreon_id=os.environ.get('patreon_id')
@@ -332,6 +333,11 @@ def edit_book(q, v, bid):
         abort(403)
 
     return render_template('editbook.html', b=b, v=v)
+
+@app.route("/settings")
+@auth_required
+def settings_page(q,v):
+    return render_template("settings.html", v=v)
     
 #API hits
 @app.route('/api/submit', methods=["POST"])
@@ -527,3 +533,11 @@ def undelete_book(q, v, bid):
     return redirect(b.url)
 
 
+@app.route('/api/settings', methods=["POST"])
+@auth_required
+def settings_api(q,v):
+    
+    google=request.form.get('analytics')
+    v.set_google(google)
+
+    return redirect(v.url)

@@ -1,9 +1,11 @@
 {% extends "default.html" %}
 
+{% block title %}
+<title>Editing: {{ b.title }}</title>
+{% endblock %}
+
 {% block content %}
-
 <h1>Edit Book</h1>
-
 <form action="/api/editbook/{{ b.id }}" method="post">
 Title:<br>
 <input type="text" name="title" value="{{ b.title }}"><br>
