@@ -20,8 +20,9 @@ c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
 c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1")
 c.execute("PREPARE GetUserByToken(text) AS SELECT * FROM Users WHERE token=$1")
 c.execute("PREPARE UpdateToken(int, text) AS UPDATE Users SET token=$2 WHERE id=$1")
-c.execute("PREPARE SetPatreon(int, text) AS UPDATE USERS SET patreon=$2 WHERE id=$1")
-c.execute("PREPARE SetGoogle(int, text) AS UPDATE USERS SET google_analytics=$2 WHERE id=$1")
+c.execute("PREPARE SetPatreon(int, text) AS UPDATE Users SET patreon=$2 WHERE id=$1")
+c.execute("PREPARE SetGoogle(int, text) AS UPDATE Users SET google_analytics=$2 WHERE id=$1")
+c.execute("PREPARE SetOver18(int, boolean) AS UPDATE Users SET over_18=$2 WHERE id=$1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *")
@@ -33,6 +34,7 @@ c.execute("PREPARE UnbanStory(int) AS UPDATE Stories Set banned='false' WHERE id
 c.execute("PREPARE DeleteStory(int) AS UPDATE Stories SET deleted='true' WHERE id=$1")
 c.execute("PREPARE UndeleteStory(int) AS UPDATE Stories Set deleted='false' WHERE id=$1")
 c.execute("PREPARE GetStoriesByBook(int) AS SELECT * FROM Stories WHERE book_id=$1")
+c.execute("PREPARE SetNSFW(int, boolean) AS UPDATE Stories SET nsfw=$2 WHERE id=$1")
 
 #for books
 c.execute("PREPARE MakeBook(text, int, text, text) AS INSERT INTO Books (name, author_id, description, description_raw, timestamp) VALUES ($1, $2, $3, $4, 'NOW') RETURNING *")
@@ -86,6 +88,7 @@ class User():
         self.admin=bool(result[5])
         self.agreed=bool(result[6])
         self.patreon=result[8]
+        self.over18=result[9]
         
         self.url="/u/{}".format(self.name)
         self.created_date=str(self.created).split()[0]
@@ -138,6 +141,9 @@ class User():
         c.execute("EXECUTE UnbanUser(%s)", (self.id,))
         conn.commit()
 
+    def set_over18(self, over18=False):
+        c.execute("EXECUTE SetOver18(%s, %s)", (self.id, over18))
+
 class Story():
 
     def __init__(self, sid=0, result=None, load_author=False):
@@ -167,6 +173,7 @@ class Story():
         self._story_raw=result[10]
         self._post_raw=result[11]
         self.book_id=int(result[12])
+        self.nsfw=bool(result[13])
         
         self.url="/s/{}".format(self.id)
         self.created_date=str(self.created).split()[0]
@@ -175,6 +182,9 @@ class Story():
             self.author=User(uid=self.author_id)
         else:
             self.author=None
+            
+    def set_nsfw(self, nsfw=False):
+        c.execute("EXECUTE SetNSFW(%s, %s)", (self.id, nsfw))
 
     def book(self):
 
@@ -230,7 +240,7 @@ class Story():
         data=c.fetchone()
         conn.commit()
         s=Story(result=data)
-        return redirect(s.url)
+        return s
     
     def edit(self, title, pre, story, post):
 		
@@ -334,7 +344,7 @@ class Book():
         data=c.fetchone()
         conn.commit()
         b=Book(result=data)
-        return redirect(b.url)
+        return b
 
     def edit(self, title, description):
 

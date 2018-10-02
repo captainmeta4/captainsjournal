@@ -359,6 +359,7 @@ def create_story(q, v):
     story_md=request.form.get('story',"")
     post_md=request.form.get('post',"")
     bid=int(request.form.get("book",0))
+    nsfw=request.form.get("nsfw",False)
 
     honeypot=request.form.get('subtitle',"")
     if honeypot:
@@ -376,7 +377,12 @@ def create_story(q, v):
     #assemble data for story object and save it
     data=(-1,0,"","","", False, title_md, v.id,None,pre_md,story_md,post_md, bid)
     story=Story(result=data)
-    return story.save()
+    s=story.save()
+
+    if nsfw:
+        s.set_nsfw(True)
+
+    return redirect(s.url)
     
 @app.route('/api/banuser/<uid>', methods=["POST"])
 @auth_required
@@ -456,6 +462,10 @@ def post_edit_story(q, v, sid):
     s.edit(title, pre_md, story_md, post_md)
     s.set_book(bid)
 
+    nsfw=request.form.get("nsfw")
+    if nsfw != s.nsfw:
+        s.set_nsfw(nsfw=nsfw)
+
     return redirect(s.url)
 
 @app.route("/api/makebook", methods=["POST"])
@@ -473,9 +483,9 @@ def make_book(q, v):
     
     result=(0,title,v.id,"",description,0,False,False)
 
-    b=Book(result=result)
-    
-    return b.save()
+    book=Book(result=result)
+    b=book.save()
+    return redirect(b.url)
 
 @app.route("/api/editbook/<bid>", methods=["POST"])
 @auth_required
@@ -548,5 +558,9 @@ def settings_api(q,v):
     unlink_patreon=request.form.get('unlink-patreon')
     if unlink_patreon:
         v.set_patreon("")
+
+    over18=request.form.get('over18')
+    if over18 != v.over18:
+        v.set_over18(over18=over18)
 
     return redirect(v.url)
