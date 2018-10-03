@@ -605,8 +605,8 @@ def patreon_webhook(uid):
 
     #get relevant data
     data=request.get_json()
-    creator_id=data['data']['creator']['data']['id']
-    supporter_id=data['data']['patron']['data']['id']
+    creator_id=data['data']['relationships']['creator']['data']['id']
+    supporter_id=data['data']['relationships']['patron']['data']['id']
     declined_since=data['data']['attributes']['declined_since']
     if declined_since or ('delete' in request.headers["X-Patreon-Event"]):
         pledge_amount_cents=0
