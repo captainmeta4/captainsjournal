@@ -302,7 +302,7 @@ class Story():
 
         if self.patreon_threshold:
             if not v:
-                abort(401)
+                render_template('patreon_required.html', s=self, v=v)
             elif not v.patreon_id:
                 render_template('patreon_required.html', s=self, v=v)
 
