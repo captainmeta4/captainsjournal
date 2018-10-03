@@ -8,6 +8,7 @@ import patreon
 import hashlib
 import json
 import hmac
+import jinja2
 
 
 ### NAMING CONVENTIONS ###
@@ -208,7 +209,10 @@ def error_500(e, v):
 def rules(v, filename):
     filepath=safe_join("/info/",filename)
     file="{}.html".format(filepath)
-    return render_template(file,v=v)
+    try:
+        return render_template(file,v=v)
+    except jinja2.exceptions.TemplateNotFound:
+        abort(404)
 
 @app.route('/submit')
 @auth_required
