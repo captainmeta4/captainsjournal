@@ -8,8 +8,18 @@
 <h1>Settings</h1>
 
 Patreon: {% if v.patreon %}{{ v.patreon }} | <form style="display:inline-block" action="/api/unlink_patreon" method="post"><input type="submit" value="Disconnect" ></form>{% else %}<a href="https://www.patreon.com/oauth2/authorize?client_id=Fy0C97RAlAGmKPtdxZT_Q4GiGoVks4zRqT9jrGmtf27Q02_UAUkTDZtOdZax8Scd&scope=users&state=x&response_type=code&redirect_uri=https://www.captainslogbook.org/oauth/patreon">Connect</a>{% endif %}<br><br>
-<hr>
+
+
 <form action="/api/settings" method="post">
+{% if v.patreon %}
+If you want to restrict content to your Patreon supporters:
+<ol>
+<li><a href="https://www.patreon.com/portal/registration/register-webhooks">Click here</a> to visit Patreon. Create a new webhook with: <code>https://captainslogbook.org/api/patreon_webhook/{{ v.id }}</code></li>
+<li>Copy and paste your Webhook Secret into the field below.</li>
+</ol>
+Webhook Secret: <input type="text" name="patreon_webhook_id" value="{{ v.patreon_webhook }}>
+{% endif %}
+<hr>
 Google Analytics tracking code: <input type="text" name="analytics" value="{{ v.google_analytics }}" style="width:100px"><br><br>
 <input type="checkbox" name="over18"  {% if v.over18 %}checked{% endif %}>I am over 18 and willing to see adult content<br><br>
 <input type="submit" value="Save">

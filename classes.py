@@ -23,6 +23,7 @@ c.execute("PREPARE UpdateToken(int, text) AS UPDATE Users SET token=$2 WHERE id=
 c.execute("PREPARE SetPatreon(int, int, text) AS UPDATE Users SET patreon_id=$2, patreon=$3 WHERE id=$1")
 c.execute("PREPARE SetGoogle(int, text) AS UPDATE Users SET google_analytics=$2 WHERE id=$1")
 c.execute("PREPARE SetOver18(int, boolean) AS UPDATE Users SET over_18=$2 WHERE id=$1")
+c.execute("PREPARE SetPatreonWebhook(int, text) AS UPDATE Users SET patreon_webhook_secret=$2 WHERE id=$1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *")
@@ -35,12 +36,20 @@ c.execute("PREPARE DeleteStory(int) AS UPDATE Stories SET deleted='true' WHERE i
 c.execute("PREPARE UndeleteStory(int) AS UPDATE Stories Set deleted='false' WHERE id=$1")
 c.execute("PREPARE GetStoriesByBook(int) AS SELECT * FROM Stories WHERE book_id=$1")
 c.execute("PREPARE SetNSFW(int, boolean) AS UPDATE Stories SET nsfw=$2 WHERE id=$1")
+c.execute("PREPARE SetPatreonThreshold(int,int) AS UPDATE Stories SET patreon_threshold=$2 WHERE id=$1")
 
 #for books
 c.execute("PREPARE MakeBook(text, int, text, text) AS INSERT INTO Books (name, author_id, description, description_raw, timestamp) VALUES ($1, $2, $3, $4, 'NOW') RETURNING *")
 c.execute("PREPARE GetBookById(int) AS SELECT * FROM Books WHERE id=$1")
 c.execute("PREPARE GetBooksByAuthorId(int) AS SELECT * FROM Books WHERE author_id=$1")
 c.execute("PREPARE EditBook(text, text, text, int) AS UPDATE Books SET name=$1, description=$2, description_raw=$3 WHERE id=$4")
+c.execute("PREPARE BanBook(int, boolean) AS UPDATE Books SET banned=$2 WHERE id=$1")
+c.execute("PREPARE DeleteBook(int, boolean) AS UPDATE Books SET deleted=$2 WHERE id=$1")
+
+#for pledges
+c.execute("PREPARE MakePledge(int,int,int) AS INSERT INTO Pledges (author_patreon_id, supporter_patreon_id, pledge_amount_cents) VALUES ($1, $2, $3)")
+c.execute("PREPARE UpdatePledge(int,int,int) AS UPDATE Pledges SET pledge_amount_cents=$3 WHERE author_patreon_id=$1 AND supporter_patreon_id=$2")
+c.execute("PREPARE GetPledge(int,int) AS SELECT * FROM Pledges WHERE author_patreon_id=$1 AND supporter_patreon_id=$2")
 
 #Module global
 tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre','div','span']
@@ -89,6 +98,7 @@ class User():
         self.agreed=bool(result[6])
         self.patreon=result[8]
         self.over18=result[9]
+        self.patreon_webhook=result[10]
         
         self.url="/u/{}".format(self.name)
         self.created_date=str(self.created).split()[0]
@@ -101,6 +111,11 @@ class User():
 
         tracking_id=tracking_id[0:14]
         c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, tracking_id))
+
+    def set_patreon_webhook(self, secret):
+
+        secret=secret[0:64]
+        c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, secret))
         
     def tos_agree(self):
         c.execute("UPDATE Users SET agreed='true' WHERE id=%s",(self.id,))
@@ -174,6 +189,7 @@ class Story():
         self._post_raw=result[11]
         self.book_id=int(result[12])
         self.nsfw=bool(result[13])
+        self.patreon_threshold=int(result[14])
         
         self.url="/s/{}".format(self.id)
         self.created_date=str(self.created).split()[0]
@@ -185,6 +201,9 @@ class Story():
             
     def set_nsfw(self, nsfw=False):
         c.execute("EXECUTE SetNSFW(%s, %s)", (self.id, nsfw))
+
+    def set_patreon_threshold(self, cents):
+        c.execute("EXECUTE SetPatreonThreshold(%s,%s)", (self.id, cents))
 
     def book(self):
 
@@ -367,20 +386,43 @@ class Book():
 
     def ban(self):
 
-        c.execute("UPDATE Books SET banned='true' WHERE id=%s",(self.id,))
+        c.execute("EXECUTE BanBook(%s, 'true')",(self.id,))
         conn.commit()
 
     def unban(self):
 
-        c.execute("UPDATE Books SET banned='false' WHERE id=%s",(self.id,))
+        c.execute("EXECUTE BanBook(%s, 'false')",(self.id,))
         conn.commit()
 
     def delete(self):
 
-        c.execute("UPDATE Books SET deleted='true' WHERE id=%s",(self.id,))
+        c.execute("EXECUTE DeleteBook(%s, 'true')",(self.id,))
         conn.commit()
 
     def undelete(self):
 
-        c.execute("UPDATE Books SET deleted='false' WHERE id=%s",(self.id,))
+        c.execute("EXECUTE DeleteBook(%s, 'false')",(self.id,))
         conn.commit()
+
+class Pledge():
+
+    def __init__(creator_id, supporter_id):
+        
+        self.creator_id=creator_id
+        self.supporter_id=supporter_id
+
+        c=execute("EXECUTE GetPledge(%s,%s)", (creator_id, supporter_id))
+
+        result=c.fetchone()
+        if result is None:
+            c.execute("EXECUTE MakePledge(%s,%s,0)" (creator_id, supporter_id))
+            conn.commit()
+
+
+    def update_pledge(self, amount_cents):
+        c.execute("EXECUTE UpdatePledge(%s,%s,%s)", (self.creator_id, self.supporter_id, amount_cents))
+        conn.commit()
+    
+
+        
+    

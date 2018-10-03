@@ -195,6 +195,14 @@ def error_405(e, v):
 def error_500(e, v):
     return render_template('500.html', v=v, e=e), 500
 
+#take care of mostly static content
+@app.route('/info/<path:filename>')
+@auth_desired
+def rules(v):
+    filepath=safe_join("/info/",filename)
+    file="{}.html".format(filepath)
+    return render_template_string(file,v=v)
+
 @app.route('/submit')
 @auth_required
 def create_submission(q, v):
@@ -211,11 +219,6 @@ def create_book(q, v):
 def home(v):
     l=Listing(kind='new')
     return render_template('home.html', v=v, l=l)
-
-@app.route('/rules')
-@auth_desired
-def rules(v):
-    return render_template('rules.html',v=v)
 
 @app.route("/oauth/redirect")
 def oauth_redirect():
@@ -259,7 +262,7 @@ def patreon_redirect(q, v):
 
     v.set_patreon(name, pid)
     
-    return redirect(v.url)
+    return redirect("/settings")
 
 @app.route("/me")
 @auth_required
@@ -557,15 +560,13 @@ def settings_api(q,v):
     google=request.form.get('analytics')
     v.set_google(google)
 
-    unlink_patreon=request.form.get('unlink-patreon')
-    if unlink_patreon:
-        v.set_patreon("")
-
     over18=request.form.get('over18')
     if over18 != v.over18:
         v.set_over18(over18=over18)
 
-    return redirect(v.url)
+    v.set_patreon_webhook(request.form.get('patreon_webhook_secret'))
+
+    return redirect("/settings")
 
 @app.route('/api/unlink_patreon', methods=["POST"])
 @auth_required
@@ -573,3 +574,33 @@ def unlink_patreon(q,v):
 
     v.set_patreon(None, None)
     return redirect("/settings")
+
+@app.route('/api/patreon_webhook/<uid>', methods=["POST"])
+def patreon_webhook(uid):
+
+    try:
+        u=User(uid=uid)
+    except KeyError:
+        abort(404)
+
+    secret=request.args.get('secret')
+    if not secret==u.patreon_webhook:
+        abort(401)
+
+    #get relevant data
+    data=request.json
+    creator_id=data['data']['creator']['data']['id']
+    supporter_id=data['data']['patron']['data']['id']
+    declined_since=data['data']['attributes']['declined_since']
+    if declined_since:
+        pledge_amount_cents=0
+    else:
+        pledge_amount_cents=data['attributes']['amount_cents']
+
+    p=Pledge(creator_id,supporter_id)
+    p.update_pledge(pledge_amount_cents)
+
+    return "",201
+    
+
+    
