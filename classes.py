@@ -201,9 +201,11 @@ class Story():
             
     def set_nsfw(self, nsfw=False):
         c.execute("EXECUTE SetNSFW(%s, %s)", (self.id, nsfw))
+        conn.commit()
 
     def set_patreon_threshold(self, cents):
         c.execute("EXECUTE SetPatreonThreshold(%s,%s)", (self.id, cents))
+        conn.commit()
 
     def book(self):
 
