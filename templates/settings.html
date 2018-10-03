@@ -6,9 +6,12 @@
 
 {% block content %}
 <h1>Settings</h1>
+
+Patreon: {% if v.patreon %}{{ v.patreon }} | <form action="/api/unlink_patreon" method="post">
+  <input type="submit" value="Disconnect" ></form>{% else %}<a href="https://www.patreon.com/oauth2/authorize?client_id=Fy0C97RAlAGmKPtdxZT_Q4GiGoVks4zRqT9jrGmtf27Q02_UAUkTDZtOdZax8Scd&scope=users&state=x&response_type=code&redirect_uri=https://www.captainslogbook.org/oauth/patreon">Connect</a>{% endif %}<br><br>
+<hr>
 <form action="/api/settings" method="post">
 Google Analytics tracking code: <input type="text" name="analytics" value="{{ v.google_analytics }}" style="width:100px"><br><br>
-Patreon: {% if v.patreon %}{{ v.patreon }} | <input id="unlink-patreon" type="checkbox" name="unlink-patreon"><label for="unlink-patreon">Un-link Patreon</label>{% else %}<a href="https://www.patreon.com/oauth2/authorize?client_id=Fy0C97RAlAGmKPtdxZT_Q4GiGoVks4zRqT9jrGmtf27Q02_UAUkTDZtOdZax8Scd&scope=users&state=x&response_type=code&redirect_uri=https://www.captainslogbook.org/oauth/patreon">Connect</a>{% endif %}<br><br>
 <input type="checkbox" name="over18"  {% if v.over18 %}checked{% endif %}>I am over 18 and willing to see adult content<br><br>
 <input type="submit" value="Save">
 </form>

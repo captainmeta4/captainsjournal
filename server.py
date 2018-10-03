@@ -255,7 +255,7 @@ def patreon_redirect(q, v):
     user = user_response.data()
     name = user.attributes()['vanity']
 
-    v.set_patreon(name)
+    v.set_patreon(name, pid)
     
     return redirect(v.url)
 
@@ -564,3 +564,10 @@ def settings_api(q,v):
         v.set_over18(over18=over18)
 
     return redirect(v.url)
+
+@app.route('/api/unlinkpatreon', methods=["POST"])
+@auth_required
+def unlink_patreon(q,v):
+
+    v.set_patreon(None, None)
+    return redirect("/settings")
