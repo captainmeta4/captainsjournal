@@ -6,6 +6,7 @@ from classes import *
 from flaskext.markdown import Markdown
 import patreon
 import hmac
+from hashlib import md5
 
 
 ### NAMING CONVENTIONS ###
@@ -594,7 +595,7 @@ def patreon_webhook(uid):
         abort(404)
 
     #validate secretu.patreon_webhook_secret
-    if not request.headers['X-Patreon-Signature'] == hmac.digest(key=u.patreon_webhook_secret, msg=request.json):
+    if not request.headers['X-Patreon-Signature'] == hmac.digest(key=u.patreon_webhook_secret, msg=request.json, md5):
         abort(403)
 
     #get relevant data
