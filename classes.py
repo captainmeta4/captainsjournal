@@ -306,14 +306,14 @@ class Story():
             if not d:
                 d="0"
             if not v:
-                render_template('patreon_required.html', s=s, v=v, d=d, c=c)
+                render_template('patreon_required.html', s=self, v=v, d=d, c=c)
             elif v.patreon_id==0:
-                render_template('patreon_required.html', s=s, v=v, d=d, c=c)
+                render_template('patreon_required.html', s=self, v=v, d=d, c=c)
 
 
             p=Pledge(self.author.patreon_id, v.patreon_id)
             if p.amount_cents < self.patreon_threshold and v.id != self.author_id:
-                render_template('patreon_required.html', s=s, v=v, d=d, c=c)
+                render_template('patreon_required.html', s=self, v=v, d=d, c=c)
         
         return render_template('storypage.html', s=self, v=v)
 
