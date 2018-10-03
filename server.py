@@ -208,7 +208,7 @@ def error_500(e, v):
 def rules(v, filename):
     filepath=safe_join("/info/",filename)
     file="{}.html".format(filepath)
-    return render_template_string(file,v=v)
+    return render_template(file,v=v)
 
 @app.route('/submit')
 @auth_required
