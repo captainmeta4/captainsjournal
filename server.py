@@ -597,8 +597,9 @@ def patreon_webhook(uid):
 
     #validate patreon secret
     print('expected '+request.headers['X-Patreon-Signature'])
+    print(json.dumps(request.get_json()))
 
-    digester = hmac.new(u.patreon_webhook_secret.encode('utf-8'), request.get_data(), hashlib.md5)
+    digester = hmac.new(u.patreon_webhook_secret.encode('utf-8'), bytes(json.dumps(request.get_json()),'utf-8'), hashlib.md5)
     digest = digester.hexdigest()
 
     print('digested '+digest)
