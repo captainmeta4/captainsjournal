@@ -429,7 +429,7 @@ class Pledge():
         self.creator_id=creator_id
         self.supporter_id=supporter_id
 
-        c=execute("EXECUTE GetPledge(%s,%s)", (creator_id, supporter_id))
+        c.execute("EXECUTE GetPledge(%s,%s)", (creator_id, supporter_id))
 
         result=c.fetchone()
         if result is None and make==True:
