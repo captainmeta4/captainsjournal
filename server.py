@@ -599,8 +599,12 @@ def patreon_webhook(uid):
     string=json.dumps(request.json)
     h=hmac.new(bytes(u.patreon_webhook_secret,'utf-8'), bytes(string, 'utf-8'), md5)
     sig=h.hexdigest()
+
+    head=request.headers['X-Patreon-Signature']
+    print(head)
+    print(sig)
     
-    if not hmac.compare_digest(request.headers['X-Patreon-Signature'],sig):
+    if not hmac.compare_digest(head,sig):
         abort(403)
 
     #get relevant data
