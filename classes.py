@@ -300,6 +300,9 @@ class Story():
 
     def render_storypage(self, v=None):
 
+        if self.banned or self.deleted:
+            return render_template('storypage.html', s=self, v=v)
+
         if self.patreon_threshold:
             d=str(self.patreon_threshold)[0:-2]
             c=str(self.patreon_threshold)[-2:]
