@@ -111,7 +111,7 @@ class User():
     def set_google(self, tracking_id):
 
         if tracking_id:
-            c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, int(tracking_id)))
+            c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, tracking_id))
         else:
             c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, ""))
         conn.commit()
