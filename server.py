@@ -5,7 +5,7 @@ import time
 from classes import *
 from flaskext.markdown import Markdown
 import patreon
-from hashlib import md5
+import hashlib
 import json
 import hmac
 
@@ -595,18 +595,15 @@ def patreon_webhook(uid):
     except KeyError:
         abort(404)
 
-    #validate secretu.patreon_webhook_secret
-
-    print('data '+request.get_data(as_text=True))
-    print('secret '+u.patreon_webhook_secret)
+    #validate patreon secret
     print('expected '+request.headers['X-Patreon-Signature'])
 
-    digester = hmac.new(bytes(u.patreon_webhook_secret, 'utf-8'), request.get_data(), md5)
+    digester = hmac.new(u.patreon_webhook_secret.encode('utf-8'), request.get_data(), hashlib.md5)
     digest = digester.hexdigest()
 
     print('digested '+digest)
 
-    if not digest==request.headers['X-Patreon-Signature']:
+    if hmac.compare_digest(digest, request.headers['X-Patreon-Signature']):
         abort(403)
 
     #get relevant data
