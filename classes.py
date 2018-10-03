@@ -424,7 +424,7 @@ class Book():
 
 class Pledge():
 
-    def __init__(creator_id, supporter_id, make=False):
+    def __init__(self, creator_id, supporter_id, make=False):
         
         self.creator_id=creator_id
         self.supporter_id=supporter_id
@@ -443,8 +443,6 @@ class Pledge():
             self.amount_cents=int(result[3])
 
         
-
-
     def update_pledge(self, amount_cents):
         c.execute("EXECUTE UpdatePledge(%s,%s,%s)", (self.creator_id, self.supporter_id, amount_cents))
         conn.commit()
