@@ -601,6 +601,8 @@ def patreon_webhook(uid):
     sig=h.hexdigest()
 
     head=request.headers['X-Patreon-Signature']
+
+    print(json.dumps(request.json))
     print(head)
     print(sig)
     
