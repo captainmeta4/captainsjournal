@@ -81,6 +81,9 @@
 {% if s.nsfw %}
         <p><b><span class="red">[This story contains adult content.]</span></b></p>
 {% endif %}
+{% if s.patreon_threshold %}
+	<p><b><span class="red">[Patreon support required: {{ s.patreon_threshold }}]</span></b></p>
+{% endif %}
 {% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw)) %}
 	<hr>
 	{% if s.pre %}

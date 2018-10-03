@@ -574,6 +574,9 @@ span.red {
 }
 
 span.green {
+    color: green
+}
+.night span.green {
     color: limegreen
 }
 
