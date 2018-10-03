@@ -625,6 +625,3 @@ def patreon_webhook(uid):
     p.update_pledge(pledge_amount_cents)
 
     return "",201
-
-if __name__=="__main__"
-    app.run('0.0.0.0', port=os.environ.get("PORT"))
