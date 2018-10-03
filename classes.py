@@ -139,7 +139,6 @@ class User():
 
     def stories(self):
         
-
         c.execute("EXECUTE GetStoriesByAuthorId(%s)", (self.id,))
         output=[]
         for l in c.fetchall():
