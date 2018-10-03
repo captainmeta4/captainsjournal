@@ -205,7 +205,7 @@ def error_500(e, v):
 #take care of mostly static content
 @app.route('/info/<path:filename>')
 @auth_desired
-def rules(v):
+def rules(v, filename):
     filepath=safe_join("/info/",filename)
     file="{}.html".format(filepath)
     return render_template_string(file,v=v)

@@ -14,7 +14,7 @@ Patreon: {% if v.patreon %}{{ v.patreon }} | <form style="display:inline-block" 
 {% if v.patreon %}
 If you want to restrict content to your Patreon supporters:
 <ol>
-<li><a href="https://www.patreon.com/portal/registration/register-webhooks">Click here</a> to visit Patreon. Create a new webhook with: <code>https://www.captainslogbook.org/api/patreon_webhook/{{ v.id }}</code></li>
+<li><a href="https://www.patreon.com/portal/registration/register-webhooks">Click here</a>, and create a new webhook with the following URL: <code>https://www.captainslogbook.org/api/patreon_webhook/{{ v.id }}</code></li>
 <li>Copy and paste your Webhook Secret into the field below.<br><input type="text" name="patreon_webhook_secret" value="{{ v.patreon_webhook_secret }}"></li>
 </ol>
 {% endif %}
