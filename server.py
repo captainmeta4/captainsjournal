@@ -609,7 +609,7 @@ def patreon_webhook(uid):
         abort(403)
 
     #get relevant data
-    data=request.json
+    data=request.get_json(force=True)
     creator_id=data['data']['creator']['data']['id']
     supporter_id=data['data']['patron']['data']['id']
     declined_since=data['data']['attributes']['declined_since']
