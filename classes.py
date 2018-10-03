@@ -113,7 +113,7 @@ class User():
         if tracking_id:
             c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, int(tracking_id)))
         else:
-            c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, None))
+            c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, ""))
         conn.commit()
 
     def set_patreon_webhook(self, secret):
@@ -121,7 +121,7 @@ class User():
         if secret:
             c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, secret))
         else:
-            c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, None))
+            c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, ""))
         conn.commit()
         
     def tos_agree(self):
