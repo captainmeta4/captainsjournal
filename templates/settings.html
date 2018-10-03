@@ -11,7 +11,7 @@ Patreon: {% if v.patreon %}{{ v.patreon }} | <form style="display:inline-block" 
 
 
 <form action="/api/settings" method="post">
-{% if v.patreon %}
+{% if v.patreon and v.admin %}
 If you want to restrict content to your Patreon supporters:
 <ol>
 <li><a href="https://www.patreon.com/portal/registration/register-webhooks">Click here</a> to visit Patreon. Create a new webhook with: <code>https://captainslogbook.org/api/patreon_webhook/{{ v.id }}</code></li>
