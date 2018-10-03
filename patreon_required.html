@@ -1,0 +1,87 @@
+{% extends "default.html" %}
+
+{% if s.book_id %}
+{% set b=s.book() %}
+{% endif %}
+
+{% block title %}
+<title>{% if b %}[{{ b.title }}] {% endif %}{{ s.title }}</title>
+<meta name="description" content="by {{ s.author.name }}">
+{% endblock %}
+
+{% block storynav %}
+{% set n=s.next() %}
+{% set p=s.previous() %}
+{% if p or n %}
+  <p>{% if p %}<a href="{{ p.url }}">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}">Next</a>{% endif %}</p>
+{% endif %}
+{% endblock %}
+
+{% block adminpanel %}
+{% if v.admin %}
+{% if not s.banned %}
+<form action="/api/banstory/{{ s.id }}" method="post">
+<input type="submit" value="Ban Story">
+</form>
+{% endif %}
+{% if s.banned %}
+<form action="/api/unbanstory/{{ s.id }}" method="post">
+<input type="submit" value="Unban Story">
+</form>
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block authorpanel %}
+  {% if v.id == s.author_id %}
+    {% if not s.deleted %}
+      <form action="/api/deletestory/{{ s.id }}" method="post">
+      <input type="submit" value="Unpublish Story">
+      </form>
+    {% endif %}
+    {% if s.deleted %}
+      <form action="/api/undeletestory/{{ s.id }}" method="post">
+      <input type="submit" value="Re-publish Story">
+      </form>
+    {% endif %}
+    {% if not s.author.banned %}
+      <a href="/edit/{{ s.id }}"><button>Edit Story</button></a>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block authortracking %}
+{% if s.author.google_analytics %}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ s.author.google_analytics }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ s.author.google_analytics }}');
+  </script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1>{{ s.title }}</h1>
+<p>by <a href="/u/{{ s.author.name }}">{{ s.author.name }}</a> on {{ s.created_date }}{% if s.author.patreon and not s.author.banned %} | <a href="https://patreon.com/{{ s.author.patreon }}">Patreon</a>{% endif %}</p>
+{% if b %}
+<p>Part of <em><a href="{{ b.url }}">{{ b.title }}</a></em></p>
+{% endif %}
+{% if s.banned %}
+	<p><b><span class="red">[This story has been removed by the site administrators.]</span></b></p>
+{% endif %}
+{% if s.deleted %}
+	<p><b><span class="red">[This story has been unpublished by its author.]</span></b></p>
+{% endif %}
+{% if s.author.banned %}
+	<p><b><span class="red">[This story’s author is banned.]</span></b></p>
+{% endif %}
+{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw)) %}
+<h2>Patreon Support required</h2>
+{% set d=str(s.patreon_threshold)[0:-2] %}
+{% set c=str(s.patreon_threshold)[-2:] %}
+<p>A Patreon pledge of ${{ d }}.{{ c }}  to {{ s.author.name }} is required to access this content.</p>
+{% endif %}
+{% endblock %}
