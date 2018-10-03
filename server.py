@@ -567,14 +567,14 @@ def undelete_book(q, v, bid):
 @auth_required
 def settings_api(q,v):
     
-    google=request.form.get('analytics')
+    google=request.form.get('analytics','')
     v.set_google(google)
 
     over18=request.form.get('over18')
     if over18 != v.over18:
         v.set_over18(over18=over18)
 
-    v.set_patreon_webhook(request.form.get('patreon_webhook_secret'))
+    v.set_patreon_webhook(request.form.get('patreon_webhook_secret',''))
 
     return redirect("/settings")
 
@@ -582,7 +582,7 @@ def settings_api(q,v):
 @auth_required
 def unlink_patreon(q,v):
 
-    v.set_patreon(None, None)
+    v.set_patreon("", 0)
     return redirect("/settings")
 
 @app.route('/api/patreon_webhook/<uid>', methods=["POST"])
