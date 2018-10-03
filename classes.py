@@ -110,13 +110,19 @@ class User():
 
     def set_google(self, tracking_id):
 
-        tracking_id=tracking_id[0:14]
-        c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, tracking_id))
+        if tracking_id:
+            c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, int(tracking_id)))
+        else:
+            c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, None))
+        conn.commit()
 
     def set_patreon_webhook(self, secret):
 
-        secret=secret[0:64]
-        c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, secret))
+        if secret:
+            c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, secret))
+        else:
+            c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, None))
+        conn.commit()
         
     def tos_agree(self):
         c.execute("UPDATE Users SET agreed='true' WHERE id=%s",(self.id,))
