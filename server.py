@@ -597,7 +597,7 @@ def patreon_webhook(uid):
 
     #validate secretu.patreon_webhook_secret
     string=json.dumps(request.json)
-    h=hmac.new(u.patreon_webhook_secret, string, md5)
+    h=hmac.new(bytes(u.patreon_webhook_secret,'utf-8'), bytes(string, 'utf-8'), md5)
     sig=h.hexdigest()
     
     if not hmac.safe_compare(request.headers['X-Patreon-Signature'],sig):
