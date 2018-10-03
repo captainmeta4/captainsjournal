@@ -73,6 +73,7 @@ def auth_required(f):
           
         try:
             v=User(token=token)
+            q=temporary_reddit(token)
         except:
             try:
                 q=temporary_reddit(token)
