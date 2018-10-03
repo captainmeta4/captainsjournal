@@ -596,6 +596,7 @@ def patreon_webhook(uid):
         abort(404)
 
     #validate patreon secret
+    print('beginning validation')
     print(request.get_json(force=True))
     print('expected '+request.headers['X-Patreon-Signature'])
     
