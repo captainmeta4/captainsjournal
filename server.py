@@ -587,7 +587,7 @@ def unlink_patreon(q,v):
     v.set_patreon("", 0)
     return redirect("/settings")
 
-@app.route('/api/patreon_webhook/<uid>', methods=["POST","GET"])
+@app.route('/api/patreon_webhook/<uid>', methods=["POST"])
 def patreon_webhook(uid):
 
     try:
@@ -597,12 +597,9 @@ def patreon_webhook(uid):
 
     #validate patreon secret
     print('data '+str(request.data))
-    print(request.method)
-    print(request.headers)
-    print(dir(request))
+
     print('expected '+request.headers['X-Patreon-Signature'])
     
-
     digester = hmac.new(u.patreon_webhook_secret.encode('utf-8'), request.data, hashlib.md5)
     digest = digester.hexdigest()
 
