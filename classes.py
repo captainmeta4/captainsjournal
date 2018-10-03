@@ -62,10 +62,8 @@ class User():
 
     def __init__(self, name="", uid=0, token=None, make=False):
 
-        if not(name or uid):
+        if not(name or uid or token):
             raise ValueError("One of name or uid must be provided")
-        if (name and uid):
-            raise ValueError("Only one of name or uid can be provided")
 
         #check database
         #sanitize name and token
