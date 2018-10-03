@@ -565,7 +565,7 @@ def settings_api(q,v):
 
     return redirect(v.url)
 
-@app.route('/api/unlinkpatreon', methods=["POST"])
+@app.route('/api/unlink_patreon', methods=["POST"])
 @auth_required
 def unlink_patreon(q,v):
 

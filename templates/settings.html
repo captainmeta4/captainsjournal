@@ -7,8 +7,7 @@
 {% block content %}
 <h1>Settings</h1>
 
-Patreon: {% if v.patreon %}{{ v.patreon }} | <form action="/api/unlink_patreon" method="post">
-  <input type="submit" value="Disconnect" ></form>{% else %}<a href="https://www.patreon.com/oauth2/authorize?client_id=Fy0C97RAlAGmKPtdxZT_Q4GiGoVks4zRqT9jrGmtf27Q02_UAUkTDZtOdZax8Scd&scope=users&state=x&response_type=code&redirect_uri=https://www.captainslogbook.org/oauth/patreon">Connect</a>{% endif %}<br><br>
+Patreon: {% if v.patreon %}{{ v.patreon }} | <form style="display:inline-block" action="/api/unlink_patreon" method="post"><input type="submit" value="Disconnect" ></form>{% else %}<a href="https://www.patreon.com/oauth2/authorize?client_id=Fy0C97RAlAGmKPtdxZT_Q4GiGoVks4zRqT9jrGmtf27Q02_UAUkTDZtOdZax8Scd&scope=users&state=x&response_type=code&redirect_uri=https://www.captainslogbook.org/oauth/patreon">Connect</a>{% endif %}<br><br>
 <hr>
 <form action="/api/settings" method="post">
 Google Analytics tracking code: <input type="text" name="analytics" value="{{ v.google_analytics }}" style="width:100px"><br><br>
