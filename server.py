@@ -596,20 +596,15 @@ def patreon_webhook(uid):
         abort(404)
 
     #validate patreon secret
-    print('data '+str(request.data))
-
-    print('expected '+request.headers['X-Patreon-Signature'])
     
     digester = hmac.new(u.patreon_webhook_secret.encode('utf-8'), request.data, hashlib.md5)
     digest = digester.hexdigest()
-
-    print('digested '+digest)
 
     if not digest == request.headers['X-Patreon-Signature']:
         abort(403)
 
     #get relevant data
-    data=request.data
+    data=request.get_json()
     creator_id=data['data']['creator']['data']['id']
     supporter_id=data['data']['patron']['data']['id']
     declined_since=data['data']['attributes']['declined_since']
