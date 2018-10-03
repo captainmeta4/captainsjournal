@@ -2,6 +2,7 @@
 
 {% if s.book_id %}
 {% set b=s.book() %}
+{% endif %}
 
 {% block title %}
 <title>{% if b %}[{{ b.title }}] {% endif %}{{ s.title }}</title>
