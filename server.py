@@ -307,28 +307,6 @@ def storypage(sid, v=None):
     except KeyError:
         abort(404)
 
-    if s.banned or s.deleted:
-        return s.render_storypage(v=v)
-
-    if s.patreon_threshold:
-        d=str(s.patreon_threshold)[0:-2]
-        c=str(s.patreon_threshold)[-2:]
-        if not v:
-            render_template('patreon_required.html', s=s, v=v, d=d, c=c)
-        elif v.patreon_id==0:
-            render_template('patreon_required.html', s=s, v=v, d=d, c=c)
-
-
-        if not d:
-            d="0"
-
-        print(s.author.name)
-        print(s.author.patreon_id)
-
-        p=Pledge(s.author.patreon_id, v.patreon_id)
-        if p.amount_cents < self.patreon_threshold and v.id != s.author_id:
-            render_template('patreon_required.html', s=s, v=v, d=d, c=c)
-        
     return s.render_storypage(v=v)
 
 @app.route("/b/<bid>")
