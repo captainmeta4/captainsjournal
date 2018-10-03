@@ -97,7 +97,7 @@ class User():
         self.patreon=result[8]
         self.over18=result[9]
         self.patreon_id=int(result[10])
-        self.patreon_webhook=result[11]
+        self.patreon_webhook_secret=result[11]
         
         self.url="/u/{}".format(self.name)
         self.created_date=str(self.created).split()[0]
