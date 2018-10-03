@@ -20,7 +20,7 @@ c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
 c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1")
 c.execute("PREPARE GetUserByToken(text) AS SELECT * FROM Users WHERE token=$1")
 c.execute("PREPARE UpdateToken(int, text) AS UPDATE Users SET token=$2 WHERE id=$1")
-c.execute("PREPARE SetPatreon(int, int, text) AS UPDATE Users SET patreon_id=%2, patreon=$3 WHERE id=$1")
+c.execute("PREPARE SetPatreon(int, int, text) AS UPDATE Users SET patreon_id=$2, patreon=$3 WHERE id=$1")
 c.execute("PREPARE SetGoogle(int, text) AS UPDATE Users SET google_analytics=$2 WHERE id=$1")
 c.execute("PREPARE SetOver18(int, boolean) AS UPDATE Users SET over_18=$2 WHERE id=$1")
 
