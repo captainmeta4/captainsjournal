@@ -255,7 +255,7 @@ def patreon_redirect(q, v):
     user = user_response.data()
     data = user.attributes()
     name = data['vanity']
-    pid = user.id
+    pid = user.id()
 
     v.set_patreon(name, pid)
     
