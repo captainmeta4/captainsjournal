@@ -594,7 +594,7 @@ def patreon_webhook(uid):
         abort(404)
 
     #validate secretu.patreon_webhook_secret
-    if not request.headers['X-Patreon-Signature'] == hmac.digest(key=u.patreon_webhook_secret, msg=request.content):
+    if not request.headers['X-Patreon-Signature'] == hmac.digest(key=u.patreon_webhook_secret, msg=request.contents):
         abort(403)
 
     #get relevant data
