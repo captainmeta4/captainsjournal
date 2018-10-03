@@ -7,6 +7,7 @@ from flaskext.markdown import Markdown
 import patreon
 import hmac
 from hashlib import md5
+import json
 
 
 ### NAMING CONVENTIONS ###
@@ -589,16 +590,17 @@ def unlink_patreon(q,v):
 @app.route('/api/patreon_webhook/<uid>', methods=["POST", "GET"])
 def patreon_webhook(uid):
 
-    print(vars(request))
-
     try:
         u=User(uid=uid)
     except KeyError:
         abort(404)
 
     #validate secretu.patreon_webhook_secret
+    string=json.dumps(request.json)
+    h=hmac.new(u.patreon_webhook_secret, string, md5)
+    sig=h.hexdigest()
     
-    if not request.headers['X-Patreon-Signature'] == hmac.hexdigest(u.patreon_webhook_secret, request.json, md5):
+    if not hmac.safe_compare(request.headers['X-Patreon-Signature'],sig):
         abort(403)
 
     #get relevant data
