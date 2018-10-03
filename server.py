@@ -589,7 +589,7 @@ def unlink_patreon(q,v):
 @app.route('/api/patreon_webhook/<uid>', methods=["POST", "GET"])
 def patreon_webhook(uid):
 
-    print(dict(request))
+    print(vars(request))
 
     try:
         u=User(uid=uid)
