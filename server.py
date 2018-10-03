@@ -605,11 +605,11 @@ def patreon_webhook(uid):
 
     print('digested '+digest)
 
-    if hmac.compare_digest(digest, request.headers['X-Patreon-Signature']):
+    if not digest == request.headers['X-Patreon-Signature']:
         abort(403)
 
     #get relevant data
-    data=request.get_json(force=True)
+    data=request.get_json()
     creator_id=data['data']['creator']['data']['id']
     supporter_id=data['data']['patron']['data']['id']
     declined_since=data['data']['attributes']['declined_since']
