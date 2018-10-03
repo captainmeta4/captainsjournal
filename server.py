@@ -587,7 +587,7 @@ def unlink_patreon(q,v):
     v.set_patreon("", 0)
     return redirect("/settings")
 
-@app.route('/api/patreon_webhook/<uid>', methods=["POST"])
+@app.route('/api/patreon_webhook/<uid>', methods=["POST","GET"])
 def patreon_webhook(uid):
 
     try:
