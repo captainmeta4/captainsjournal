@@ -598,12 +598,12 @@ def patreon_webhook(uid):
     #validate secretu.patreon_webhook_secret
 
     print(request.get_data())
+    print(request.headers['X-Patreon-Signature'])
 
     digester = hmac.new(bytes(u.patreon_webhook_secret, 'utf-8'), bytes(request.get_data(), 'utf-8'), md5)
     digest = digester.hexdigest()
 
     print(digest)
-    print(request.headers['X-Patreon-Signature'])
 
     if not digest==request.headers['X-Patreon-Signature']:
         abort(403)
