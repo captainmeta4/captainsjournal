@@ -5,6 +5,8 @@ import time
 from classes import *
 from flaskext.markdown import Markdown
 import patreon
+import hmac
+
 
 ### NAMING CONVENTIONS ###
 # s - Story object
@@ -12,6 +14,8 @@ import patreon
 # u - target user - User object
 # q - Temporary reddit object
 # l - Listing object for homepages
+# p - pledge object
+
 
 #globals
 app=Flask(__name__)
@@ -365,6 +369,7 @@ def create_story(q, v):
     post_md=request.form.get('post',"")
     bid=int(request.form.get("book",0))
     nsfw=request.form.get("nsfw",False)
+    patreon_threshold=int(request.form.get('patreon_threshold',0))
 
     honeypot=request.form.get('subtitle',"")
     if honeypot:
@@ -386,6 +391,8 @@ def create_story(q, v):
 
     if nsfw:
         s.set_nsfw(True)
+    if patreon_threshold:
+        s.set_patreon_threshold(patreon_threshold)
 
     return redirect(s.url)
     
@@ -463,6 +470,8 @@ def post_edit_story(q, v, sid):
     pre_md=request.form.get("pre","")
     story_md=request.form.get("story","")
     post_md=request.form.get("post","")
+    patreon_threshold=int(request.form.get("patreon_threshold",0))
+    
 
     s.edit(title, pre_md, story_md, post_md)
     s.set_book(bid)
@@ -470,6 +479,7 @@ def post_edit_story(q, v, sid):
     nsfw=request.form.get("nsfw")
     if nsfw != s.nsfw:
         s.set_nsfw(nsfw=nsfw)
+    s.set_patreon_threshold(patreon_threshold)
 
     return redirect(s.url)
 
@@ -583,21 +593,21 @@ def patreon_webhook(uid):
     except KeyError:
         abort(404)
 
-    secret=request.args.get('secret')
-    if not secret==u.patreon_webhook:
-        abort(401)
+    #validate secretu.patreon_webhook_secret
+    if not request.headers['X-Patreon-Signature'] == hmac.digest(key=u.patreon_webhook_secret, msg=request.body):
+        abort(403)
 
     #get relevant data
     data=request.json
     creator_id=data['data']['creator']['data']['id']
     supporter_id=data['data']['patron']['data']['id']
     declined_since=data['data']['attributes']['declined_since']
-    if declined_since:
+    if declined_since or ('delete' in request.headers["X-Patreon-Event"]):
         pledge_amount_cents=0
     else:
         pledge_amount_cents=data['attributes']['amount_cents']
 
-    p=Pledge(creator_id,supporter_id)
+    p=Pledge(creator_id,supporter_id, make=True)
     p.update_pledge(pledge_amount_cents)
 
     return "",201

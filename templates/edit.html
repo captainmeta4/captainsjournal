@@ -15,6 +15,9 @@ Include this story in a book:
 {% endfor %}
 </select></br>
 <input type="checkbox" name="nsfw" {% if s.nsfw %}checked{% endif %}>Mark NSFW?<br>
+{% if v.patreon_webhook %}
+Restrict story to Patreon supporters with pledge of: <input type="text" value="{{ s.patreon_threshold }}" name="patreon_threshold>
+{% endif %}
 <input type="text" name="subtitle">
 Markdown is supported in all fields below.<br>
 Pre-story author note:<br>

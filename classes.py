@@ -47,7 +47,7 @@ c.execute("PREPARE BanBook(int, boolean) AS UPDATE Books SET banned=$2 WHERE id=
 c.execute("PREPARE DeleteBook(int, boolean) AS UPDATE Books SET deleted=$2 WHERE id=$1")
 
 #for pledges
-c.execute("PREPARE MakePledge(int,int,int) AS INSERT INTO Pledges (author_patreon_id, supporter_patreon_id, pledge_amount_cents) VALUES ($1, $2, $3)")
+c.execute("PREPARE MakePledge(int,int,int) AS INSERT INTO Pledges (author_patreon_id, supporter_patreon_id, pledge_amount_cents) VALUES ($1, $2, $3) RETURNING *")
 c.execute("PREPARE UpdatePledge(int,int,int) AS UPDATE Pledges SET pledge_amount_cents=$3 WHERE author_patreon_id=$1 AND supporter_patreon_id=$2")
 c.execute("PREPARE GetPledge(int,int) AS SELECT * FROM Pledges WHERE author_patreon_id=$1 AND supporter_patreon_id=$2")
 
@@ -291,6 +291,16 @@ class Story():
         conn.commit()
 
     def render_storypage(self, v=None):
+
+        if self.patreon_threshold:
+            if not v:
+                abort(401)
+            elif not v.patreon_id:
+                abort(401)
+
+            p=Pledge(self.author.patreon_id, v.patreon_id)
+            if p.amount_cents < self.patreon_threshold and v.id != self.author_id:
+                abort(402)
         
         return render_template('storypage.html', s=self, v=v)
 
@@ -406,7 +416,7 @@ class Book():
 
 class Pledge():
 
-    def __init__(creator_id, supporter_id):
+    def __init__(creator_id, supporter_id, make=False):
         
         self.creator_id=creator_id
         self.supporter_id=supporter_id
@@ -414,14 +424,23 @@ class Pledge():
         c=execute("EXECUTE GetPledge(%s,%s)", (creator_id, supporter_id))
 
         result=c.fetchone()
-        if result is None:
+        if result is None and make==True:
             c.execute("EXECUTE MakePledge(%s,%s,0)" (creator_id, supporter_id))
+            result=c.fetchone()
+            self.amount_cents=0
             conn.commit()
+        elif result is None:
+            self.amount_cents=0
+        else:
+            self.amount_cents=int(result[3])
+
+        
 
 
     def update_pledge(self, amount_cents):
         c.execute("EXECUTE UpdatePledge(%s,%s,%s)", (self.creator_id, self.supporter_id, amount_cents))
         conn.commit()
+        self.amount_cents=amount_cents
     
 
         
