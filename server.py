@@ -589,13 +589,16 @@ def unlink_patreon(q,v):
 @app.route('/api/patreon_webhook/<uid>', methods=["POST", "GET"])
 def patreon_webhook(uid):
 
+    print(dict(request))
+
     try:
         u=User(uid=uid)
     except KeyError:
         abort(404)
 
     #validate secretu.patreon_webhook_secret
-    if not request.headers['X-Patreon-Signature'] == hmac.digest(u.patreon_webhook_secret, request.json, md5):
+    
+    if not request.headers['X-Patreon-Signature'] == hmac.hexdigest(u.patreon_webhook_secret, request.json, md5):
         abort(403)
 
     #get relevant data
