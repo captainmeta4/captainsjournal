@@ -302,7 +302,6 @@ def user_by_id(uid, v=None):
 @app.route("/s/<sid>")
 @auth_desired
 def storypage(sid, v=None):
-
     try:
         s=Story(sid, load_author=True)
     except KeyError:
@@ -314,7 +313,7 @@ def storypage(sid, v=None):
     if s.patreon_threshold:
         d=str(s.patreon_threshold)[0:-2]
         c=str(s.patreon_threshold)[-2:]
-        if v is None:
+        if not v:
             render_template('patreon_required.html', s=s, v=v, d=d, c=c)
         elif v.patreon_id==0:
             render_template('patreon_required.html', s=s, v=v, d=d, c=c)
