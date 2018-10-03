@@ -7,6 +7,7 @@ from flaskext.markdown import Markdown
 import patreon
 from hashlib import md5
 import json
+import hmac
 
 
 ### NAMING CONVENTIONS ###
