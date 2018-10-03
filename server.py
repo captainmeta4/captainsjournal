@@ -605,6 +605,7 @@ def patreon_webhook(uid):
 
     #get relevant data
     data=request.get_json()
+    print(data)
     creator_id=data['data']['relationships']['creator']['data']['id']
     supporter_id=data['data']['relationships']['patron']['data']['id']
     declined_since=data['data']['attributes']['declined_since']
