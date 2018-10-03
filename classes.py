@@ -300,12 +300,14 @@ class Story():
         if self.banned or self.deleted:
             return render_template('storypage.html', s=self, v=v)
 
+        print(v)
+
         if self.patreon_threshold:
             d=str(self.patreon_threshold)[0:-2]
             c=str(self.patreon_threshold)[-2:]
             if not d:
                 d="0"
-            if not v:
+            if v==None:
                 render_template('patreon_required.html', s=self, v=v, d=d, c=c)
             elif v.patreon_id==0:
                 render_template('patreon_required.html', s=self, v=v, d=d, c=c)
