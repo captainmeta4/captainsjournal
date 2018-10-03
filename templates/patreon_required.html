@@ -79,6 +79,7 @@
 	<p><b><span class="red">[This story’s author is banned.]</span></b></p>
 {% endif %}
 {% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw)) %}
+<hr>
 <h2>Patreon Support required</h2>
 <p>A Patreon pledge of ${{ d }}.{{ c }}  to {{ s.author.name }} is required to access this content. You need to make a pledge and/or link your Patreon account to Captain's Logbook</p>
 {% endif %}
