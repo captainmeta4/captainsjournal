@@ -308,9 +308,9 @@ class Story():
             c=str(self.patreon_threshold)[-2:]
             if not d:
                 d="0"
-            if not v:
+            if v is None:
                 render_template('patreon_required.html', s=self, v=v, d=d, c=c)
-            elif not v.patreon_id:
+            elif v.patreon_id==0:
                 render_template('patreon_required.html', s=self, v=v, d=d, c=c)
 
             p=Pledge(self.author.patreon_id, v.patreon_id)
