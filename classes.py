@@ -304,6 +304,7 @@ class Story():
             return render_template('storypage.html', s=self, v=v)
 
         if self.patreon_threshold:
+            print(self.author, self.patreon_threshold)
             d=str(self.patreon_threshold)[0:-2]
             c=str(self.patreon_threshold)[-2:]
             if not d:
