@@ -626,4 +626,5 @@ def patreon_webhook(uid):
 
     return "",201
 
-app.run('0.0.0.0', port=os.environ.get("PORT"))
+if __name__=="__main__"
+    app.run('0.0.0.0', port=os.environ.get("PORT"))
