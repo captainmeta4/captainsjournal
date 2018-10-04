@@ -228,8 +228,9 @@ def create_book(q, v):
 @app.route('/')
 @auth_desired
 def home(v):
-    l=Listing(kind='new')
-    return render_template('home.html', v=v, l=l)
+    new=Listing(kind='new')
+    news=Listing(kind='news')
+    return render_template('home.html', v=v, l=new,news=news)
 
 @app.route("/oauth/redirect")
 def oauth_redirect():
@@ -471,7 +472,14 @@ def post_edit_story(q, v, sid):
         abort(418)
 
     bid=int(request.form.get("book",0))
-    
+    if bid:
+        if bid==4 and v.admin:
+            pass
+        else:
+            b=Book(bid=bid)
+            if not b.author_id == v.id:
+                abort(400)
+                
     title=request.form.get("title","")
     pre_md=request.form.get("pre","")
     story_md=request.form.get("story","")

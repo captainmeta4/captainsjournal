@@ -9,7 +9,14 @@
 <p>To get started, authenticate with reddit. Then post a story, and share it!</p>
 
 <hr>
-<p><b>Newest Stories</b></p>
+<h2>News</h2>
+<ul>
+{% for s in news %}
+<li><h3><a href="{{ s.url }}">{{ s.title }}</a></h3></li>
+{% endfor %}
+</ul>
+<hr>
+<h2><b>Newest Stories</b></h2>
 <ul>
 {% for s in l %}
 {% set b=s.book() %}

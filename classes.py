@@ -16,8 +16,7 @@ c.execute("ROLLBACK TRANSACTION")
 c.execute("PREPARE MakeUser(text) AS INSERT INTO Users (reddit_name, created_utc, google_analytics) VALUES ($1,'NOW','') RETURNING *")
 c.execute("PREPARE GetUserByName(text) AS SELECT * FROM Users WHERE UPPER(reddit_name) = UPPER($1)")
 c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
-c.execute("PREPARE BanUser(int) AS UPDATE Users SET banned='true' WHERE id=$1")
-c.execute("PREPARE UnbanUser(int) AS UPDATE Users Set banned='false' WHERE id=$1")
+c.execute("PREPARE BanUser(int, boolean) AS UPDATE Users SET banned=$2 WHERE id=$1")
 c.execute("PREPARE GetUserByToken(text) AS SELECT * FROM Users WHERE token=$1")
 c.execute("PREPARE UpdateToken(int, text) AS UPDATE Users SET token=$2 WHERE id=$1")
 c.execute("PREPARE SetPatreon(int, int, text) AS UPDATE Users SET patreon_id=$2, patreon=$3 WHERE id=$1")
@@ -30,10 +29,8 @@ c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int)
 c.execute("PREPARE EditStory(int, text, text, text, text, text, text, text) AS UPDATE Stories SET pre=$2, story=$3, post=$4, pre_raw=$5, story_raw=$6, post_raw=$7, title=$8 WHERE id=$1")
 c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE author_id = $1 ORDER BY id DESC")
-c.execute("PREPARE BanStory(int) AS UPDATE Stories SET banned='true' WHERE id=$1")
-c.execute("PREPARE UnbanStory(int) AS UPDATE Stories Set banned='false' WHERE id=$1")
-c.execute("PREPARE DeleteStory(int) AS UPDATE Stories SET deleted='true' WHERE id=$1")
-c.execute("PREPARE UndeleteStory(int) AS UPDATE Stories Set deleted='false' WHERE id=$1")
+c.execute("PREPARE BanStory(int, boolean) AS UPDATE Stories SET banned=$2 WHERE id=$1")
+c.execute("PREPARE DeleteStory(int, boolean) AS UPDATE Stories SET deleted=$2 WHERE id=$1")
 c.execute("PREPARE GetStoriesByBook(int) AS SELECT * FROM Stories WHERE book_id=$1")
 c.execute("PREPARE SetNSFW(int, boolean) AS UPDATE Stories SET nsfw=$2 WHERE id=$1")
 c.execute("PREPARE SetPatreonThreshold(int,int) AS UPDATE Stories SET patreon_threshold=$2 WHERE id=$1")
@@ -152,12 +149,12 @@ class User():
 
     def ban(self):
 
-        c.execute("EXECUTE BanUser(%s)", (self.id,))
+        c.execute("EXECUTE BanUser(%s,%s)", (self.id, True))
         conn.commit()
 
     def unban(self):
 
-        c.execute("EXECUTE UnbanUser(%s)", (self.id,))
+        c.execute("EXECUTE BanUser(%s,%s)", (self.id, False))
         conn.commit()
 
     def set_over18(self, over18=False):
@@ -320,31 +317,37 @@ class Story():
 
     def ban(self):
 
-        c.execute("EXECUTE BanStory(%s)", (self.id,))
+        c.execute("EXECUTE BanStory(%s, %s)", (self.id, True))
         conn.commit()
 
     def unban(self):
 
-        c.execute("EXECUTE UnbanStory(%s)", (self.id,))
+        c.execute("EXECUTE UnbanStory(%s, %s)", (self.id, False))
         conn.commit()
 
     def delete(self):
-        c.execute("EXECUTE DeleteStory(%s)", (self.id,))
+        c.execute("EXECUTE DeleteStory(%s, %s)", (self.id, True))
         conn.commit()
 
     def undelete(self):
 
-        c.execute("EXECUTE UndeleteStory(%s)", (self.id,))
+        c.execute("EXECUTE DeleteStory(%s, %s)", (self.id, False))
         conn.commit()
 
 class Listing():
 
     def __init__(self, kind="new"):
+        self.kind=kind
+        
         if kind=='new':
-            c.execute("SELECT * FROM Stories WHERE banned='false' AND deleted='false' ORDER BY id DESC LIMIT 15")
+            c.execute("SELECT * FROM Stories WHERE banned='false' AND deleted='false' AND book_id<>4 ORDER BY id DESC LIMIT 15")
+        elif kind=='news':
+            c.execute("SELECT * FROM Stories WHERE book_id=4 ORDER BY id DESC LIMIT 5")
         self.raw=c.fetchall()
 
     def __iter__(self):
+
+        
         for entry in self.raw:
             yield Story(result=entry, load_author=True)
             
