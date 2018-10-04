@@ -27,7 +27,7 @@ c.execute("PREPARE SetPatreonWebhook(int, text) AS UPDATE Users SET patreon_webh
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *")
-c.execute("PREPARE EditStory(int, text, text, text, text, text, text, text) AS UPDATE Stories SET pre=$2, story=$3, post=$4, pre_raw=$5, story_raw=$6, post_raw=$7, title=$8 WHERE id=$1")
+c.execute("PREPARE EditStory(int, text, text, text, text, text, text, text) AS UPDATE Stories SET pre=$2, story=$3, post=$4, pre_raw=$5, story_raw=$6, post_raw=$7, title=$8, edited='NOW' WHERE id=$1")
 c.execute("PREPARE GetStoryById(int) AS SELECT * FROM Stories WHERE id = $1")
 c.execute("PREPARE GetStoriesByAuthorId(int) AS SELECT * FROM Stories WHERE author_id = $1 ORDER BY id DESC")
 c.execute("PREPARE BanStory(int, boolean) AS UPDATE Stories SET banned=$2 WHERE id=$1")
@@ -40,7 +40,7 @@ c.execute("PREPARE SetPatreonThreshold(int,int) AS UPDATE Stories SET patreon_th
 c.execute("PREPARE MakeBook(text, int, text, text) AS INSERT INTO Books (name, author_id, description, description_raw, timestamp) VALUES ($1, $2, $3, $4, 'NOW') RETURNING *")
 c.execute("PREPARE GetBookById(int) AS SELECT * FROM Books WHERE id=$1")
 c.execute("PREPARE GetBooksByAuthorId(int) AS SELECT * FROM Books WHERE author_id=$1")
-c.execute("PREPARE EditBook(text, text, text, int) AS UPDATE Books SET name=$1, description=$2, description_raw=$3 WHERE id=$4")
+c.execute("PREPARE EditBook(text, text, text, int) AS UPDATE Books SET name=$1, description=$2, description_raw=$3, edited='NOW' WHERE id=$4")
 c.execute("PREPARE BanBook(int, boolean) AS UPDATE Books SET banned=$2 WHERE id=$1")
 c.execute("PREPARE DeleteBook(int, boolean) AS UPDATE Books SET deleted=$2 WHERE id=$1")
 
@@ -59,6 +59,8 @@ Cleaner=bleach.sanitizer.Cleaner(tags=tags, attributes=attrs, styles=styles)
 
 #SQL timestamp to readable time string
 def time_string(timestamp):
+    if timestamp is None:
+        return None
     t=str(timestamp).split('.')[0]
     t=time.strptime(t,"%Y-%m-%d %H:%M:%S")
     t=time.strftime("%d %B %Y at %H:%M:%S",t)
@@ -200,9 +202,11 @@ class Story():
         self.book_id=int(result[12])
         self.nsfw=bool(result[13])
         self.patreon_threshold=int(result[14])
+        self.edited=result[15]
         
         self.url="/s/{}".format(self.id)
         self.created_date=time_string(self.created)
+        self.edited_date=time_sstring(self.edited)
 
         if load_author:
             self.author=User(uid=self.author_id)
@@ -383,8 +387,10 @@ class Book():
         self.created=result[5]
         self.banned=result[6]
         self.deleted=result[7]
+        self.edited=result[8]
 
         self.created_date=time_string(self.created)
+        self.edited_date=time_string(self.edited)
         self.url="/b/{}".format(str(self.id))
 
         if load_author:
