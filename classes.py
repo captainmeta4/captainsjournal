@@ -31,6 +31,7 @@ signal.signal(signal.SIGTERM, signal_term_handler)
 
 #clear any aborted transactions from previous iteration (debugging)
 c.execute("ROLLBACK TRANSACTION")
+c.execute("SET AUTOCOMMIT TO OFF")
 
 #prepare parameterized sql statements
 #for users
