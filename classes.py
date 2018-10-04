@@ -13,6 +13,7 @@ c=db.cursor()
 
 #wrapper for commit() - make test env read only
 DOMAIN=os.environ.get("domain")
+print(DOMAIN)
 def commit():
     if DOMAIN=="www.captainslogbook.org":
         db.commit()
