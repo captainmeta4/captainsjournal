@@ -313,26 +313,12 @@ class Story():
         conn.commit()
 
     def render_storypage(self, v=None):
-        if self.banned or self.deleted:
-            return render_template('storypage.html', s=self, v=v)
 
-        if self.patreon_threshold:
-            d=str(self.patreon_threshold)[0:-2]
-            c=str(self.patreon_threshold)[-2:]
-            if not d:
-                d="0"
-                
-            if v is None:
-                return render_template('patreon_required.html', s=self, v=v, d=d, c=c)
-            elif v.patreon_id==0:
-                return render_template('patreon_required.html', s=self, v=v, d=d, c=c)
-
-
-            p=Pledge(self.author.patreon_id, v.patreon_id)
-            if p.amount_cents < self.patreon_threshold and v.id != self.author_id:
-                render_template('patreon_required.html', s=self, v=v, d=d, c=c)
+        cent_string=str(self.patreon_threshold).rjust(3,'0')
+        d=str(self.patreon_threshold)[0:-2]
+        c=str(self.patreon_threshold)[-2:]
         
-        return render_template('storypage.html', s=self, v=v)
+        return render_template('storypage.html', s=self, v=v,d=d,c=c)
 
     def ban(self):
 
