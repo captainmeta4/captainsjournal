@@ -56,7 +56,7 @@
 {% block content %}
 <h1>{{ b.title }}</h1>
 <p>by <a href="/u/{{ b.author.name }}">{{ b.author.name }}</a>{% if b.author.patreon and not b.author.banned %} | <a href="https://patreon.com/{{ b.author.patreon }}">Patreon</a>{% endif %}<br>
-{% if b.distinguished %}<span class="red">[A]</span> {% endif %}{{ b.created_date }}{% if b.edited %} | <span class="blue" title="{{ b.edited_date }}">[E]</span>{% endif %}</p>
+{{ b.created_date }}{% if b.distinguished %} | <span class="red" title="Administrator">[A]</span>{% endif %}{% if b.edited %} | <span class="blue" title="Edited: {{ b.edited_date }}">[E]</span>{% endif %}</p>
 
 {% if b.banned %}
 	<p><b><span class="red">[This book has been removed by the site administrators.]</span></b></p>
