@@ -206,6 +206,7 @@ class Story():
         self.nsfw=bool(result[13])
         self.patreon_threshold=int(result[14])
         self.edited=result[15]
+        self.distinguished=bool(result[16])
         
         self.url="/s/{}".format(self.id)
         self.created_date=time_string(self.created)
@@ -385,6 +386,7 @@ class Book():
         self.banned=result[6]
         self.deleted=result[7]
         self.edited=result[8]
+        self.distinguished=bool(result[9])
 
         self.created_date=time_string(self.created)
         self.edited_date=time_string(self.edited)
