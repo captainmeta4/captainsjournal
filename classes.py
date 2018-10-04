@@ -22,9 +22,11 @@ def commit():
 #and rollback transaction on kill if test env
 def signal_term_handler(signal, frame):
     if DOMAIN!="www.captainslogbook.org":
-        print("sending ROLLBACK TRANSACTION")
-        c.execute("ROLLBACK TRANSACTION;")
-    sys.exit(0)
+        print("rolling back")
+        db.rollback()
+    c.close()
+    db.close()
+    sys.exit()
 signal.signal(signal.SIGTERM, signal_term_handler)
 
 #clear any aborted transactions from previous iteration (debugging)
