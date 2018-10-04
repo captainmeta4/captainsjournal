@@ -61,9 +61,12 @@ Cleaner=bleach.sanitizer.Cleaner(tags=tags, attributes=attrs, styles=styles)
 def time_string(timestamp):
     if timestamp is None:
         return None
-    t=str(timestamp).split('.')[0]
-    t=time.strptime(t,"%Y-%m-%d %H:%M:%S")
-    t=time.strftime("%d %B %Y at %H:%M:%S",t)
+    try:
+        t=str(timestamp).split('.')[0]
+        t=time.strptime(t,"%Y-%m-%d %H:%M:%S")
+        t=time.strftime("%d %B %Y at %H:%M:%S",t)
+    except:
+        return None
     return t
 
 class User():
