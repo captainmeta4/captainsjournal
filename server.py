@@ -458,9 +458,9 @@ def undelete_story(q, v, sid):
 @auth_required
 @not_banned
 @agree_required
-def post_edit_story(q, v, sid, load_author=True):
+def post_edit_story(q, v, sid):
     try:
-        s=Story(sid=sid)
+        s=Story(sid=sid, load_author=True)
     except KeyError:
         abort(404)
 
