@@ -13,7 +13,7 @@ Include this story in a book:
 {% for b in v.books() %}
 <option value="{{ b.id }}" {% if b.id==s.book_id %}selected{% endif %}>{{ b.title }}</option>
 {% endfor %}
-{% if v.admin %}<option value="4" {% if b.id==4 %}selected{% endif %}>News</option>{% endif %}
+{% if v.admin %}<option value="4" {% if s.book_id==4 %}selected{% endif %}>News</option>{% endif %}
 </select></br>
 <input type="checkbox" name="nsfw" {% if s.nsfw %}checked{% endif %}>Mark NSFW?<br>
 {% if v.patreon_webhook_secret %}
