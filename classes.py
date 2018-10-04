@@ -53,7 +53,7 @@ tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br'
 attrs=bleach.sanitizer.ALLOWED_ATTRIBUTES
 attrs['*']=["class","style"]
 attrs['img']=["height","width","alt","src"]
-styles=['white-space',"border","border-radius","text-align"]
+styles=['white-space',"border","border-radius","text-align","align"]
 Cleaner=bleach.sanitizer.Cleaner(tags=tags, attributes=attrs, styles=styles)
 
 class User():
