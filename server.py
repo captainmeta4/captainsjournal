@@ -32,6 +32,9 @@ r=praw.Reddit(client_id=os.environ.get('client_id'),
 patreon_id=os.environ.get('patreon_id')
 patreon_secret=os.environ.get('patreon_secret')
 
+COOKIE=os.environ.get('cookie')
+DOMAIN=os.environ.get('domain')
+
 #define jinja2 custom filters
 @app.template_filter("os_get")
 def os_get(key):
@@ -56,7 +59,7 @@ def temporary_reddit(refresh_token):
 
 def check_token():
 
-    token=request.cookies.get("logbook_reddit")
+    token=request.cookies.get(COOKIE)
     if token==None:
         raise KeyError('not found')
     else:
@@ -251,7 +254,7 @@ def oauth_redirect():
     v=User(name=name, make=True)
 
     resp=make_response(redirect(v.url))
-    resp.set_cookie("logbook_reddit", value=token, domain=".captainslogbook.org")
+    resp.set_cookie(COOKIE, value=token, domain=DOMAIN)
 
     return resp
 
