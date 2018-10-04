@@ -89,7 +89,7 @@ Created: {{ s.created_date }}{% if s.edited %} | Edited: {{ s.edited_date }}{% e
 {% endif %}
 </p>
 {% endif %}
-{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw) and Pledge(s.author.patreon_id, v.patreon_id).amount_cents >=s.patreon_threshold) %}
+{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw) and p.amount_cents>=s.patreon_threshold) %}
 	<hr>
 	{% if s.pre %}
 		<p><b>Author's Note:</b> {{ s.pre|safe }}</p>
