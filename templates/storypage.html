@@ -93,7 +93,7 @@ Created: {{ s.created_date }}{% if s.edited %} | Edited: {{ s.edited_date }}{% e
 {% elif pledge_cents < s.patreon_threshold %}
 	<hr>
 	<p>This content is only for patrons of {{ s.author.name }} with a pledge of at least ${{ d }}.{{ c }}.</p>
-	<p>If you're already a Patron, and you've [linked your Patreon account](/settings), try making a $0.01 edit to your pledge. (Editing your pledge makes Patreon send an update to Captain's Logbook).</p>
+	<p>If you're already a Patron, and you've <a href="/settings">linked your Patreon account</a>, try making a $0.01 edit to your pledge. (Editing your pledge makes Patreon send an update to Captain's Logbook).</p>
 	<p>If that still doesn't work, ask {{ s.author.name }} to make sure their own Patreon settings are correctly configured.</p>
 {% endif %}
 {% endblock %}
