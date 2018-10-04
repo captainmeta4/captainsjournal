@@ -5,6 +5,8 @@ from flask import *
 import mistletoe
 import bleach
 import time
+import signal
+import sys
 
 db=psycopg2.connect(os.environ.get("DATABASE_URL"))
 c=db.cursor()
@@ -14,6 +16,12 @@ DOMAIN=os.environ.get("domain")
 def commit():
     if DOMAIN=="www.captainslogbook.org":
         db.commit()
+
+#and rollback transaction on kill if test env
+def signal_term_handler(signal, frame):
+    if DOMAIN!="www.captainslogbook.org":
+        c.execute("ROLLBACK TRANSACTION;")
+signal.signal(signal.SIGTERM, signal_term_handler)
 
 #clear any aborted transactions from previous iteration (debugging)
 c.execute("ROLLBACK TRANSACTION")
