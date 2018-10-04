@@ -281,6 +281,9 @@ class Story():
 		
         if self.id==-1:
             raise KeyError("This story does not yet exist. Use `save()` instead.")
+
+        if title==self.title and pre==self._pre_raw and story==self._story_raw and post == self._post_raw:
+            return
 	
         self.title=title
 	
@@ -408,6 +411,9 @@ class Book():
         return b
 
     def edit(self, title, description):
+
+        if title==self.title and description==self._description_raw:
+            return
 
         self.title=Cleaner.clean(title)
         self._description_raw=description
