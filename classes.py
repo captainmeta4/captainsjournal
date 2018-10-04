@@ -48,10 +48,11 @@ c.execute("PREPARE MakePledge(int,int,int) AS INSERT INTO Pledges (author_patreo
 c.execute("PREPARE UpdatePledge(int,int,int) AS UPDATE Pledges SET pledge_amount_cents=$3 WHERE author_patreon_id=$1 AND supporter_patreon_id=$2")
 c.execute("PREPARE GetPledge(int,int) AS SELECT * FROM Pledges WHERE author_patreon_id=$1 AND supporter_patreon_id=$2")
 
-#Module global
-tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre','div','span']
+#Sanitization object used throughout module
+tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre','div','span','img']
 attrs=bleach.sanitizer.ALLOWED_ATTRIBUTES
 attrs['*']=["class","style"]
+attrs['img']=["height","width","alt"]
 styles=['white-space',"border","border-radius","text-align"]
 Cleaner=bleach.sanitizer.Cleaner(tags=tags, attributes=attrs, styles=styles)
 
