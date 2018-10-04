@@ -70,16 +70,19 @@ Created: {{ s.created_date }}{% if s.edited %} | Edited: {{ s.edited_date }}{% e
 {% if b %}
 <p>Part of <em><a href="{{ b.url }}">{{ b.title }}</a></em></p>
 {% endif %}
+{% if s.banned or s.deleted or s.author.banned %}
+<p>
 {% if s.banned %}
-	<p><b><span class="red">[This story has been removed by the site administrators.]</span></b></p>
+	<b><span class="red">[This story has been removed by the site administrators.]</span></b>
 {% endif %}
 {% if s.deleted %}
-	<p><b><span class="red">[This story has been unpublished by its author.]</span></b></p>
+	<b><span class="red">[This story has been unpublished by its author.]</span></b><br>
 {% endif %}
 {% if s.author.banned %}
-	<p><b><span class="red">[This story’s author is banned.]</span></b></p>
+	<b><span class="red">[This story’s author is banned.]</span></b><br>
 {% endif %}
-<p><b><span class="green">[Patron-Only Content]</span></b></p>
+{% endif %}
+<b><span class="green">[Patron-Only Content]</span></b></p>
 <hr>
 <h2>Patreon Support Required</h2>
 <p>A Patreon pledge of ${{ d }}.{{ c }}  to <a href="https://patreon.com/{{ s.author.patreon }}">{{ s.author.name }}</a> is required to access this content. You need to make a pledge and/or link your Patreon account to Captain's Logbook.</p>

@@ -70,17 +70,24 @@ Created: {{ s.created_date }}{% if s.edited %} | Edited: {{ s.edited_date }}{% e
 {% if b %}
 <p>Part of <em><a href="{{ b.url }}">{{ b.title }}</a></em></p>
 {% endif %}
+{% if s.banned or s.deleted or s.author.banned or s.nsfw or s.patreon_threshold %}
+<p>
 {% if s.banned %}
-	<p><b><span class="red">[This story has been removed by the site administrators.]</span></b></p>
+	<b><span class="red">[This story has been removed by the site administrators.]</span></b><br>
 {% endif %}
 {% if s.deleted %}
-	<p><b><span class="red">[This story has been unpublished by its author.]</span></b></p>
+	<b><span class="red">[This story has been unpublished by its author.]</span></b><br>
 {% endif %}
 {% if s.author.banned %}
-	<p><b><span class="red">[This story’s author is banned.]</span></b></p>
+	<b><span class="red">[This story’s author is banned.]</span></b><br>
 {% endif %}
 {% if s.nsfw %}
-        <p><b><span class="red">[This story contains adult content.]</span></b></p>
+        <b><span class="red">[This story contains adult content.]</span></b><br>
+{% endif %}
+{% if patreon_threshold %}
+	<b><span class="green">[Patron-Only Content]</span></b>
+{% endif %}
+</p>
 {% endif %}
 {% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw)) %}
 	<hr>
