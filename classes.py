@@ -338,7 +338,7 @@ class Story():
 
     def unban(self):
 
-        c.execute("EXECUTE UnbanStory(%s, %s)", (self.id, False))
+        c.execute("EXECUTE BanStory(%s, %s)", (self.id, False))
         conn.commit()
 
     def delete(self):
