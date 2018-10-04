@@ -16,13 +16,10 @@ DOMAIN=os.environ.get("domain")
 def commit():
     if DOMAIN=="www.captainslogbook.org":
         db.commit()
-    else:
-        print("Not committing")
 
 #and rollback transaction on kill if test env
 def signal_term_handler(signal, frame):
     if DOMAIN!="www.captainslogbook.org":
-        print("rolling back")
         db.rollback()
     c.close()
     db.close()
@@ -31,7 +28,6 @@ signal.signal(signal.SIGTERM, signal_term_handler)
 
 #clear any aborted transactions from previous iteration (debugging)
 c.execute("ROLLBACK TRANSACTION")
-c.execute("SET AUTOCOMMIT TO OFF")
 
 #prepare parameterized sql statements
 #for users
