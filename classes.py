@@ -1,4 +1,4 @@
-import psycopg2
+ import psycopg2
 import os
 import re
 from flask import *
@@ -396,6 +396,7 @@ class Book():
         self.description=Cleaner.clean(mistletoe.markdown(self._description_raw))
 
         c.execute("EXECUTE EditBook(%s, %s, %s, %s)", (self.title, self.description, self._description_raw, self.id))
+        conn.commit()
     
 
     def stories(self):
