@@ -389,11 +389,6 @@ def create_story(q, v):
     if len(title_md)<5 or len(story_md)<10:
         return render_template('badstory.html')
 
-    if bid:
-        b=Book(bid=bid)
-        if b.author_id != v.id:
-            abort(403)
-
     #assemble data for story object and save it
     data=(-1,0,"","","", False, title_md, v.id,None,pre_md,story_md,post_md, bid,False,0)
     story=Story(result=data)
@@ -403,6 +398,8 @@ def create_story(q, v):
         s.set_nsfw(True)
     if patreon_threshold:
         s.set_patreon_threshold(patreon_threshold)
+    if bid:
+        s.set_bid(bid)
 
     return redirect(s.url)
     
@@ -475,13 +472,6 @@ def post_edit_story(q, v, sid):
         abort(418)
 
     bid=int(request.form.get("book",0))
-    if bid:
-        if bid==4 and v.admin:
-            pass
-        else:
-            b=Book(bid=bid)
-            if not b.author_id == v.id:
-                abort(400)
                 
     title=request.form.get("title","")
     pre_md=request.form.get("pre","")
@@ -496,7 +486,8 @@ def post_edit_story(q, v, sid):
     nsfw=request.form.get("nsfw")
     if nsfw != s.nsfw:
         s.set_nsfw(nsfw=nsfw)
-    s.set_patreon_threshold(patreon_threshold)
+    if patreon_threshold != s.patreon_threshold:
+        s.set_patreon_threshold(patreon_threshold)
 
     return redirect(s.url)
 

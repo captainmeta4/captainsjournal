@@ -287,8 +287,8 @@ class Story():
             return
 
         b=Book(bid=bid)
-        if not b.author_id==self.author_id:
-            abort(403)
+        if b.author_id!=self.author_id and not(bid==4 and self.author.admin):
+                abort(403)
 
         c.execute("UPDATE Stories SET book_id=%s WHERE id=%s", (bid, self.id))
         conn.commit()
@@ -342,7 +342,7 @@ class Listing():
         if kind=='new':
             c.execute("SELECT * FROM Stories WHERE banned='false' AND deleted='false' AND book_id<>4 ORDER BY id DESC LIMIT 15")
         elif kind=='news':
-            c.execute("SELECT * FROM Stories WHERE book_id=4 ORDER BY id DESC LIMIT 5")
+            c.execute("SELECT * FROM Stories WHERE banned='false' AND deleted='false' AND book_id=4 ORDER BY id DESC LIMIT 5")
         self.raw=c.fetchall()
 
     def __iter__(self):
