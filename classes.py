@@ -28,7 +28,7 @@ def signal_term_handler(signal, frame):
 signal.signal(signal.SIGTERM, signal_term_handler)
 
 #clear any aborted transactions from previous iteration (debugging)
-c.execute("ROLLBACK TRANSACTION")
+c.execute("ROLLBACK TRANSACTION;")
 
 #prepare parameterized sql statements
 #for users
@@ -129,7 +129,7 @@ class User():
         self.patreon_webhook_secret=result[11]
         
         self.url="/u/{}".format(self.name)
-        self.created_date=time_string(self.created).split(" at ")
+        self.created_date=time_string(self.created).split(" at ")[0]
 
     def set_patreon(self, name, pid):
         c.execute("EXECUTE SetPatreon(%s, %s, %s)", (self.id, pid, name))
