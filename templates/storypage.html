@@ -89,7 +89,7 @@ Created: {{ s.created_date }}{% if s.edited %} | Edited: {{ s.edited_date }}{% e
 {% endif %}
 </p>
 {% endif %}
-{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw) and p.amount_cents>=s.patreon_threshold) %}
+{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw) and pledge_cents>=s.patreon_threshold) %}
 	<hr>
 	{% if s.pre %}
 		<p><b>Author's Note:</b> {{ s.pre|safe }}</p>
@@ -100,5 +100,10 @@ Created: {{ s.created_date }}{% if s.edited %} | Edited: {{ s.edited_date }}{% e
 		<hr>
 		<p><b>Author's Note:</b> {{ s.post|safe }}</p>
 	{% endif %}
+{$ elif pledge_cents < s.patreon_threshold %}
+	<hr>
+	<p>This content is only for patrons of {{ s.author.name }}.</p>
+	<p>If you'r already pledged and have linked your Patreon account, try making a $0.01 edit to your pledge. (Editing your pledge makes Patreon send an update to Captain's Logbook).</p>
+	<p>If that still doesn't work, ask {{ s.author.name }} to make sure their own Patreon settings are correctly configured.</p>
 {% endif %}
 {% endblock %}

@@ -318,9 +318,12 @@ class Story():
         d=str(self.patreon_threshold)[0:-2]
         c=str(self.patreon_threshold)[-2:]
 
-        p=Pledge(self.author.patreon_id, v.patreon_id)
+        if self.patreon_threshold and v:
+            pledge_cents=Pledge(self.author.patreon_id, v.patreon_id).amount_cents
+        else:
+            pledge_cents=0
         
-        return render_template('storypage.html', s=self, v=v, d=d, c=c, p=p)
+        return render_template('storypage.html', s=self, v=v, d=d, c=c, pledge_cents=pledge_cents)
 
     def ban(self):
 
