@@ -206,7 +206,7 @@ class Story():
         
         self.url="/s/{}".format(self.id)
         self.created_date=time_string(self.created)
-        self.edited_date=time_sstring(self.edited)
+        self.edited_date=time_string(self.edited)
 
         if load_author:
             self.author=User(uid=self.author_id)
