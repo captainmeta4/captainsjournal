@@ -65,7 +65,7 @@
 
 {% block content %}
 <h1>{{ s.title }}</h1>
-<p>by <a href="/u/{{ s.author.name }}">{{ s.author.name }}</a> on {{ s.created_date }}{% if not s.author.banned and not s.banned %} | <span class="green">[$] </span><a href="https://patreon.com/{{ s.author.patreon }}">Patreon</a>{% endif %}</p>
+<p>by <a href="/u/{{ s.author.name }}">{{ s.author.name }}</a> on {{ s.created_date }}{% if not s.author.banned %} | <span class="green">[$] </span><a href="https://patreon.com/{{ s.author.patreon }}">Patreon</a>{% endif %}</p>
 {% if b %}
 <p>Part of <em><a href="{{ b.url }}">{{ b.title }}</a></em></p>
 {% endif %}
