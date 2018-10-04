@@ -390,7 +390,7 @@ def create_story(q, v):
         return render_template('badstory.html')
 
     #assemble data for story object and save it
-    data=(-1,0,"","","", False, title_md, v.id,None,pre_md,story_md,post_md, bid,False,0,False)
+    data=(-1,0,"","","", False, title_md, v.id,None,pre_md,story_md,post_md, bid,False,0,0,False)
     story=Story(result=data)
     s=story.save()
 
@@ -504,7 +504,7 @@ def make_book(q, v):
     title=request.form.get('title',"")
     description=request.form.get('desc',"")
     
-    result=(0,title,v.id,"",description,0,False,False,False)
+    result=(0,title,v.id,"",description,0,False,False,0,False)
 
     book=Book(result=result)
     b=book.save()
