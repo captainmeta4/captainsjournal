@@ -4,6 +4,7 @@ import re
 from flask import *
 import mistletoe
 import bleach
+import time
 
 conn=psycopg2.connect(os.environ.get("DATABASE_URL"))
 c=conn.cursor()
@@ -56,6 +57,13 @@ attrs['img']=["height","width","alt","src"]
 styles=['white-space',"border","border-radius","text-align","align", "float","margin","padding"]
 Cleaner=bleach.sanitizer.Cleaner(tags=tags, attributes=attrs, styles=styles)
 
+#SQL timestamp to readable time string
+def time_string(timestamp):
+    t=str(timestamp).split('.')[0]
+    t=time.strptime(t,"%Y-%m-%d %H:%M:%S")
+    t=time.strftime("%d %B %Y at %H:%M:%S",t)
+    return t
+
 class User():
 
     def __init__(self, name="", uid=0, token=None, make=False):
@@ -98,7 +106,7 @@ class User():
         self.patreon_webhook_secret=result[11]
         
         self.url="/u/{}".format(self.name)
-        self.created_date=str(self.created).split()[0]
+        self.created_date=time_string(self.created).split(" at ")
 
     def set_patreon(self, name, pid):
         c.execute("EXECUTE SetPatreon(%s, %s, %s)", (self.id, pid, name))
@@ -194,7 +202,7 @@ class Story():
         self.patreon_threshold=int(result[14])
         
         self.url="/s/{}".format(self.id)
-        self.created_date=str(self.created).split()[0]
+        self.created_date=time_string(self.created)
 
         if load_author:
             self.author=User(uid=self.author_id)
@@ -376,7 +384,7 @@ class Book():
         self.banned=result[6]
         self.deleted=result[7]
 
-        self.created_date=str(self.created).split()[0]
+        self.created_date=time_string(self.created)
         self.url="/b/{}".format(str(self.id))
 
         if load_author:
