@@ -708,6 +708,7 @@ body.night {
     }
 }
 
+/* This was leftover from discord plugin on captainmeta4.me
 @media print, screen and (max-height: 800px) and (min-width: 961px) {
     footer {
         float:none;
@@ -716,3 +717,4 @@ body.night {
         margin-left: 360px
     }
 }
+*/
