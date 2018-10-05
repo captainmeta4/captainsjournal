@@ -28,7 +28,7 @@
       <input type="submit" value="Unpublish Book">
       </form>
     {% endif %}
-    {% if b.deleted %}
+    {% if b.deleted and not b.author.banned %}
       <form action="/api/undeletebook/{{ b.id }}" method="post">
       <input type="submit" value="Re-publish Book">
       </form>
