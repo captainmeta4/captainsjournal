@@ -31,14 +31,14 @@
 <h3><a href="{{ b.url }}">{% if b.banned or b.deleted %}<s>{{ b.title }}</s>{% else %}{{ b.title }}{% endif %}</a></h3>
 <ol>
 {% for s in b.stories() | sort(attribute="id") %}
-{% if (v.admin or v.id==u.id) or (not s.banned and not s.deleted) %}<li>{% if s.patreon_threshold and u.patreon_id %}<span class="green">[$]</span> {% endif %}{% if s.nsfw %}<span class="blue">[NSFW]</span> {% endif %}<a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
+{% if (v.admin or v.id==u.id) or (not s.banned and not s.deleted) %}<li>{% if s.patreon_threshold and u.patreon_id %}<span class="green">[$]</span> {% endif %}{% if s.nsfw %}<span class="red">[M]</span> {% endif %}<a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
 {% endfor %}
 </ol>
 {% endfor %}
 <h3>Standalone Stories</h3>
 <ul>
 {% for s in u.stories() if ((v.admin or v.id==u.id) or (not s.banned and not s.deleted)) and s.book_id==0 %}
-<li>{% if s.patreon_threshold and u.patreon_id %}<span class="green">[$]</span> {% endif %}{% if s.nsfw %}<span class="blue">[NSFW]</span> {% endif %}<a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>
+<li>{% if s.patreon_threshold and u.patreon_id %}<span class="green">[$]</span> {% endif %}{% if s.nsfw %}<span class="red">[M]</span> {% endif %}<a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>
 {% else %}
 <li><em>None yet!</em></li>
 {% endfor %}
