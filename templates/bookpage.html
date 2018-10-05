@@ -58,14 +58,15 @@
 <p>by <a href="/u/{{ b.author.name }}">{{ b.author.name }}</a>{% if b.author.patreon and not b.author.banned %} | <a href="https://patreon.com/{{ b.author.patreon }}">Patreon</a>{% endif %}<br>
 {{ b.created_date }}{% if b.distinguished %} | <span class="red" title="Administrator">[A]</span>{% endif %}{% if b.edited %} | <span class="blue" title="Edited: {{ b.edited_date }}">[E]</span>{% endif %}</p>
 
+{% if b.banned or b.deleted %}
+<p>
 {% if b.banned %}
-	<p><b><span class="red">[This book has been removed by the site administrators.]</span></b></p>
+	<b><span class="red">[This book has been removed by the site administrators.]</span></b><br>
 {% endif %}
 {% if b.deleted %}
-	<p><b><span class="red">[This book has been unpublished by its author.]</span></b></p>
+	<b><span class="red">[This book has been unpublished by its author.]</span></b><br>
 {% endif %}
-{% if b.author.banned %}
-	<p><b><span class="red">[This story’s author is banned.]</span></b></p>
+</p>
 {% endif %}
 {% if (v.admin or v.id==b.author_id) or (not b.banned and not b.deleted) %}
 <hr>
@@ -73,7 +74,7 @@
 <hr>
 <ol>
 {% for s in b.stories() | sort(attribute="id") %}
-{% if ((v.admin or v.id==b.author_id) or (not s.banned and not s.deleted)) %}<li>{% if s.patreon_threshold and b.author.patreon_id %}<span class="green">[$]</span> {% endif %}<a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
+{% if ((v.admin or v.id==b.author_id) or (not s.banned and not s.deleted)) %}<li>{% if s.patreon_threshold and b.author.patreon_id %}<span class="green">[$]</span> {% endif %}{% if s.nsfw %}<span class="blue">[NSFW] </span>{% endif %}<a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
 {% else %}
 <li><em>None yet!</em></li>
 {% endfor %}
