@@ -691,7 +691,7 @@ body.night {
 }
 
 .night textarea,
-.night input[type=text] {
+.night input[type="text"] {
     backgroud-color: #111;
     color: #ddd
 }
