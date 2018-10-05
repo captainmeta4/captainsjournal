@@ -39,7 +39,7 @@
       <input type="submit" value="Unpublish Story">
       </form>
     {% endif %}
-    {% if s.deleted and not v.banned %}
+    {% if s.deleted and not s.author.banned %}
       <form action="/api/undeletestory/{{ s.id }}" method="post">
       <input type="submit" value="Re-publish Story">
       </form>
