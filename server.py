@@ -399,7 +399,7 @@ def create_story(q, v):
     if patreon_threshold:
         s.set_patreon_threshold(patreon_threshold)
     if bid:
-        s.set_bid(bid)
+        s.set_book(bid)
 
     return redirect(s.url)
     
