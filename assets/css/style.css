@@ -7,12 +7,6 @@ input[type="text"][name="title"] {
     width: 100%;
 }
 
-.night textarea,
-.night input[type=text] {
-    backgroud-color: black;
-    color: #ddd
-}
-
 input[type='text'] {
     width:100%;
 }
@@ -694,6 +688,12 @@ body.night {
 
 .night hr {
     background: #1a1a1a
+}
+
+.night textarea,
+.night input[type=text] {
+    backgroud-color: #111;
+    color: #ddd
 }
 
 @media print, screen and (max-width: 960px) {
