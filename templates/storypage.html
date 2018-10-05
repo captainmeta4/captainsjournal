@@ -73,9 +73,8 @@
 {% if s.banned or s.deleted or s.author.banned or s.nsfw or s.patreon_threshold %}
 <p>{% if s.banned %}<b><span class="red">[This story has been removed by the site administrators.]</span></b><br>{% endif %}
 {% if s.deleted %}<b><span class="red">[This story has been unpublished by its author.]</span></b><br>{% endif %}
-{% if s.author.banned %}<b><span class="red">[This story’s author is banned.]</span></b><br>{% endif %}
 {% if s.nsfw %}<b><span class="red">[This story contains adult content.]</span></b><br>{% endif %}
-{% if s.patreon_threshold %}<b><span class="green">[Patron-Only Content. Threshold: ${{ d }}.{{ c }}]</span></b>{% endif %}</p>
+{% if s.patreon_threshold %}<b><span class="green">[For Patrons of {{ s.author.name }} only. Threshold: ${{ d }}.{{ c }}]</span></b>{% endif %}</p>
 {% endif %}
 {% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw) and pledge_cents>=s.patreon_threshold) %}
 	<hr>
@@ -95,5 +94,8 @@
 	<p>This content is only for patrons of {{ s.author.name }} with a pledge of at least ${{ d }}.{{ c }}.</p>
 	<p>If you're already a Patron, and you've <a href="/settings">linked your Patreon account</a>, try making a $0.01 edit to your pledge. (Editing your pledge makes Patreon send an update to Captain's Logbook).</p>
 	<p>If that still doesn't work, ask {{ s.author.name }} to make sure their own Patreon settings are correctly configured.</p>
+{% elif s.nsfw %}
+	<hr>
+	<p>You need to sign in with reddit and be over 18 years old to read this.</p>
 {% endif %}
 {% endblock %}
