@@ -447,6 +447,7 @@ def delete_story(q, v, sid):
     
 @app.route('/api/undeletestory/<sid>', methods=["POST"])
 @auth_required
+@not_banned
 def undelete_story(q, v, sid):
     s=Story(sid=sid)
     if not v.id==s.author_id:
