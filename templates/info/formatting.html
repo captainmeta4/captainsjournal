@@ -1,0 +1,47 @@
+{% extends "default.html" %}
+
+{% block title %}
+<title>Captain's Logbook - Formatting</title>
+<meta name="description" content="Captain's Logbook formatting guide">
+{% endblock%}
+
+{% block content %}
+<h1>Formatting</h1>
+
+Captain's Logbook uses markdown for formatting.
+
+<table>
+	<tr>
+		<th>Markdown</th>
+		<th>Displayed as</th>
+	</tr>
+	<tr>
+		<td>*italics*<br>OR<br>_italics_</td>
+		<td><em>italics</em></td>
+	</tr>
+	<tr>
+		<td>**bold**<br>OR<br>__bold__</td>
+		<td><b>bold</b></td>
+	</tr>
+   <tr>
+		<td>`code`</td>
+		<td><code>code</code></td>
+	</tr>
+</table>
+
+A few extra custom styles also exist.
+
+
+
+{% endblock %} <table>
+	<tr>
+		<th>Style</th>
+		<th>HTML</th>
+		<th>Displayed as</th>
+	</tr>
+	<tr>
+		<td>Text messaging</td>
+		<td><pre><p class="iostext-me">How are you doing?</p><p class="iostext-other">Not bad, how about you?</p></pre></td>
+		<td><p class="iostext-me">How are you doing?</p><p class="iostext-other">Not bad, how about you?</p></td>
+	</tr>
+</table>
