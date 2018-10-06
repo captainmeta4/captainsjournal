@@ -1,23 +1,8 @@
 import psycopg2
-
+import os
+\
 db=psycopg2.connect(os.environ.get("DATABASE_URL"))
 c=db.cursor()
-
-#wrapper for commit() - make test env read only
-DOMAIN=os.environ.get("domain")
-print(DOMAIN)
-def commit():
-    if DOMAIN=="www.captainslogbook.org":
-        db.commit()
-
-#and rollback transaction on kill if test env
-def signal_term_handler(signal, frame):
-    if DOMAIN!="www.captainslogbook.org":
-        db.rollback()
-    c.close()
-    db.close()
-    sys.exit()
-signal.signal(signal.SIGTERM, signal_term_handler)
 
 #prepare parameterized sql statements
 #for users
