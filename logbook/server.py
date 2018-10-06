@@ -216,6 +216,11 @@ def rules(v, filename):
     except jinja2.exceptions.TemplateNotFound:
         abort(404)
 
+@app.route("/gdpr")
+@auth_required
+def gdpr(q,v):
+  return render_template("gdpr.html", v=v)
+
 @app.route('/submit')
 @auth_required
 def create_submission(q, v):

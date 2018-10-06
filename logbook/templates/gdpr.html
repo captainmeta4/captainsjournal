@@ -1,0 +1,21 @@
+{% extends "default.html" %}
+
+{% block content %}
+<h1>Your Data</h1>
+
+<p>This is all of the data that Captain's Logbook has stored about you.</p>
+
+<title>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+{% for entry in v.__dict__ %}
+<tr>
+<td>{{ entry }}</td>
+<td>{{ v.__dict__[entry] }}</td>
+</tr>
+{% endfor %}
+</title
+
+{% endblock %}
