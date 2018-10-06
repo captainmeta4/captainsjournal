@@ -1,0 +1,18 @@
+{% extends "default.html" %}
+
+{% block content %}
+<h1>Your Data</h1>
+<p>This is the data that is connected to your Captain's Logbook account.</p>
+<table>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+{% for k in v.__dict__ %}
+<tr>
+<td>{{ k }}</td>
+<td>{{ v.__dict__[k] }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
