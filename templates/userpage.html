@@ -24,7 +24,7 @@
 <h1>{{ u.name }}</h1>
 {% if u.banned %} <p><span class="red"><b>[This user is banned.]</b></span></p>{% endif %}
 {% if v.admin or v.id==u.id or not u.banned %}
-<p>{% if u.admin %}<span class="red">[A]</span> {% endif %}User since: {{ u.created_date }}{% if u.patreon and not u.banned %} | <a href="https://patreon.com/{{ u.patreon }}">Patreon</a>{% endif %}</p>
+<p> {% if u.admin %}{% include "tags/a.html"%}| {% endif %}User since: {{ u.created_date }}{% if u.patreon and not u.banned %} | <a href="https://patreon.com/{{ u.patreon }}">Patreon</a>{% endif %}</p>
 <hr>
 <h2><b>Stories</b></h2>
 {% for b in u.books() if ((v.admin or v.id==u.id) or (not b.banned and not b.deleted)) %}
