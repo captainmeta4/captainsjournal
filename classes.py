@@ -27,8 +27,8 @@ def signal_term_handler(signal, frame):
     sys.exit()
 signal.signal(signal.SIGTERM, signal_term_handler)
 
-#clear any aborted transactions from previous iteration (debugging)
-c.execute("ROLLBACK TRANSACTION;")
+#turn off autocommit
+c.execute("SET AUTOCOMMIT=OFF")
 
 #prepare parameterized sql statements
 #for users
