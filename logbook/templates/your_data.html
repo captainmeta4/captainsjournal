@@ -16,7 +16,7 @@
 {% for k in v.__dict__ %}
 <tr>
 <td>{{ k }}</td>
-<td>{{ v.__dict__[k] }}</td>
+<td style="word-wrap:break-word">{{ v.__dict__[k] }}</td>
 </tr>
 {% endfor %}
 </table>
