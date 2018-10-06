@@ -15,7 +15,7 @@ input[type='text'] {
 input[name="subtitle"] {
     display: none
 }
-
+/*
 .highlight table td {
     padding: 5px
 }
@@ -291,7 +291,7 @@ input[name="subtitle"] {
 .highlight {
     background-color: #f8f8f8
 }
-
+*/
 body {
     background-color: #fff;
     padding: 50px;
@@ -589,6 +589,10 @@ span.grey {
 
 .night span.grey {
     color: #555
+}
+
+.night span.blue {
+    color: #6666ff
 }
 
 p[class^="iostext-"] {
