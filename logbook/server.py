@@ -3,7 +3,6 @@ from flask import *
 import os
 import time
 from .classes import *
-from flaskext.markdown import Markdown
 import patreon
 import hashlib
 import json
@@ -21,8 +20,11 @@ import jinja2
 
 
 #globals
-app=Flask(__name__)
-Markdown(app)
+app=Flask(__name__,
+          template_folder="../templates",
+          static_folder="../static"
+         )
+
 user_agent="Captain's Journal by /u/captainmeta4"
 r=praw.Reddit(client_id=os.environ.get('client_id'),
               client_secret=os.environ.get('client_secret'),
