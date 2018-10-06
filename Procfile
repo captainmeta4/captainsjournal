@@ -1,1 +1,1 @@
-web: gunicorn logbook/server:app
+web: gunicorn logbook.server:app
