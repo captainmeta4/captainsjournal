@@ -4,7 +4,7 @@ from flask import *
 import mistletoe
 import bleach
 import time
-from db_prep import c, db
+from .db_prep import c, db
 
 #Sanitization object used throughout module
 tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre','div','span','img']
