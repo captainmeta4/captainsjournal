@@ -580,6 +580,10 @@ span.green {
 }
 
 span.orange {
+    color: #cc8500
+}
+
+.night span.orange {
     color: orange
 }
 
