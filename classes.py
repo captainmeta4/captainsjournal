@@ -1,12 +1,9 @@
-import psycopg2
 import os
 import re
 from flask import *
 import mistletoe
 import bleach
 import time
-import signal
-import sys
 from db_prep import c, db
 
 #Sanitization object used throughout module
