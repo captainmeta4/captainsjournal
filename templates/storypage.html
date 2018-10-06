@@ -76,7 +76,7 @@
 {% if s.nsfw %}<b><span class="red">[This story contains adult content.]</span></b><br>{% endif %}
 {% if s.patreon_threshold %}<b><span class="green">[For Patrons of {{ s.author.name }} only. Threshold: ${{ d }}.{{ c }}]</span></b>{% endif %}</p>
 {% endif %}
-{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw) and pledge_cents>=s.patreon_threshold) %}
+{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw) and (pledge_cents>=s.patreon_threshold or not s.author.patreon_id)) %}
 	<hr>
 	{% if s.pre %}
 		<p><b>Author's Note:</b></p>
