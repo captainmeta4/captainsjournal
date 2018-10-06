@@ -56,7 +56,7 @@
 {% block content %}
 <h1>{{ b.title }}</h1>
 <p>by <a href="/u/{{ b.author.name }}">{{ b.author.name }}</a>{% if b.author.patreon and not b.author.banned %} | <a href="https://patreon.com/{{ b.author.patreon }}">Patreon</a>{% endif %}<br>
-{{ b.created_date }}{% if b.distinguished %}|{% include "a.html" %}{% endif %}{% if b.edited %}|{% include "tags/e.html" %}{% endif %}</p>
+{{ b.created_date }} {% if b.distinguished %}|{% include "a.html" %}{% endif %}{% if b.edited %}|{% include "tags/e.html" %}{% endif %}</p>
 
 {% if b.banned or b.deleted %}
 <p>
