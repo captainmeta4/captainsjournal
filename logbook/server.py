@@ -2,7 +2,7 @@ import praw
 from flask import *
 import os
 import time
-from classes import *
+from .classes import *
 from flaskext.markdown import Markdown
 import patreon
 import hashlib
