@@ -50,7 +50,7 @@ class User():
         if result is None:
             if make and name:
                 c.execute("EXECUTE MakeUser(%s)", (name,))
-                commit()
+                db.commit()
                 result=c.fetchone()
             else:
                 raise KeyError("User not found")
@@ -72,7 +72,7 @@ class User():
 
     def set_patreon(self, name, pid):
         c.execute("EXECUTE SetPatreon(%s, %s, %s)", (self.id, pid, name))
-        commit()
+        db.commit()
 
     def set_google(self, tracking_id):
 
@@ -80,7 +80,7 @@ class User():
             c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, tracking_id))
         else:
             c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, ""))
-        commit()
+        db.commit()
 
     def set_patreon_webhook(self, secret):
 
@@ -88,16 +88,16 @@ class User():
             c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, secret))
         else:
             c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, ""))
-        commit()
+        db.commit()
         
     def tos_agree(self):
         c.execute("UPDATE Users SET agreed='true' WHERE id=%s",(self.id,))
         self.agreed=True
-        commit()
+        db.commit()
 	
     def update_token(self, token):
         c.execute("EXECUTE UpdateToken(%s,%s)", (self.id, token))
-        commit()
+        db.commit()
 
     def render_userpage(self, v=None):
 
@@ -121,12 +121,12 @@ class User():
     def ban(self):
 
         c.execute("EXECUTE BanUser(%s,%s)", (self.id, True))
-        commit()
+        db.commit()
 
     def unban(self):
 
         c.execute("EXECUTE BanUser(%s,%s)", (self.id, False))
-        commit()
+        db.commit()
 
     def set_over18(self, over18=False):
         c.execute("EXECUTE SetOver18(%s, %s)", (self.id, over18))
@@ -176,11 +176,11 @@ class Story():
             
     def set_nsfw(self, nsfw=False):
         c.execute("EXECUTE SetNSFW(%s, %s)", (self.id, nsfw))
-        commit()
+        db.commit()
 
     def set_patreon_threshold(self, cents):
         c.execute("EXECUTE SetPatreonThreshold(%s,%s)", (self.id, cents))
-        commit()
+        db.commit()
 
     def book(self):
 
@@ -234,7 +234,7 @@ class Story():
         self.process()
         c.execute("EXECUTE MakeStory(%s,%s,%s,%s,%s,%s,%s,%s,%s)", (self.author_id, self.title, self.pre, self.story, self.post, self._pre_raw, self._story_raw, self._post_raw, self.book_id))
         data=c.fetchone()
-        commit()
+        db.commit()
         s=Story(result=data)
         return s
     
@@ -254,13 +254,13 @@ class Story():
         self.process()
         
         c.execute("EXECUTE EditStory(%s,%s,%s,%s,%s,%s,%s,%s)",  (self.id, self.pre, self.story, self.post, self._pre_raw, self._story_raw, self._post_raw, self.title))
-        commit()
+        db.commit()
 
     def set_book(self, bid):
 
         if bid==0:
             c.execute("UPDATE Stories SET book_id=0 WHERE id=%s", (self.id,))
-            commit()
+            db.commit()
             return
 
         b=Book(bid=bid)
@@ -268,7 +268,7 @@ class Story():
                 abort(403)
 
         c.execute("UPDATE Stories SET book_id=%s WHERE id=%s", (bid, self.id))
-        commit()
+        db.commit()
 
     def render_storypage(self, v=None):
 
@@ -286,21 +286,21 @@ class Story():
     def ban(self):
 
         c.execute("EXECUTE BanStory(%s, %s)", (self.id, True))
-        commit()
+        db.commit()
 
     def unban(self):
 
         c.execute("EXECUTE BanStory(%s, %s)", (self.id, False))
-        commit()
+        db.commit()
 
     def delete(self):
         c.execute("EXECUTE DeleteStory(%s, %s)", (self.id, True))
-        commit()
+        db.commit()
 
     def undelete(self):
 
         c.execute("EXECUTE DeleteStory(%s, %s)", (self.id, False))
-        commit()
+        db.commit()
 
 class Listing():
 
@@ -359,7 +359,7 @@ class Book():
 
         c.execute("EXECUTE MakeBook(%s,%s,%s,%s)",(self.title, self.author_id, self.description, self._description_raw))
         data=c.fetchone()
-        commit()
+        db.commit()
         b=Book(result=data)
         return b
 
@@ -373,7 +373,7 @@ class Book():
         self.description=Cleaner.clean(mistletoe.markdown(self._description_raw))
 
         c.execute("EXECUTE EditBook(%s, %s, %s, %s)", (self.title, self.description, self._description_raw, self.id))
-        commit()
+        db.commit()
     
 
     def stories(self):
@@ -389,22 +389,22 @@ class Book():
     def ban(self):
 
         c.execute("EXECUTE BanBook(%s, 'true')",(self.id,))
-        commit()
+        db.commit()
 
     def unban(self):
 
         c.execute("EXECUTE BanBook(%s, 'false')",(self.id,))
-        commit()
+        db.commit()
 
     def delete(self):
 
         c.execute("EXECUTE DeleteBook(%s, 'true')",(self.id,))
-        commit()
+        db.commit()
 
     def undelete(self):
 
         c.execute("EXECUTE DeleteBook(%s, 'false')",(self.id,))
-        commit()
+        db.commit()
 
 class Pledge():
 
@@ -420,7 +420,7 @@ class Pledge():
             c.execute("EXECUTE MakePledge(%s,%s,0)" (creator_id, supporter_id))
             result=c.fetchone()
             self.amount_cents=0
-            commit()
+            db.commit()
         elif result is None:
             self.amount_cents=0
         else:
@@ -429,7 +429,7 @@ class Pledge():
         
     def update_pledge(self, amount_cents):
         c.execute("EXECUTE UpdatePledge(%s,%s,%s)", (self.creator_id, self.supporter_id, amount_cents))
-        commit()
+        db.commit()
         self.amount_cents=amount_cents
     
 
