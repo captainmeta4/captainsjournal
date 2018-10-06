@@ -20,10 +20,7 @@ import jinja2
 
 
 #globals
-app=Flask(__name__,
-          template_folder="../templates",
-          static_folder="../static"
-         )
+app=Flask(__name__,)
 
 user_agent="Captain's Journal by /u/captainmeta4"
 r=praw.Reddit(client_id=os.environ.get('client_id'),
