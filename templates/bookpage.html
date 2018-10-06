@@ -74,7 +74,7 @@
 <hr>
 <ol>
 {% for s in b.stories() | sort(attribute="id") %}
-{% if ((v.admin or v.id==b.author_id) or (not s.banned and not s.deleted)) %}<li>{% if s.patreon_threshold and b.author.patreon_id %}<span class="green">[$]</span> {% endif %}{% if s.nsfw %}<span class="red">[M] </span>{% endif %}<a href="{{ s.url }}">{% if s.banned or s.deleted %}<s>{{ s.title }}</s>{% else %}{{ s.title }}{% endif %}</a></li>{% endif %}
+{% if ((v.admin or v.id==b.author_id) or (not s.banned and not s.deleted)) %} <li>{% if s.patreon_threshold and u.patreon_id %}{% include "tags/p.html" %}{% endif %}{% if s.nsfw %}{% include "tags/m.html" %}{% endif %}{% if s.banned %}{% include "tags/b.html" %}{% endif %}{% if s.deleted %}{% include "tags/r.html" %}{% endif %} <a href="{{ s.url }}">{{ s.title }}</a></li>{% endif %}
 {% else %}
 <li><em>None yet!</em></li>
 {% endfor %}
