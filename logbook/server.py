@@ -224,7 +224,7 @@ def create_submission(q, v):
 @app.route('/your_data')
 @auth_required
 def your_data(q,v):
-    return render_tempalte("your_data.html",v=v)
+    return render_template("your_data.html",v=v)
 
 @app.route("/makebook")
 @auth_required
