@@ -20,7 +20,7 @@
 <ul>
 {% for s in l %}
 {% set b=s.book() %}
-<li>{% if s.patreon_threshold and s.author.patreon_id %}<span class="green">[$]</span> {% endif %} {% if s.nsfw %}<span class="red">[M]</span> {% endif %}{% if b %}[<a href="{{ b.url }}">{{ b.title }}</a>] {% endif %}<a href={{ s.url }}>{{ s.title }}</a> by <a href="{{ s.author.url }}">{{ s.author.name }}</a></li>
+<li>{% if s.patreon_threshold and s.author.patreon_id %}<span class="green">[$]</span> {% endif %} {% if s.nsfw %}<span class="red">[M]</span> {% endif %}{% if b %}[<a href="{{ b.url }}"{% if s.patreon_threshold and s.author.patreon_id %} rel="nofollow"{% endif %}>{{ b.title }}</a>] {% endif %}<a href={{ s.url }}>{{ s.title }}</a> by <a href="{{ s.author.url }}">{{ s.author.name }}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}
