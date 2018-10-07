@@ -634,3 +634,23 @@ def patreon_webhook(uid):
     p.update_pledge(pledge_amount_cents)
 
     return "",201
+
+@app.route("/api/s/<sid>")
+def story_json(sid):
+    s=Story(sid=sid)
+    return jsonify(s.json())
+
+@app.route("/api/b/<bid>")
+def book_json(bid):
+    b=Book(bid=bid)
+    return jsonify(b.json())
+
+@app.route("/api/u/<name>")
+def user_json(name):
+    u=User(name=name)
+    return jsonify(u.json())
+
+@app.route("/api/uid/<uid>")
+def uid_json(uid):
+    u=User(uid=uid)
+    return jsonify(u.json())
