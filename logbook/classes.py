@@ -137,9 +137,11 @@ class User():
             stories=[]
             books=[]
             for s in self.stories():
-                stories.append(s.id)
+		        if not s.banned and not s.deleted:
+	                stories.append(s.id)
             for b in self.books():
-                books.append(b.id)
+		        if not b.banned and not b.deleted:
+	                books.append(b.id)
             output['stories']=stories
             output['books']=books
             
@@ -402,7 +404,8 @@ class Book():
         else:
             stories=[]
             for s in self.stories():
-                stories.append(s.id)
+                if not s.banned and not s.deleted:
+                    stories.append(s.id)
             output['stories']=stories
             
         return output
