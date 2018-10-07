@@ -149,7 +149,7 @@ class User():
         output.pop("google_analytics")
         output.pop("over18")
         
-	    return output
+        return output
 
 class Story():
 
