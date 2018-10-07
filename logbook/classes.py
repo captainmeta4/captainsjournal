@@ -134,13 +134,15 @@ class User():
         output = self.__dict__
         
         if not self.banned:
-            output["stories"]=[]
-            output["books"]=[]
+            stories=[]
+            books=[]
             for s in self.stories():
-                output["stories"].append(s.id)
+                stories.append(s.id)
             for b in self.books():
-                output["books"].append(b.id)
-                
+                books.append(b.id)
+            output['stories']=stores
+            output['books']=books
+            
         output.pop("patreon_webhook_secret")
         output.pop("patreon_id")
         output.pop("agreed")
@@ -398,10 +400,11 @@ class Book():
         if self.banned or self.deleted:
             output.pop(self.description)
         else:
-            output["stories"]=[]
+            stories=[]
             for s in self.stories():
-                output["stories"].append(s.id)
-                
+                stories.append(s.id)
+            output['stories']=stories
+            
         return output
 
     def save(self):
