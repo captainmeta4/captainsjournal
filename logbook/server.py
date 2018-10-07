@@ -646,20 +646,32 @@ def patreon_webhook(uid):
 
 @app.route("/api/s/<sid>")
 def story_json(sid):
-    s=Story(sid=sid)
+    try:
+        s=Story(sid=sid)
+    except KeyError:
+        abort(404,j=True)
     return jsonify(s.json())
 
 @app.route("/api/b/<bid>")
 def book_json(bid):
-    b=Book(bid=bid)
+    try:
+        b=Book(bid=bid)
+    except KeyError:
+        abort(404,j=True)
     return jsonify(b.json())
 
 @app.route("/api/u/<name>")
 def user_json(name):
-    u=User(name=name)
+    try:
+        u=User(name=name)
+    except KeyError:
+        abort(404,j=True)
     return jsonify(u.json())
 
 @app.route("/api/uid/<uid>")
 def uid_json(uid):
-    u=User(uid=uid)
+    try:
+        u=User(uid=uid)
+    except:
+        abort(404,j=True)
     return jsonify(u.json())
