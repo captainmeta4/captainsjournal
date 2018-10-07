@@ -43,6 +43,11 @@ def os_get(key):
 @app.route('/assets/<path:path>')
 def static_service(path):
     return send_from_directory('assets', path)
+  
+#take care of robots
+@app.route('/robots.txt')
+def robots_txt():
+    return send_file('static/robots.txt')
 
 def temporary_reddit(refresh_token):
 
