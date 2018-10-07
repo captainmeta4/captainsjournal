@@ -130,6 +130,27 @@ class User():
 
     def set_over18(self, over18=False):
         c.execute("EXECUTE SetOver18(%s, %s)", (self.id, over18))
+    
+    def json(self, v):
+        
+        output = self.__dict__
+        
+        if not v.admin and not v.id=self.id:
+            output.pop("patreon_webhook_secret")
+            output.pop("patreon_id")
+            output.pop("agreed")
+            output.pop("google_analytics")
+            output.pop("over18")
+        
+        if v.admin or v.id=self.id or not self.banned:
+            output["stories"]=[]
+            output["books"]=[]
+            for s in self.stories():
+                output["stories"].append(s.id)
+            for b in self.books():
+                output["books"].append(s.id)
+        
+	    return output
 
 class Story():
 
