@@ -140,7 +140,7 @@ class User():
                 stories.append(s.id)
             for b in self.books():
                 books.append(b.id)
-            output['stories']=stores
+            output['stories']=stories
             output['books']=books
             
         output.pop("patreon_webhook_secret")
