@@ -13,7 +13,7 @@
 {% set n=s.next() %}
 {% set p=s.previous() %}
 {% if p or n %}
-  <p>{% if p %}<a href="{{ p.url }}">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}">Next</a>{% endif %}</p>
+  <p>{% if p %}<a href="{{ p.url }}" rel="prev">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}" rel="next">Next</a>{% endif %}</p>
 {% endif %}
 {% endblock %}
 
