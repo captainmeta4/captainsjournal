@@ -1,2 +1,4 @@
 User-Agent: *
 Disallow: /api/
+Disallow: /settings
+Disallow: /me
