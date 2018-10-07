@@ -31,14 +31,14 @@
 <h3>{% if b.banned %}{% include "tags/b.html" %}{% endif %}{% if b.deleted %}{% include "tags/r.html" %}{% endif %}<a href="{{ b.url }}">{{ b.title }}</a></h3>
 <ol>
 {% for s in b.stories() | sort(attribute="id") %}
-{% if (v.admin or v.id==u.id) or (not s.banned and not s.deleted) %}<li>{% if s.patreon_threshold and u.patreon_id %}{% include "tags/p.html" %}{% endif %}{% if s.nsfw %}{% include "tags/m.html" %}{% endif %}{% if s.banned %}{% include "tags/b.html" %}{% endif %}{% if s.deleted %}{% include "tags/r.html" %}{% endif %} <a href="{{ s.url }}">{{ s.title }}</a></li>{% endif %}
+{% if (v.admin or v.id==u.id) or (not s.banned and not s.deleted) %}<li>{% if s.patreon_threshold and u.patreon_id %}{% include "tags/p.html" %}{% endif %}{% if s.nsfw %}{% include "tags/m.html" %}{% endif %}{% if s.banned %}{% include "tags/b.html" %}{% endif %}{% if s.deleted %}{% include "tags/r.html" %}{% endif %} <a href="{{ s.url }}"{% if s.patreon_threshold and s.author.patreon_id %} rel="nofollow"{% endif %}>{{ s.title }}</a></li>{% endif %}
 {% endfor %}
 </ol>
 {% endfor %}
 <h3>Standalone Stories</h3>
 <ul>
 {% for s in u.stories() if ((v.admin or v.id==u.id) or (not s.banned and not s.deleted)) and s.book_id==0 %}
-<li>{% if s.patreon_threshold and u.patreon_id %}{% include "tags/p.html" %}{% endif %}{% if s.nsfw %}{% include "tags/m.html" %}{% endif %}{% if s.banned %}{% include "tags/b.html" %}{% endif %}{% if s.deleted %}{% include "tags/r.html" %}{% endif %}<a href="{{ s.url }}">{{ s.title }}</a></li>
+<li>{% if s.patreon_threshold and u.patreon_id %}{% include "tags/p.html" %}{% endif %}{% if s.nsfw %}{% include "tags/m.html" %}{% endif %}{% if s.banned %}{% include "tags/b.html" %}{% endif %}{% if s.deleted %}{% include "tags/r.html" %}{% endif %}<a href="{{ s.url }}"{% if s.patreon_threshold and s.author.patreon_id %} rel="nofollow"{% endif %}>{{ s.title }}</a></li>
 {% else %}
 <li><em>None yet!</em></li>
 {% endfor %}
