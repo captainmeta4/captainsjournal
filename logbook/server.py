@@ -187,27 +187,18 @@ def admin_required(f):
 #take care of error pages
 @app.errorhandler(401)
 @auth_desired
-def error_401(e, v, j=False):
-    if j:
-        return jsonify({"error":401}), 401
-    else:
-        return render_template('401.html', v=v), 401
+def error_401(e, v):
+    return render_template('401.html', v=v), 401
 
 @app.errorhandler(403)
 @auth_desired
-def error_403(e, v, j=False):
-    if j:
-        return jsonify({"error":403}), 403
-    else:
-        return render_template('403.html', v=v), 403
+def error_403(e, v):
+    return render_template('403.html', v=v), 403
 
 @app.errorhandler(404)
 @auth_desired
-def error_404(e, v, j=False):
-    if j:
-        return jsonify({"error":404}), 404
-    else:
-        return render_template('404.html', v=v), 404
+def error_404(e, v):
+  render_template('404.html', v=v), 404
 
 @app.errorhandler(405)
 @auth_desired
@@ -649,7 +640,7 @@ def story_json(sid):
     try:
         s=Story(sid=sid)
     except KeyError:
-        abort(404,j=True)
+        abort(404)
     return jsonify(s.json())
 
 @app.route("/api/b/<bid>")
@@ -657,7 +648,7 @@ def book_json(bid):
     try:
         b=Book(bid=bid)
     except KeyError:
-        abort(404,j=True)
+        abort(404)
     return jsonify(b.json())
 
 @app.route("/api/u/<name>")
@@ -665,7 +656,7 @@ def user_json(name):
     try:
         u=User(name=name)
     except KeyError:
-        abort(404,j=True)
+        abort(404)
     return jsonify(u.json())
 
 @app.route("/api/uid/<uid>")
@@ -673,5 +664,5 @@ def uid_json(uid):
     try:
         u=User(uid=uid)
     except:
-        abort(404,j=True)
+        abort(404)
     return jsonify(u.json())
