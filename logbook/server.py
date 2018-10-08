@@ -198,7 +198,7 @@ def error_403(e, v):
 @app.errorhandler(404)
 @auth_desired
 def error_404(e, v):
-  render_template('404.html', v=v), 404
+    return render_template('404.html', v=v), 404
 
 @app.errorhandler(405)
 @auth_desired
