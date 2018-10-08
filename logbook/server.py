@@ -666,3 +666,30 @@ def uid_json(uid):
     except:
         abort(404)
     return jsonify(u.json())
+
+@app.route("/api/postreddit/<sid>")
+@auth_required
+def post_reddit(q, v, sid):
+    s=Story(sid=sid)
+    if not v.id==s.author_id:
+        abort(403)
+    
+    subreddit=request.form.get("subreddit")
+    
+    sub=q.subreddit(subreddit)
+    if s.book_id:
+        b=Book(bid=s.book_id)
+        title="[{}] {}".format(b.title, s.title)
+        description = bleach.clean(b._description_raw)
+    else:
+        title=s.title
+        description = bleach.clean(s._story_raw)[200:]
+        
+    body="[**LINK**](https://{}{})\n\n---\n\n{}\n\n---\n\n[**LINK**](https://{}{})".format(DOMAIN, s.url, description, DOMAIN, s.url)
+    
+    try:
+        submission=subreddit.submit(title, selftext=body)
+    except:
+        abort(400)
+        
+    return redirect(submission.permalink)
