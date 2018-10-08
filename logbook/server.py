@@ -683,7 +683,9 @@ def post_reddit(q, v, sid):
         description = bleach.clean(b._description_raw)
     else:
         title=s.title
-        description = bleach.clean(s._story_raw)[200:]
+        description = bleach.clean(s._story_raw)[0:200]
+        if len(description)==200:
+          description+="..."
         
     body="[**LINK**](https://{}{})\n\n---\n\n{}\n\n---\n\n[**LINK**](https://{}{})".format(DOMAIN, s.url, description, DOMAIN, s.url)    
     submission=sub.submit(title, selftext=body)
