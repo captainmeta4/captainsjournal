@@ -15,7 +15,8 @@
 {% if p or n or s.reddit %}
 {% if p or n %}
   <p>{% if p %}<a href="{{ p.url }}" rel="prev">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}" rel="next">Next</a>{% endif %}
-{$ if (p or n) and s.reddit %}
+{% endif %}
+{% if (p or n) and s.reddit %}
 <br>
 {% endif %}
 {% if s.reddit %}
