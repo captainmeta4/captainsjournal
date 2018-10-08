@@ -27,6 +27,7 @@ c.execute("PREPARE DeleteStory(int, boolean) AS UPDATE Stories SET deleted=$2 WH
 c.execute("PREPARE GetStoriesByBook(int) AS SELECT * FROM Stories WHERE book_id=$1")
 c.execute("PREPARE SetNSFW(int, boolean) AS UPDATE Stories SET nsfw=$2 WHERE id=$1")
 c.execute("PREPARE SetPatreonThreshold(int,int) AS UPDATE Stories SET patreon_threshold=$2 WHERE id=$1")
+c.execute("PREPARE SetReddit(int, text, text) AS UPDATE Stories SET reddit=$2, subreddit=$3 WHERE id=$1") 
 
 #for books
 c.execute("PREPARE MakeBook(text, int, text, text) AS INSERT INTO Books (name, author_id, description, description_raw, timestamp) VALUES ($1, $2, $3, $4, 'NOW') RETURNING *")

@@ -399,7 +399,7 @@ def create_story(q, v):
         return render_template('badstory.html')
 
     #assemble data for story object and save it
-    data=(-1,0,"","","", False, title_md, v.id,None,pre_md,story_md,post_md, bid,False,0,0,False)
+    data=(-1,0,"","","", False, title_md, v.id,None,pre_md,story_md,post_md, bid,False,0,0,False,None,None)
     story=Story(result=data)
     s=story.save()
 
@@ -687,4 +687,6 @@ def post_reddit(q, v, sid):
         
     body="[**LINK**](https://{}{})\n\n---\n\n{}\n\n---\n\n[**LINK**](https://{}{})".format(DOMAIN, s.url, description, DOMAIN, s.url)    
     submission=sub.submit(title, selftext=body)
+    s.set_reddit(submission.id, submission.subreddit.display_name)
+    
     return redirect(submission.permalink)

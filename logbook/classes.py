@@ -186,6 +186,8 @@ class Story():
         self.patreon_threshold=int(result[14])
         self.edited=result[15]
         self.distinguished=bool(result[16])
+        self.reddit=result[17]
+        self.subreddit=result[18]
         
         self.url="/s/{}".format(self.id)
         self.created_date=time_string(self.created)
@@ -195,6 +197,10 @@ class Story():
             self.author=User(uid=self.author_id)
         else:
             self.author=None
+
+    def set_reddit(self, reddit_id, subreddit)
+
+        c.execute("EXECUTE SetReddit(%s,%s,%s)",(self.id, reddit_id, subreddit))
     
     def json(self):
         
