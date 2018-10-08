@@ -685,11 +685,6 @@ def post_reddit(q, v, sid):
         title=s.title
         description = bleach.clean(s._story_raw)[200:]
         
-    body="[**LINK**](https://{}{})\n\n---\n\n{}\n\n---\n\n[**LINK**](https://{}{})".format(DOMAIN, s.url, description, DOMAIN, s.url)
-    
-    try:
-        submission=subreddit.submit(title, selftext=body)
-    except:
-        abort(400)
-        
+    body="[**LINK**](https://{}{})\n\n---\n\n{}\n\n---\n\n[**LINK**](https://{}{})".format(DOMAIN, s.url, description, DOMAIN, s.url)    
+    submission=subreddit.submit(title, selftext=body)
     return redirect(submission.permalink)
