@@ -106,11 +106,9 @@ class User():
     def stories(self):
         
         c.execute("EXECUTE GetStoriesByAuthorId(%s)", (self.id,))
-        output=[]
+        
         for l in c.fetchall():
-            output.append(Story(result=l))
-
-        return output
+            yield Story(result=l)
 
     def books(self):
 
@@ -130,6 +128,30 @@ class User():
 
     def set_over18(self, over18=False):
         c.execute("EXECUTE SetOver18(%s, %s)", (self.id, over18))
+    
+    def json(self):
+        
+        output = self.__dict__
+        
+        if not self.banned:
+            stories=[]
+            books=[]
+            for s in self.stories():
+                if not s.banned and not s.deleted:
+                    stories.append(s.id)
+            for b in self.books():
+                if not b.banned and not b.deleted:
+                    books.append(b.id)
+            output['stories']=stories
+            output['books']=books
+            
+        output.pop("patreon_webhook_secret")
+        output.pop("patreon_id")
+        output.pop("agreed")
+        output.pop("google_analytics")
+        output.pop("over18")
+        
+        return output
 
 class Story():
 
@@ -173,7 +195,23 @@ class Story():
             self.author=User(uid=self.author_id)
         else:
             self.author=None
-            
+    
+    def json(self):
+        
+        output=self.__dict__
+        
+        output.pop("_pre_raw")
+        output.pop("_story_raw")
+        output.pop("_post_raw")
+        output.pop("author")
+        
+        if self.banned or self.deleted or self.patreon_threshold:
+            output.pop("pre")
+            output.pop("story")
+            output.pop("post")
+        
+        return output
+    
     def set_nsfw(self, nsfw=False):
         c.execute("EXECUTE SetNSFW(%s, %s)", (self.id, nsfw))
         db.commit()
@@ -351,6 +389,26 @@ class Book():
 
         if load_author:
             self.author=User(uid=self.author_id)
+        else:
+            self.author=None
+
+    def json(self):
+        
+        output=self.__dict__
+        
+        output.pop("_description_raw")
+        output.pop("author")
+        
+        if self.banned or self.deleted:
+            output.pop(self.description)
+        else:
+            stories=[]
+            for s in self.stories():
+                if not s.banned and not s.deleted:
+                    stories.append(s.id)
+            output['stories']=stories
+            
+        return output
 
     def save(self):
     
