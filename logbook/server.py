@@ -667,7 +667,7 @@ def uid_json(uid):
         abort(404)
     return jsonify(u.json())
 
-@app.route("/api/postreddit/<sid>")
+@app.route("/api/postreddit/<sid>", methods=["POST"])
 @auth_required
 def post_reddit(q, v, sid):
     s=Story(sid=sid)
