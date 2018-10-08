@@ -12,8 +12,15 @@
 {% block storynav %}
 {% set n=s.next() %}
 {% set p=s.previous() %}
-{% if p or n %}
-  <p>{% if p %}<a href="{{ p.url }}" rel="prev">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}" rel="next">Next</a>{% endif %}</p>
+{% if p or n or s.reddit %}
+  <p>{% if p %}<a href="{{ p.url }}" rel="prev">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}" rel="next">Next</a>{% endif %}
+{$ if (p or n) and s.reddit %}
+<br>
+{% endif %}
+{% if s.reddit %}
+<a href="https://redd.it/{{ s.reddit }}">Discuss on /r/{{ s.subreddit }}</a>
+{% endif %}
+</p>
 {% endif %}
 {% endblock %}
 
@@ -44,7 +51,7 @@
       <input type="submit" value="Re-publish Story">
       </form>
     {% endif %}
-    {% if not s.author.banned %}
+    {% if not s.author.banned and not s.reddit %}
       <a href="/edit/{{ s.id }}"><button>Edit Story</button></a>
       <form action="/api/postreddit/{{ s.id }}" method="post">
           /r/<input type="text" name="subreddit"><br>
