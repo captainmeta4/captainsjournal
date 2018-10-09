@@ -53,8 +53,10 @@
       <input type="submit" value="Re-publish Story">
       </form>
     {% endif %}
-    {% if not s.author.banned and not s.reddit %}
+    {% if not s.author.banned %}
       <a href="/edit/{{ s.id }}"><button>Edit Story</button></a>
+    {% endif %}
+    {% if not s.author.banned and not s.reddit %}
       <form action="/api/postreddit/{{ s.id }}" method="post">
           /r/<input type="text" name="subreddit" style="max-width:200px"><br>
           <input type="submit" value="Share to reddit">
@@ -81,7 +83,7 @@
 <p>by <a href="/u/{{ s.author.name }}">{{ s.author.name }}</a> {% if s.author.patreon and not s.author.banned %} | <a href="https://patreon.com/{{ s.author.patreon }}">Patreon</a>{% endif %}<br>
 {{ s.created_date }} {% if s.distinguished %}|{% include "tags/a.html" %}{% endif %}{% if s.edited %}|{% include "tags/e.html" %}{% endif %}{% if s.author.patreon and s.patreon_threshold and not s.author.banned %}|{% include "tags/p.html" %}{% endif %}</p>
 {% if b %}
-<p>Part of <em><a href="{{ b.url }}">{{ b.title }}</a></em></p>
+<p>Part of <em><a href="{{ b.url }}">{{ b.title }}</a></em></p
 {% endif %}
 {% if s.banned or s.deleted or s.author.banned or s.nsfw or s.patreon_threshold %}
 <p>{% if s.banned %}<b><span class="red">[This story has been removed by the site administrators.]</span></b><br>{% endif %}
