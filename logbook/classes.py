@@ -307,7 +307,7 @@ class Story():
             db.commit()
             return
 
-        b=Book(bid=bid)
+        b=Book(bid=bid, load_author=True)
         if b.author_id!=self.author_id and not(bid==4 and self.author.admin):
                 abort(403)
 
