@@ -198,6 +198,7 @@ class Story():
         else:
             self.author=None
 
+    def set_reddit(self, reddit_id, subreddit):
 
         c.execute("EXECUTE SetReddit(%s,%s,%s)",(self.id, reddit_id, subreddit))
     

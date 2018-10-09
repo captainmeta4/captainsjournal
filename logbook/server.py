@@ -698,6 +698,5 @@ def post_reddit(q, v, sid):
         abort(400)
         
     s.set_reddit(submission.id, submission.subreddit.display_name)
-        
 
     return redirect("https://reddit.com"+submission.permalink)
