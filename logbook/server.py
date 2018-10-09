@@ -689,6 +689,7 @@ def post_reddit(q, v, sid):
         description = re.sub("</?\w+.*?(>|$)","",s.story[0:100])
         description = re.sub("!\[.*?\]\(.*?\)","",description)
         description+="..."
+
         
     body="[**LINK**](https://{}{})\n\n---\n\n{}\n\n---\n\n[**LINK**](https://{}{})".format(DOMAIN, s.url, description, DOMAIN, s.url)    
     try:
@@ -698,4 +699,5 @@ def post_reddit(q, v, sid):
         
     s.set_reddit(submission.id, submission.subreddit.display_name)
         
+
     return redirect("https://reddit.com"+submission.permalink)

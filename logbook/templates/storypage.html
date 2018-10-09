@@ -13,8 +13,10 @@
 {% set n=s.next() %}
 {% set p=s.previous() %}
 {% if p or n or s.reddit %}
+{% if p or n %}
   <p>{% if p %}<a href="{{ p.url }}" rel="prev">Previous</a>{% endif %}{% if p and n %} | {% endif %}{% if n %}<a href="{{ n.url }}" rel="next">Next</a>{% endif %}
-{$ if (p or n) and s.reddit %}
+{% endif %}
+{% if (p or n) and s.reddit %}
 <br>
 {% endif %}
 {% if s.reddit %}
@@ -54,7 +56,7 @@
     {% if not s.author.banned and not s.reddit %}
       <a href="/edit/{{ s.id }}"><button>Edit Story</button></a>
       <form action="/api/postreddit/{{ s.id }}" method="post">
-          /r/<input type="text" name="subreddit"><br>
+          /r/<input type="text" name="subreddit" style="max-width:200px"><br>
           <input type="submit" value="Share to reddit">
       </form>
     {% endif %}
