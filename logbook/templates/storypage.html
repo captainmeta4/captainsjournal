@@ -56,7 +56,7 @@
     {% if not s.author.banned %}
       <a href="/edit/{{ s.id }}"><button>Edit Story</button></a>
     {% endif %}
-    {% if not s.author.banned and not s.reddit %}
+    {% if not s.author.banned and not s.reddit and not s.banned and not s.delted and not s.patreon_threshold %}
       <form action="/api/postreddit/{{ s.id }}" method="post">
           /r/<input type="text" name="subreddit" style="max-width:200px"><br>
           <input type="submit" value="Share to reddit">
