@@ -8,6 +8,7 @@ import hashlib
 import json
 import hmac
 import jinja2
+import re
 
 
 ### NAMING CONVENTIONS ###
@@ -680,13 +681,21 @@ def post_reddit(q, v, sid):
     if s.book_id:
         b=Book(bid=s.book_id)
         title="[{}] {}".format(b.title, s.title)
-        description = bleach.clean(b._description_raw)
+        description = re.sub("</?\w+.*?(>|$)","",b._description_raw)
+        description = re.sub("!\[.*?\]\(.*?\)","",description)
     else:
         title=s.title
-        description = bleach.clean(s._story_raw)[200:]
+        #strip embedded html/images
+        description = re.sub("</?\w+.*?(>|$)","",s.story[0:100])
+        description = re.sub("!\[.*?\]\(.*?\)","",description)
+        description+="..."
         
     body="[**LINK**](https://{}{})\n\n---\n\n{}\n\n---\n\n[**LINK**](https://{}{})".format(DOMAIN, s.url, description, DOMAIN, s.url)    
-    submission=sub.submit(title, selftext=body)
+    try:
+        submission=sub.submit(title, selftext=body)
+    except:
+        abort(400)
+        
     s.set_reddit(submission.id, submission.subreddit.display_name)
-    
-    return redirect(submission.permalink)
+        
+    return redirect("https://reddit.com"+submission.permalink)
