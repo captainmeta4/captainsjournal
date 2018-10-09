@@ -86,7 +86,7 @@
 {% if s.banned or s.deleted or s.author.banned or s.nsfw or s.patreon_threshold %}
 <p>{% if s.banned %}<b><span class="red">[This story has been removed by the site administrators.]</span></b><br>{% endif %}
 {% if s.deleted %}<b><span class="red">[This story has been unpublished by its author.]</span></b><br>{% endif %}
-{% if s.nsfw %}<b><span class="red">[This story contains adult content.]</span></b><br>{% endif %}
+{% if s.nsfw %}<b><span class="red">[This story includes mature content.]</span></b><br>{% endif %}
 {% if s.patreon_threshold %}<b><span class="green">[For Patrons of {{ s.author.name }} only. Threshold: ${{ d }}.{{ c }}]</span></b>{% endif %}</p>
 {% endif %}
 {% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw) and (pledge_cents>=s.patreon_threshold or not s.author.patreon_id)) %}
