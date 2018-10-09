@@ -674,6 +674,9 @@ def post_reddit(q, v, sid):
     s=Story(sid=sid)
     if not v.id==s.author_id:
         abort(403)
+
+    if s.reddit or s.subreddit:
+        abort(403)
     
     subreddit=request.form.get("subreddit")
     
