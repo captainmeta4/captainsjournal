@@ -675,7 +675,7 @@ def post_reddit(q, v, sid):
     if not v.id==s.author_id:
         abort(403)
 
-    if s.reddit or s.subreddit:
+    if s.reddit or s.subreddit or s.banned or s.deleted or s.patreon_threshold:
         abort(403)
     
     subreddit=request.form.get("subreddit")
