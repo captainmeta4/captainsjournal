@@ -1,4 +1,4 @@
 language: python
 python: "3.6.6"
 install: pip install -r requirements.txt
-script: logbook.test
+script: python logbook/test.py
