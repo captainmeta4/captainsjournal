@@ -691,7 +691,7 @@ def post_reddit(q, v, sid):
         title=s.title
 
     #remove html
-    description = re.sub("</?\w+.*?(>|$)","",b._description_raw)
+    description = re.sub("</?\w+.*?(>|$)","",description)
     #remove images
     description = re.sub("!\[.*?\]\(.*?\)","",description)
         
