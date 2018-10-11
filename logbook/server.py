@@ -678,19 +678,24 @@ def post_reddit(q, v, sid):
     subreddit=request.form.get("subreddit")
     
     sub=q.subreddit(subreddit)
+
+    description = re.match("^\s?(.*?\s+){0,15}", s._story_raw).match(0)
+    description+="..."
+
+    
     if s.book_id:
         b=Book(bid=s.book_id)
         title="[{}] {}".format(b.title, s.title)
-        description = re.sub("</?\w+.*?(>|$)","",b._description_raw)
-        description = re.sub("!\[.*?\]\(.*?\)","",description)
+        description = b._description_raw+"\n\n---\n\n"+description
     else:
         title=s.title
-        #strip embedded html/images
-        description = re.sub("</?\w+.*?(>|$)","",s.story[0:100])
-        description = re.sub("!\[.*?\]\(.*?\)","",description)
-        description+="..."
 
+    #remove html
+    description = re.sub("</?\w+.*?(>|$)","",b._description_raw)
+    #remove images
+    description = re.sub("!\[.*?\]\(.*?\)","",description)
         
+
     body="[**LINK**](https://{}{})\n\n---\n\n{}\n\n---\n\n[**LINK**](https://{}{})".format(DOMAIN, s.url, description, DOMAIN, s.url)    
     try:
         submission=sub.submit(title, selftext=body)
