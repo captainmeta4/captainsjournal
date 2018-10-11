@@ -379,9 +379,6 @@ def settings_page(q,v):
 @not_banned
 @agree_required
 def create_story(q, v):
-
-    if v.banned:
-        abort(403)
     
     title_md=request.form.get('title',"")
     pre_md=request.form.get('pre',"")
