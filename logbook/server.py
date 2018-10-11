@@ -705,3 +705,11 @@ def post_reddit(q, v, sid):
     s.set_reddit(submission.id, submission.subreddit.display_name)
 
     return redirect("https://reddit.com"+submission.permalink)
+
+@app.route("/api/logout")
+@auth_required
+def logout(q,v):
+
+    resp = make_response(redirect('/'))
+    resp.set_cookie(COOKIE, value="", domain=DOMAIN)
+    return resp
