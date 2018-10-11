@@ -679,7 +679,7 @@ def post_reddit(q, v, sid):
     
     sub=q.subreddit(subreddit)
 
-    description = re.match("^\s?(.*?\s+){0,15}", s._story_raw).group(0)
+    description = re.match("^\s?(.*?\s+){0,30}", s._story_raw).group(0)
     description+="..."
 
     
