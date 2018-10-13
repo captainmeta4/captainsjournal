@@ -7,7 +7,7 @@
       "required": true
     },
     "client_id": {
-      "required": true
+      "value": "C7z2X6UjqzlmPg"
     },
     "client_secret": {
       "required": true
@@ -15,7 +15,9 @@
     "cookie": {
       "required": true
     },
-    "domain": "review.captainslogbook.org",
+    "domain": {
+      "value":"captainlogbook-staging-pr-5.herokuapp.com",
+    }
     "PAPERTRAIL_API_TOKEN": {
       "required": true
     },
