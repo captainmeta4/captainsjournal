@@ -19,9 +19,6 @@
     "PAPERTRAIL_API_TOKEN": {
       "required": true
     },
-    "password": {
-      "required": true
-    },
     "patreon_id": {
       "required": true
     },
