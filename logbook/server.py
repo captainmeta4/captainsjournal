@@ -299,15 +299,6 @@ def patreon_redirect(q, v):
     except IndexError:
         c_id=0
     
-    
-    
-    #api_client = patreon.API(access_token)
-    #user_response = api_client.fetch_user()
-    #user = user_response.data()
-    #attrs = user.attributes()
-    #name = attrs['vanity']
-    #pid = user.id()
-
     v.set_patreon(name, p_id, access_ token, c_id)
     
     return redirect("/settings")
