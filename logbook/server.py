@@ -299,7 +299,7 @@ def patreon_redirect(q, v):
     except IndexError:
         c_id=0
     
-    v.set_patreon(name, p_id, access_ token, c_id)
+    v.set_patreon(name, p_id, access_token, c_id)
     
     return redirect("/settings")
 
