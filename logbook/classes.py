@@ -469,33 +469,3 @@ class Book():
 
         c.execute("EXECUTE DeleteBook(%s, 'false')",(self.id,))
         db.commit()
-
-class Pledge():
-
-    def __init__(self, creator_id, supporter_id, make=False):
-        
-        self.creator_id=creator_id
-        self.supporter_id=supporter_id
-
-        c.execute("EXECUTE GetPledge(%s,%s)", (creator_id, supporter_id))
-
-        result=c.fetchone()
-        if result is None and make==True:
-            c.execute("EXECUTE MakePledge(%s,%s,0)" (creator_id, supporter_id))
-            result=c.fetchone()
-            self.amount_cents=0
-            db.commit()
-        elif result is None:
-            self.amount_cents=0
-        else:
-            self.amount_cents=int(result[3])
-
-        
-    def update_pledge(self, amount_cents):
-        c.execute("EXECUTE UpdatePledge(%s,%s,%s)", (self.creator_id, self.supporter_id, amount_cents))
-        db.commit()
-        self.amount_cents=amount_cents
-    
-
-        
-    
