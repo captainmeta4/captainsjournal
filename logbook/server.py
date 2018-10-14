@@ -9,6 +9,7 @@ import json
 import hmac
 import jinja2
 import re
+import requests
 
 
 ### NAMING CONVENTIONS ###
@@ -29,8 +30,8 @@ r=praw.Reddit(client_id=os.environ.get('client_id'),
               redirect_uri=os.environ.get('reddit_uri'),
               user_agent=user_agent)
 
-patreon_id=os.environ.get('patreon_id')
-patreon_secret=os.environ.get('patreon_secret')
+PATREON_ID=os.environ.get('patreon_id')
+PATREON_SECRET=os.environ.get('patreon_secret')
 
 COOKIE=os.environ.get('cookie')
 DOMAIN=os.environ.get('domain')
@@ -275,8 +276,23 @@ def patreon_redirect(q, v):
     Handle incoming redirects from patreon oauth flow
     '''
 
-    oauth_client = patreon.OAuth(patreon_id, patreon_secret)
-    tokens = oauth_client.get_tokens(request.args.get('code'), 'https://www.captainslogbook.org/oauth/patreon')
+    #get code
+    code = request.args.get('code')
+
+    #send code to Patreon
+    #url="www.patreon.com/api/oauth2/token"
+    #header={"Content-Type":"application/x-www-form-urlencoded"}
+    #params={"code":code,
+    #        "grant_type":"authorization_code",
+    #        "client_id":CLIENT_ID,
+    #        "client_secret":CLIENT_SECRET
+    #        "redirect_uri":
+    #        }
+            
+    
+    
+    oauth_client = patreon.OAuth(PATREON_ID, PATREON_SECRET)
+    tokens = oauth_client.get_tokens(request.args.get('code'), 'https://{}/oauth/patreon'.format(DOMAIN))
     access_token = tokens['access_token']
     api_client = patreon.API(access_token)
     user_response = api_client.fetch_user()
