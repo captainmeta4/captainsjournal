@@ -278,30 +278,37 @@ def patreon_redirect(q, v):
 
     #get code
     code = request.args.get('code')
-
-    #send code to Patreon
-    #url="www.patreon.com/api/oauth2/token"
-    #header={"Content-Type":"application/x-www-form-urlencoded"}
-    #params={"code":code,
-    #        "grant_type":"authorization_code",
-    #        "client_id":CLIENT_ID,
-    #        "client_secret":CLIENT_SECRET
-    #        "redirect_uri":
-    #        }
-            
-    
     
     oauth_client = patreon.OAuth(PATREON_ID, PATREON_SECRET)
     tokens = oauth_client.get_tokens(request.args.get('code'), 'https://{}/oauth/patreon'.format(DOMAIN))
     access_token = tokens['access_token']
-    api_client = patreon.API(access_token)
-    user_response = api_client.fetch_user()
-    user = user_response.data()
-    data = user.attributes()
-    name = data['vanity']
-    pid = user.id()
+    
+    
+    #assemble request
+    header={"Authorization":"Bearer "+access_token}
+    url="https://www.patreon.com/api/oauth2/v2/api/oauth2/v2/identity?include=campaign"
+    
+    x=requests.get(url, headers=header)
+    
+    j=x.json()
+    
+    name=j['data']['attributes']['vanity']
+    p_id=j['data']['id']
+    try:
+        c_id=j['included'][0]['id']
+    except IndexError:
+        c_id=0
+    
+    
+    
+    #api_client = patreon.API(access_token)
+    #user_response = api_client.fetch_user()
+    #user = user_response.data()
+    #attrs = user.attributes()
+    #name = attrs['vanity']
+    #pid = user.id()
 
-    v.set_patreon(name, pid)
+    v.set_patreon(name, p_id, access_ token, c_id)
     
     return redirect("/settings")
 
