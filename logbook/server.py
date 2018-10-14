@@ -617,38 +617,6 @@ def unlink_patreon(q,v):
     v.set_patreon("", 0)
     return redirect("/settings")
 
-@app.route('/api/patreon_webhook/<uid>', methods=["POST"])
-def patreon_webhook(uid):
-
-    try:
-        u=User(uid=uid)
-    except KeyError:
-        abort(404)
-
-    #validate patreon secret
-    
-    digester = hmac.new(u.patreon_webhook_secret.encode('utf-8'), request.data, hashlib.md5)
-    digest = digester.hexdigest()
-
-    if not digest == request.headers['X-Patreon-Signature']:
-        abort(403)
-
-    #get relevant data
-    data=request.get_json()
-    print(data)
-    creator_id=data['data']['relationships']['creator']['data']['id']
-    supporter_id=data['data']['relationships']['patron']['data']['id']
-    declined_since=data['data']['attributes']['declined_since']
-    if declined_since or ('delete' in request.headers["X-Patreon-Event"]):
-        pledge_amount_cents=0
-    else:
-        pledge_amount_cents=data['attributes']['amount_cents']
-
-    p=Pledge(creator_id,supporter_id, make=True)
-    p.update_pledge(pledge_amount_cents)
-
-    return "",201
-
 @app.route("/api/s/<sid>")
 def story_json(sid):
     try:
