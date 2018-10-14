@@ -7,7 +7,7 @@
 {% block content %}
 <h1>Settings</h1>
 
-Patreon: {% if v.patreon %}{{ v.patreon }} | <form style="display:inline-block" action="/api/unlink_patreon" method="post"><input type="submit" value="Disconnect" ></form>{% else %}<a href="https://www.patreon.com/oauth2/authorize?client_id={{ "patreon_id" | os_get }}&scope=identity,campaigns,campaigns.members&state=x&response_type=code&redirect_uri=https://{{ "domain" | os_get }}/oauth/patreon">Connect</a>{% endif %}<br><br>
+Patreon: {% if v.patreon %}{{ v.patreon }} | <form style="display:inline-block" action="/api/unlink_patreon" method="post"><input type="submit" value="Disconnect" ></form>{% else %}<a href="https://www.patreon.com/oauth2/authorize?client_id={{ "patreon_id" | os_get }}&scope=identity+campaigns+campaigns.members&state=x&response_type=code&redirect_uri=https://{{ "domain" | os_get }}/oauth/patreon">Connect</a>{% endif %}<br><br>
 
 
 <form action="/api/settings" method="post">
