@@ -7,17 +7,10 @@
 {% block content %}
 <h1>Settings</h1>
 
-Patreon: {% if v.patreon %}{{ v.patreon }} | <form style="display:inline-block" action="/api/unlink_patreon" method="post"><input type="submit" value="Disconnect" ></form>{% else %}<a href="https://www.patreon.com/oauth2/authorize?client_id={{ "patreon_id" | os_get }}&scope=identity+campaigns+campaigns.members&state=x&response_type=code&redirect_uri=https://{{ "domain" | os_get }}/oauth/patreon">Connect</a>{% endif %}<br><br>
+Patreon: {% if v.patreon %}{{ v.patreon }} | <form style="display:inline-block" action="/api/unlink_patreon" method="post"><input type="submit" value="Disconnect" ></form>{% else %}<a href="https://www.patreon.com/oauth2/authorize?client_id={{ "patreon_id" | os_get }}&scope=identity+identity.memberships+campaigns+campaigns.members&state=x&response_type=code&redirect_uri=https://{{ "domain" | os_get }}/oauth/patreon">Connect</a>{% endif %}<br><br>
 
 
 <form action="/api/settings" method="post">
-{% if v.patreon %}
-If you want to host Patron-only content on this site:
-<ol>
-<li><a href="https://www.patreon.com/portal/registration/register-webhooks">Click here</a>, and create a new webhook with the following URL: <code>https://www.captainslogbook.org/api/patreon_webhook/{{ v.id }}</code></li>
-<li>Copy and paste your Webhook Secret into the field below.<br><input type="text" name="patreon_webhook_secret" value="{{ v.patreon_webhook_secret }}"></li>
-</ol>
-{% endif %}
 <hr>
 Google Analytics tracking code: <input type="text" name="analytics" value="{{ v.google_analytics }}" style="width:100px"><br><br>
 <input type="checkbox" name="over18" id="over18" {% if v.over18 %}checked{% endif %}><label for="over18">I am over 18 and willing to see mature content</label><br><br>
