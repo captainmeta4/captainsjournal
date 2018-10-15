@@ -332,6 +332,7 @@ class Story():
                 x=requests.get(url, headers=header, params=params)
                 
                 j=x.json()
+		print(j)
 
                 for entry in j['data']:
                     if entry['relationships']['user']['data']['id']!=v.patreon_id:
