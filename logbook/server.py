@@ -291,6 +291,7 @@ def patreon_redirect(q, v):
     x=requests.get(url, headers=header)
     
     j=x.json()
+    print(j)
     
     name=j['data']['attributes']['vanity']
     p_id=j['data']['id']
