@@ -614,7 +614,7 @@ def settings_api(q,v):
 @auth_required
 def unlink_patreon(q,v):
 
-    v.set_patreon("", 0, None, 0)
+    v.set_patreon("", 0, None, None, 0)
     return redirect("/settings")
 
 @app.route("/api/s/<sid>")
