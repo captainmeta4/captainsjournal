@@ -73,8 +73,8 @@ class User():
         self.url="/u/{}".format(self.name)
         self.created_date=time_string(self.created).split(" at ")[0]
 
-    def set_patreon(self, name, pid, token, cid):
-        c.execute("EXECUTE SetPatreon(%s, %s, %s, %s, %s)", (self.id, pid, name, token, cid))
+    def set_patreon(self, name, pid, token, refresh, cid):
+        c.execute("EXECUTE SetPatreon(%s, %s, %s, %s, %s, %s)", (self.id, pid, name, token, refresh, cid))
         db.commit()
 
     def set_google(self, tracking_id):

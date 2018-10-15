@@ -282,11 +282,13 @@ def patreon_redirect(q, v):
     oauth_client = patreon.OAuth(PATREON_ID, PATREON_SECRET)
     tokens = oauth_client.get_tokens(request.args.get('code'), 'https://{}/oauth/patreon'.format(DOMAIN))
     access_token = tokens['access_token']
+    refresh_token=tokens['refresh_token']
     
     
     #assemble request
     header={"Authorization":"Bearer "+access_token}
-    url="https://www.patreon.com/api/oauth2/v2/identity?include=campaign"
+    params={"fields":"vanity"}
+    url="https://www.patreon.com/api/oauth2/v2/identity"
     
     x=requests.get(url, headers=header)
     
@@ -296,11 +298,11 @@ def patreon_redirect(q, v):
     name=j['data']['attributes']['vanity']
     p_id=j['data']['id']
     try:
-        c_id=j['included'][0]['id']
-    except IndexError:
+        c_id=j['data']["relationships"]["campaign"]["id"]
+    except KeyError:
         c_id=0
     
-    v.set_patreon(name, p_id, access_token, c_id)
+    v.set_patreon(name, p_id, access_token, refresh_token, c_id)
     
     return redirect("/settings")
 
