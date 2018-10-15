@@ -1,6 +1,6 @@
 import psycopg2
 import os
-\
+
 db=psycopg2.connect(os.environ.get("DATABASE_URL"))
 c=db.cursor()
 
@@ -12,7 +12,7 @@ c.execute("PREPARE GetUserByID(int) AS SELECT * FROM Users WHERE id = $1")
 c.execute("PREPARE BanUser(int, boolean) AS UPDATE Users SET banned=$2 WHERE id=$1")
 c.execute("PREPARE GetUserByToken(text) AS SELECT * FROM Users WHERE token=$1")
 c.execute("PREPARE UpdateToken(int, text) AS UPDATE Users SET token=$2 WHERE id=$1")
-c.execute("PREPARE SetPatreon(int, int, text) AS UPDATE Users SET patreon_id=$2, patreon=$3 WHERE id=$1")
+c.execute("PREPARE SetPatreon(int, int, text, text, int) AS UPDATE Users SET patreon_id=$2, patreon=$3, patreon_token=$4, patreon_campaign_id=$5 WHERE id=$1")
 c.execute("PREPARE SetGoogle(int, text) AS UPDATE Users SET google_analytics=$2 WHERE id=$1")
 c.execute("PREPARE SetOver18(int, boolean) AS UPDATE Users SET over_18=$2 WHERE id=$1")
 c.execute("PREPARE SetPatreonWebhook(int, text) AS UPDATE Users SET patreon_webhook_secret=$2 WHERE id=$1")

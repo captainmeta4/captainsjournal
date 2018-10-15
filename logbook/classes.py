@@ -5,6 +5,8 @@ import mistletoe
 import bleach
 import time
 from .db_prep import c, db
+import json
+import requests
 
 #Sanitization object used throughout module
 tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre','div','span','img']
@@ -65,13 +67,14 @@ class User():
         self.patreon=result[8]
         self.over18=result[9]
         self.patreon_id=int(result[10])
-        self.patreon_webhook_secret=result[11]
+        self.patreon_token=result[11]
+        self.patreon_campaign_id=int(result[12])
         
         self.url="/u/{}".format(self.name)
         self.created_date=time_string(self.created).split(" at ")[0]
 
-    def set_patreon(self, name, pid):
-        c.execute("EXECUTE SetPatreon(%s, %s, %s)", (self.id, pid, name))
+    def set_patreon(self, name, pid, token, cid):
+        c.execute("EXECUTE SetPatreon(%s, %s, %s, %s, %s)", (self.id, pid, name, token, cid))
         db.commit()
 
     def set_google(self, tracking_id):
@@ -80,14 +83,6 @@ class User():
             c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, tracking_id))
         else:
             c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, ""))
-        db.commit()
-
-    def set_patreon_webhook(self, secret):
-
-        if secret:
-            c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, secret))
-        else:
-            c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, ""))
         db.commit()
         
     def tos_agree(self):
@@ -145,7 +140,7 @@ class User():
             output['stories']=stories
             output['books']=books
             
-        output.pop("patreon_webhook_secret")
+        output.pop("patreon_token")
         output.pop("patreon_id")
         output.pop("agreed")
         output.pop("google_analytics")
@@ -320,8 +315,30 @@ class Story():
         d=str(self.patreon_threshold)[0:-2]
         c=str(self.patreon_threshold)[-2:]
 
-        if self.patreon_threshold and v:
-            pledge_cents=Pledge(self.author.patreon_id, v.patreon_id).amount_cents
+        if self.patreon_threshold and self.author.patreon_campaign_id:
+            if not v:
+                pledge_cents=0
+            elif not v.patreon_token:
+                pledge_cents=0
+            else:
+                # Hit Patreon API to determine pledge cents
+                header={"Authorization":"Bearer {}".format(v.patreon_token)}
+                params={"include":"memberships",
+                        "fields[member]":"currently_entitled_amount_cents,last_charge_status"}
+                url="https://www.patreon.com/api/oauth2/v2/identity"
+                x=request.get(url, headers=header, params=params)
+                j=json.loads(x.text)
+
+                for membership in j['included']:
+                    if membership["relationships"]["campaign"]["id"]==self.author.patreon_campaign_id:
+                        if membership["attributes"]["last_charge_status"] in ["Paid",None]:
+                            pledge_cents=membership["attributes"]["currently_entitled_amount_cents"]
+                        else:
+                            pledge_cents=0
+                        break
+                else:
+                    pledge_cents=0
+            
         else:
             pledge_cents=0
         
