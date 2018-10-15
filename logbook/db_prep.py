@@ -15,7 +15,6 @@ c.execute("PREPARE UpdateToken(int, text) AS UPDATE Users SET token=$2 WHERE id=
 c.execute("PREPARE SetPatreon(int, int, text, text, int) AS UPDATE Users SET patreon_id=$2, patreon=$3, patreon_token=$4, patreon_campaign_id=$5 WHERE id=$1")
 c.execute("PREPARE SetGoogle(int, text) AS UPDATE Users SET google_analytics=$2 WHERE id=$1")
 c.execute("PREPARE SetOver18(int, boolean) AS UPDATE Users SET over_18=$2 WHERE id=$1")
-c.execute("PREPARE SetPatreonWebhook(int, text) AS UPDATE Users SET patreon_webhook_secret=$2 WHERE id=$1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *")
@@ -36,8 +35,3 @@ c.execute("PREPARE GetBooksByAuthorId(int) AS SELECT * FROM Books WHERE author_i
 c.execute("PREPARE EditBook(text, text, text, int) AS UPDATE Books SET name=$1, description=$2, description_raw=$3, edited='NOW' WHERE id=$4")
 c.execute("PREPARE BanBook(int, boolean) AS UPDATE Books SET banned=$2 WHERE id=$1")
 c.execute("PREPARE DeleteBook(int, boolean) AS UPDATE Books SET deleted=$2 WHERE id=$1")
-
-#for pledges
-c.execute("PREPARE MakePledge(int,int,int) AS INSERT INTO Pledges (author_patreon_id, supporter_patreon_id, pledge_amount_cents) VALUES ($1, $2, $3) RETURNING *")
-c.execute("PREPARE UpdatePledge(int,int,int) AS UPDATE Pledges SET pledge_amount_cents=$3 WHERE author_patreon_id=$1 AND supporter_patreon_id=$2")
-c.execute("PREPARE GetPledge(int,int) AS SELECT * FROM Pledges WHERE author_patreon_id=$1 AND supporter_patreon_id=$2")
