@@ -324,21 +324,20 @@ class Story():
                 pledge_cents=0
             else:
                 # Hit Patreon API to determine pledge cents
-                header={"Authorization":"Bearer {}".format(v.patreon_token)}
-                params={"include":"memberships",
-                        "fields[member]":"currently_entitled_amount_cents,last_charge_status"}
-                url="https://www.patreon.com/api/oauth2/v2/identity"
+                header={"Authorization":"Bearer {}".format(self.author.patreon_token)}
+                params={"include":"campaign,user",
+                        "fields[member]":"currently_entitled_amount_cents,last_charge_status",
+                        "page[count]":2000}
+                url="https://www.patreon.com/api/oauth2/v2/campaigns/{}/members".format(self.author.patreon_campaign_id)
                 x=requests.get(url, headers=header, params=params)
-                j=json.loads(x.text)
-                print(j)
+                
+                j=x.json()
 
-                for membership in j['included']:
-                    if membership["relationships"]["campaign"]["id"]==self.author.patreon_campaign_id:
-                        if membership["attributes"]["last_charge_status"] in ["Paid",None]:
-                            pledge_cents=membership["attributes"]["currently_entitled_amount_cents"]
-                        else:
-                            pledge_cents=0
-                        break
+                for entry in j['data']:
+                    if entry['relationships']['user']['data']['id']!=v.patreon_id:
+                        continue
+                    pledge_cents=entry['attributes']['currently_entitled_amount_cents']
+                    break
                 else:
                     pledge_cents=0
             
