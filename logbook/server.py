@@ -299,7 +299,7 @@ def patreon_redirect(q, v):
     name=j['data']['attributes']['vanity']
     p_id=j['data']['id']
     try:
-        c_id=j['data']["relationships"]["campaign"]["id"]
+        c_id=j['data']["relationships"]["campaign"]["data"]["id"]
     except KeyError:
         c_id=0
     
