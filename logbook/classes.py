@@ -328,7 +328,7 @@ class Story():
                 params={"include":"memberships",
                         "fields[member]":"currently_entitled_amount_cents,last_charge_status"}
                 url="https://www.patreon.com/api/oauth2/v2/identity"
-                x=request.get(url, headers=header, params=params)
+                x=requests.get(url, headers=header, params=params)
                 j=json.loads(x.text)
                 print(j)
 
