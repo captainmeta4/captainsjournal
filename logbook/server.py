@@ -287,7 +287,7 @@ def patreon_redirect(q, v):
     
     #assemble request
     header={"Authorization":"Bearer "+access_token}
-    params={"include":"campaign",
+    params={"includes":"campaign",
             "fields[user]":"vanity"}
     url="https://www.patreon.com/api/oauth2/v2/identity"
     
