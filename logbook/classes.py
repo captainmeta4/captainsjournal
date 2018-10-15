@@ -335,9 +335,11 @@ class Story():
                 print(j)
                 
                 for entry in j['data']:
+                    print(entry['relationships']['user']['data']['id'], entry['attributes']['currently_entitled_amount_cents'])
                     if entry['relationships']['user']['data']['id']!=v.patreon_id:
                         continue
                     pledge_cents=entry['attributes']['currently_entitled_amount_cents']
+                    print(pledge_cents)
                     break
                 else:
                     pledge_cents=0
@@ -345,6 +347,7 @@ class Story():
         else:
             pledge_cents=0
         
+        print(pledge_cents)
         return render_template('storypage.html', s=self, v=v, d=d, c=c, pledge_cents=pledge_cents)
 
     def ban(self):
