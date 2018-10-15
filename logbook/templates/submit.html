@@ -20,7 +20,7 @@ Include this story in a book:<br>
 {% if v.admin %}<option value="4">News</option>{% endif %}
 </select></br>
 <input type="checkbox" name="nsfw">Mark NSFW?<br>
-{% if v.patreon_webhook_secret %}
+{% if v.patreon_campaign_id %}
 Restrict story to Patreon supporters with pledge of: <input type="text" value="0" name="patreon_threshold>
 {% endif %}
 <input type="text" name="subtitle"><br>

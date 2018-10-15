@@ -69,6 +69,7 @@ class User():
         self.patreon_id=int(result[10])
         self.patreon_token=result[11]
         self.patreon_campaign_id=int(result[12])
+        self.patreon_refresh_token=result[13]
         
         self.url="/u/{}".format(self.name)
         self.created_date=time_string(self.created).split(" at ")[0]
@@ -142,6 +143,7 @@ class User():
             
         output.pop("patreon_token")
         output.pop("patreon_id")
+        output.pop("patreon_refresh_token")
         output.pop("agreed")
         output.pop("google_analytics")
         output.pop("over18")
@@ -328,6 +330,7 @@ class Story():
                 url="https://www.patreon.com/api/oauth2/v2/identity"
                 x=request.get(url, headers=header, params=params)
                 j=json.loads(x.text)
+                print(j)
 
                 for membership in j['included']:
                     if membership["relationships"]["campaign"]["id"]==self.author.patreon_campaign_id:
