@@ -604,15 +604,13 @@ def settings_api(q,v):
     if over18 != v.over18:
         v.set_over18(over18=over18)
 
-    v.set_patreon_webhook(request.form.get('patreon_webhook_secret',''))
-
     return redirect("/settings")
 
 @app.route('/api/unlink_patreon', methods=["POST"])
 @auth_required
 def unlink_patreon(q,v):
 
-    v.set_patreon("", 0)
+    v.set_patreon("", 0, None, 0)
     return redirect("/settings")
 
 @app.route("/api/s/<sid>")
