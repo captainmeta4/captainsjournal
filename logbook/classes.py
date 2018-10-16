@@ -5,6 +5,8 @@ import mistletoe
 import bleach
 import time
 from .db_prep import c, db
+import json
+import requests
 
 #Sanitization object used throughout module
 tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre','div','span','img']
@@ -65,13 +67,15 @@ class User():
         self.patreon=result[8]
         self.over18=result[9]
         self.patreon_id=int(result[10])
-        self.patreon_webhook_secret=result[11]
+        self.patreon_token=result[11]
+        self.patreon_campaign_id=int(result[12])
+        self.patreon_refresh_token=result[13]
         
         self.url="/u/{}".format(self.name)
         self.created_date=time_string(self.created).split(" at ")[0]
 
-    def set_patreon(self, name, pid):
-        c.execute("EXECUTE SetPatreon(%s, %s, %s)", (self.id, pid, name))
+    def set_patreon(self, name, pid, token, refresh, cid):
+        c.execute("EXECUTE SetPatreon(%s, %s, %s, %s, %s, %s)", (self.id, pid, name, token, refresh, cid))
         db.commit()
 
     def set_google(self, tracking_id):
@@ -80,14 +84,6 @@ class User():
             c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, tracking_id))
         else:
             c.execute("EXECUTE SetGoogle(%s, %s)", (self.id, ""))
-        db.commit()
-
-    def set_patreon_webhook(self, secret):
-
-        if secret:
-            c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, secret))
-        else:
-            c.execute("EXECUTE SetPatreonWebhook(%s, %s)", (self.id, ""))
         db.commit()
         
     def tos_agree(self):
@@ -145,8 +141,9 @@ class User():
             output['stories']=stories
             output['books']=books
             
-        output.pop("patreon_webhook_secret")
+        output.pop("patreon_token")
         output.pop("patreon_id")
+        output.pop("patreon_refresh_token")
         output.pop("agreed")
         output.pop("google_analytics")
         output.pop("over18")
@@ -319,13 +316,42 @@ class Story():
         cent_string=str(self.patreon_threshold).rjust(3,'0')
         d=str(self.patreon_threshold)[0:-2]
         c=str(self.patreon_threshold)[-2:]
+        pledge_valid=True
 
-        if self.patreon_threshold and v:
-            pledge_cents=Pledge(self.author.patreon_id, v.patreon_id).amount_cents
+        if self.patreon_threshold and self.author.patreon_campaign_id:
+            if not v:
+                pledge_cents=0
+            elif not v.patreon_token:
+                pledge_cents=0
+            else:
+                # Hit Patreon API to determine pledge cents
+                header={"Authorization":"Bearer {}".format(self.author.patreon_token)}
+                params={"include":"campaign,user",
+                        "fields[member]":"currently_entitled_amount_cents,last_charge_status",
+                        "page[count]":2000}
+                url="https://www.patreon.com/api/oauth2/v2/campaigns/{}/members".format(self.author.patreon_campaign_id)
+                x=requests.get(url, headers=header, params=params)
+                
+                j=x.json()
+                print(j)
+                
+                for entry in j['data']:
+                    print(entry['relationships']['user']['data']['id'], entry['attributes']['currently_entitled_amount_cents'])
+                    if entry['relationships']['user']['data']['id']!=str(v.patreon_id):
+                        continue
+                    pledge_cents=entry['attributes']['currently_entitled_amount_cents']
+                    if entry['attributes']['last_charge_status'] not in ["Paid",None]:
+                        pledge_valid=False
+                    print(pledge_cents)
+                    break
+                else:
+                    pledge_cents=0
+            
         else:
             pledge_cents=0
         
-        return render_template('storypage.html', s=self, v=v, d=d, c=c, pledge_cents=pledge_cents)
+        print(pledge_cents)
+        return render_template('storypage.html', s=self, v=v, d=d, c=c, pledge_cents=pledge_cents, pledge_valid=pledge_valid)
 
     def ban(self):
 
@@ -469,33 +495,3 @@ class Book():
 
         c.execute("EXECUTE DeleteBook(%s, 'false')",(self.id,))
         db.commit()
-
-class Pledge():
-
-    def __init__(self, creator_id, supporter_id, make=False):
-        
-        self.creator_id=creator_id
-        self.supporter_id=supporter_id
-
-        c.execute("EXECUTE GetPledge(%s,%s)", (creator_id, supporter_id))
-
-        result=c.fetchone()
-        if result is None and make==True:
-            c.execute("EXECUTE MakePledge(%s,%s,0)" (creator_id, supporter_id))
-            result=c.fetchone()
-            self.amount_cents=0
-            db.commit()
-        elif result is None:
-            self.amount_cents=0
-        else:
-            self.amount_cents=int(result[3])
-
-        
-    def update_pledge(self, amount_cents):
-        c.execute("EXECUTE UpdatePledge(%s,%s,%s)", (self.creator_id, self.supporter_id, amount_cents))
-        db.commit()
-        self.amount_cents=amount_cents
-    
-
-        
-    

@@ -9,6 +9,7 @@ import json
 import hmac
 import jinja2
 import re
+import requests
 
 
 ### NAMING CONVENTIONS ###
@@ -29,8 +30,8 @@ r=praw.Reddit(client_id=os.environ.get('client_id'),
               redirect_uri=os.environ.get('reddit_uri'),
               user_agent=user_agent)
 
-patreon_id=os.environ.get('patreon_id')
-patreon_secret=os.environ.get('patreon_secret')
+PATREON_ID=os.environ.get('patreon_id')
+PATREON_SECRET=os.environ.get('patreon_secret')
 
 COOKIE=os.environ.get('cookie')
 DOMAIN=os.environ.get('domain')
@@ -275,17 +276,34 @@ def patreon_redirect(q, v):
     Handle incoming redirects from patreon oauth flow
     '''
 
-    oauth_client = patreon.OAuth(patreon_id, patreon_secret)
-    tokens = oauth_client.get_tokens(request.args.get('code'), 'https://www.captainslogbook.org/oauth/patreon')
+    #get code
+    code = request.args.get('code')
+    
+    oauth_client = patreon.OAuth(PATREON_ID, PATREON_SECRET)
+    tokens = oauth_client.get_tokens(request.args.get('code'), 'https://{}/oauth/patreon'.format(DOMAIN))
     access_token = tokens['access_token']
-    api_client = patreon.API(access_token)
-    user_response = api_client.fetch_user()
-    user = user_response.data()
-    data = user.attributes()
-    name = data['vanity']
-    pid = user.id()
-
-    v.set_patreon(name, pid)
+    refresh_token=tokens['refresh_token']
+    
+    
+    #assemble request
+    header={"Authorization":"Bearer "+access_token}
+    params={"include":"campaign",
+            "fields[user]":"vanity"}
+    url="https://www.patreon.com/api/oauth2/v2/identity"
+    
+    x=requests.get(url, headers=header, params=params)
+    
+    j=x.json()
+    print(j)
+    
+    name=j['data']['attributes']['vanity']
+    p_id=j['data']['id']
+    try:
+        c_id=j['data']["relationships"]["campaign"]["data"]["id"]
+    except KeyError:
+        c_id=0
+    
+    v.set_patreon(name, p_id, access_token, refresh_token, c_id)
     
     return redirect("/settings")
 
@@ -590,48 +608,14 @@ def settings_api(q,v):
     if over18 != v.over18:
         v.set_over18(over18=over18)
 
-    v.set_patreon_webhook(request.form.get('patreon_webhook_secret',''))
-
     return redirect("/settings")
 
 @app.route('/api/unlink_patreon', methods=["POST"])
 @auth_required
 def unlink_patreon(q,v):
 
-    v.set_patreon("", 0)
+    v.set_patreon("", 0, None, None, 0)
     return redirect("/settings")
-
-@app.route('/api/patreon_webhook/<uid>', methods=["POST"])
-def patreon_webhook(uid):
-
-    try:
-        u=User(uid=uid)
-    except KeyError:
-        abort(404)
-
-    #validate patreon secret
-    
-    digester = hmac.new(u.patreon_webhook_secret.encode('utf-8'), request.data, hashlib.md5)
-    digest = digester.hexdigest()
-
-    if not digest == request.headers['X-Patreon-Signature']:
-        abort(403)
-
-    #get relevant data
-    data=request.get_json()
-    print(data)
-    creator_id=data['data']['relationships']['creator']['data']['id']
-    supporter_id=data['data']['relationships']['patron']['data']['id']
-    declined_since=data['data']['attributes']['declined_since']
-    if declined_since or ('delete' in request.headers["X-Patreon-Event"]):
-        pledge_amount_cents=0
-    else:
-        pledge_amount_cents=data['attributes']['amount_cents']
-
-    p=Pledge(creator_id,supporter_id, make=True)
-    p.update_pledge(pledge_amount_cents)
-
-    return "",201
 
 @app.route("/api/s/<sid>")
 def story_json(sid):
