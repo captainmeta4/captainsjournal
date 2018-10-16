@@ -336,7 +336,7 @@ class Story():
                 
                 for entry in j['data']:
                     print(entry['relationships']['user']['data']['id'], entry['attributes']['currently_entitled_amount_cents'])
-                    if entry['relationships']['user']['data']['id']!=v.patreon_id:
+                    if entry['relationships']['user']['data']['id']!=str(v.patreon_id):
                         continue
                     pledge_cents=entry['attributes']['currently_entitled_amount_cents']
                     print(pledge_cents)
