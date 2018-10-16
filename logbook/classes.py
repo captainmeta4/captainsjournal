@@ -78,6 +78,24 @@ class User():
         c.execute("EXECUTE SetPatreon(%s, %s, %s, %s, %s, %s)", (self.id, pid, name, token, refresh, cid))
         db.commit()
 
+    def update_patreon_token(self):
+
+        url="www.patreon.com/api/oauth2/token"
+        params={"grant_type":"refresh_token",
+                "refresh_token":self.patreon_refresh_token,
+                "client_id":os.environ.get("patreon_id"),
+                "client_secret":os.environ.get("patreon_secret")
+                }
+
+        x=requests.post(url, params=params)
+        j=x.json()
+        self.patreon_token=j['access_token']
+        self.patreon_refresh_token=j['refresh_token']
+
+        c.execute("EXECUTE SetPatreonTokens(%s,%s,%s)", (self.id, self.patreon_token, self.patreon_refresh_token))
+        db.commit()
+        
+
     def set_google(self, tracking_id):
 
         if tracking_id:
@@ -331,10 +349,13 @@ class Story():
                         "page[count]":2000}
                 url="https://www.patreon.com/api/oauth2/v2/campaigns/{}/members".format(self.author.patreon_campaign_id)
                 x=requests.get(url, headers=header, params=params)
+                if x.status_code!=200:
+                    #if token has expired, refresh it and try again
+                    self.author.refresh_patreon_tokens()
+                    header={"Authorization":"Bearer {}".format(self.author.patreon_token)}
+                    x=requests.get(url, headers=header, params=params)
                 
                 j=x.json()
-                print(j)
-                
                 for entry in j['data']:
                     print(entry['relationships']['user']['data']['id'], entry['attributes']['currently_entitled_amount_cents'])
                     if entry['relationships']['user']['data']['id']!=str(v.patreon_id):
