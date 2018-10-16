@@ -15,7 +15,7 @@ c.execute("PREPARE UpdateToken(int, text) AS UPDATE Users SET token=$2 WHERE id=
 c.execute("PREPARE SetPatreon(int, int, text, text, text, int) AS UPDATE Users SET patreon_id=$2, patreon=$3, patreon_token=$4, patreon_refresh_token=$5, patreon_campaign_id=$6 WHERE id=$1")
 c.execute("PREPARE SetGoogle(int, text) AS UPDATE Users SET google_analytics=$2 WHERE id=$1")
 c.execute("PREPARE SetOver18(int, boolean) AS UPDATE Users SET over_18=$2 WHERE id=$1")
-c.execute("PREPARE SetPatreonTokens(int, text,text) AS UPDATE Users SET patreon_token=$2, patreon_token=$3 WHERE id=$1")
+c.execute("PREPARE SetPatreonTokens(int, text,text) AS UPDATE Users SET patreon_token=$2, patreon_refresh_token=$3 WHERE id=$1")
 
 #for stories
 c.execute("PREPARE MakeStory(int, text, text, text, text, text, text, text, int) AS INSERT INTO Stories (author_id, created, title, pre, story, post, pre_raw, story_raw, post_raw, book_id) VALUES ($1,'NOW', $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *")
