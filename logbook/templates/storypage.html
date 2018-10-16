@@ -91,7 +91,7 @@
 {% if s.nsfw %}<b><span class="red">[This story includes mature content.]</span></b><br>{% endif %}
 {% if s.patreon_threshold %}<b><span class="green">[For Patrons of {{ s.author.name }} only. Threshold: ${{ d }}.{{ c }}]</span></b>{% endif %}</p>
 {% endif %}
-{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw) and (pledge_cents>=s.patreon_threshold or not s.author.patreon_id)) %}
+{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw) and ((pledge_cents>=s.patreon_threshold and pledge_valid) or not s.author.patreon_id)) %}
 	<hr>
 	{% if s.pre %}
 		<p><b>Author's Note:</b></p>
@@ -104,12 +104,13 @@
 		<p><b>Author's Note:</b></p>
 		<p>{{ s.post|safe }}</p>
 	{% endif %}
+{$ elif pledge_cents > s.patreon_threshold and not pledge_valid %}
+	<hr>
+	<p>You've made a pledge to {{ s.author.name }}, but Patreon is reporting a problem with your payment. To view this content, please correct your payment information with Patreon and refresh this page.</p>
 {% elif pledge_cents < s.patreon_threshold and not s.banned and not s.deleted %}
 	<hr>
-	<p>This content is only for patrons of {{ s.author.name }} with a pledge of at least ${{ d }}.{{ c }}.</p>
-	<p>If you're already a Patron, and you've <a href="/settings">linked your Patreon account</a>, try making a $0.01 edit to your pledge. (Editing your pledge makes Patreon send an update to Captain's Logbook).</p>
-	<p>If that still doesn't work, ask {{ s.author.name }} to make sure their own Patreon settings are correctly configured.</p>
-{% elif s.nsfw %}
+	<p>This content is only for patrons of {{ s.author.name }} with a pledge of at least ${{ d }}.{{ c }}. To access this content, make a pledge to {{ s.author.name }} and refresh this page.</p>
+	{% elif s.nsfw %}
 	<hr>
 	<p>You need to sign in with reddit and be over 18 years old to read this.</p>
 {% endif %}

@@ -316,6 +316,7 @@ class Story():
         cent_string=str(self.patreon_threshold).rjust(3,'0')
         d=str(self.patreon_threshold)[0:-2]
         c=str(self.patreon_threshold)[-2:]
+        pledge_valid=True
 
         if self.patreon_threshold and self.author.patreon_campaign_id:
             if not v:
@@ -339,6 +340,8 @@ class Story():
                     if entry['relationships']['user']['data']['id']!=str(v.patreon_id):
                         continue
                     pledge_cents=entry['attributes']['currently_entitled_amount_cents']
+                    if entry['attributes']['last_charge_status'] not in ["Paid",None]:
+                        pledge_valid=False
                     print(pledge_cents)
                     break
                 else:
@@ -348,7 +351,7 @@ class Story():
             pledge_cents=0
         
         print(pledge_cents)
-        return render_template('storypage.html', s=self, v=v, d=d, c=c, pledge_cents=pledge_cents)
+        return render_template('storypage.html', s=self, v=v, d=d, c=c, pledge_cents=pledge_cents, pledge_valid=pledge_valid)
 
     def ban(self):
 
