@@ -107,10 +107,13 @@
 {% elif pledge_cents > s.patreon_threshold and not pledge_valid %}
 	<hr>
 	<p>You've made a pledge to {{ s.author.name }}, but Patreon is reporting a problem with your payment. To view this content, please correct your payment information with Patreon and refresh this page.</p>
+{% elif pledge_cents < s.patreon_threshold and not s.banned and not s.deleted and not v %}
+	<hr>
+	<p>This content is only for patrons of {{ s.author.name }} with a pledge of at least ${{ d }}.{{ c }}. To access this content, you need to first sign in with reddit.</p>
 {% elif pledge_cents < s.patreon_threshold and not s.banned and not s.deleted %}
 	<hr>
-	<p>This content is only for patrons of {{ s.author.name }} with a pledge of at least ${{ d }}.{{ c }}. To access this content, make a pledge to {{ s.author.name }} and refresh this page.</p>
-	{% elif s.nsfw %}
+	<p>This content is only for patrons of {{ s.author.name }} with a pledge of at least ${{ d }}.{{ c }}. To access this content, you need to make a pledge to {{ s.author.name }} and link your Patreon account in <a href="/settings">settings</a>.</p>
+{% elif s.nsfw %}
 	<hr>
 	<p>You need to sign in with reddit and be over 18 years old to read this.</p>
 {% endif %}
