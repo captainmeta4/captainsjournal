@@ -357,13 +357,11 @@ class Story():
                 
                 j=x.json()
                 for entry in j['data']:
-                    print(entry['relationships']['user']['data']['id'], entry['attributes']['currently_entitled_amount_cents'])
                     if entry['relationships']['user']['data']['id']!=str(v.patreon_id):
                         continue
                     pledge_cents=entry['attributes']['currently_entitled_amount_cents']
                     if entry['attributes']['last_charge_status'] not in ["Paid",None]:
                         pledge_valid=False
-                    print(pledge_cents)
                     break
                 else:
                     pledge_cents=0
