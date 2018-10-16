@@ -104,7 +104,7 @@
 		<p><b>Author's Note:</b></p>
 		<p>{{ s.post|safe }}</p>
 	{% endif %}
-{$ elif pledge_cents > s.patreon_threshold and not pledge_valid %}
+{% elif pledge_cents > s.patreon_threshold and not pledge_valid %}
 	<hr>
 	<p>You've made a pledge to {{ s.author.name }}, but Patreon is reporting a problem with your payment. To view this content, please correct your payment information with Patreon and refresh this page.</p>
 {% elif pledge_cents < s.patreon_threshold and not s.banned and not s.deleted %}
