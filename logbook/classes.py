@@ -9,7 +9,7 @@ import json
 import requests
 
 #Sanitization object used throughout module
-tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre','div','span','img']
+tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre','div','span','img', 'sup','sub']
 attrs=bleach.sanitizer.ALLOWED_ATTRIBUTES
 attrs['*']=["class","style"]
 attrs['img']=["height","width","alt","src"]
