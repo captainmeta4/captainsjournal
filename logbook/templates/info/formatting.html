@@ -54,6 +54,31 @@ Captain's Logbook uses markdown for formatting.
 	</tr>
 </table>
 
+Some HTML tags are supported:
+
+<table>
+	<tr>
+		<th>Style</th>
+		<th>Tag</th>
+		<th>Displayed as</th>
+	</tr>
+	<tr>
+		<td>Superscript</td>
+		<td><pre>x&lt;sup>2&lt;/sup></pre></td>
+		<td>x<sup>2</sup></td>
+	</tr>
+	<tr>
+		<td>Subscript</td>
+		<td><pre>H&lt;sub>2&lt;/sub>O</pre></td>
+		<td>H<sub>2</sub>O</td>
+	</tr>
+	<tr>
+		<td>Underline</td>
+		<td><pre>&lt;u>Underline&lt;/u></pre></td>
+		<td><u>Underline</u></td>
+	</tr>
+</table>
+
 A few extra custom styles also exist.
 
 <table>
@@ -69,8 +94,8 @@ A few extra custom styles also exist.
 	</tr>
 	<tr>
 		<td>Colors</td>
-		<td><pre style="white-space:pre-wrap">&lt;span class="red">Red&lt;/span><br>&lt;span class="green">Green&lt;/span><br>&lt;span class="blue">Blue&lt;/span></pre></td>
-		<td><span class="red">Red</span><br><span class="green">Green</span><br><span class="blue">Blue</span></td>
+		<td><pre style="white-space:pre-wrap">&lt;span class="red">Red&lt;/span>&lt;span class="green">Green&lt;/span>&lt;span class="blue">Blue&lt;/span></pre></td>
+		<td><span class="red">Red</span><span class="green">Green</span><span class="blue">Blue</span></td>
 	</tr>
 </table>
 {% endblock %} 
