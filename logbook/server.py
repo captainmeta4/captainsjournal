@@ -463,6 +463,7 @@ def unban_story(q, v, sid):
 
 @app.route('/api/deletestory/<sid>', methods=["POST"])
 @auth_required
+@not_banned
 def delete_story(q, v, sid):
     s=Story(sid=sid)
     if not v.id==s.author_id:
@@ -580,6 +581,7 @@ def unban_book(q, v, bid):
 
 @app.route('/api/deletebook/<bid>', methods=["POST"])
 @auth_required
+@not_banned
 def delete_book(q, v, bid):
     b=Book(bid=bid)
     if not v.id==b.author_id:
