@@ -22,7 +22,7 @@
 
 {% block authorpanel %}
 {% if v %}
-  {% if v.id == b.author_id %}
+  {% if v.id == b.author_id and not b.author.banned %}
     {% if not b.deleted %}
       <form action="/api/deletebook/{{ b.id }}" method="post">
       <input type="submit" value="Unpublish Book">
