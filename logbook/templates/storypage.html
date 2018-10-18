@@ -43,7 +43,7 @@
 
 {% block authorpanel %}
   {% if v.id == s.author_id %}
-    {% if not s.deleted %}
+    {% if not s.deleted and not s.author.banned %}
       <form action="/api/deletestory/{{ s.id }}" method="post">
       <input type="submit" value="Unpublish Story">
       </form>
