@@ -404,7 +404,10 @@ def create_story(q, v):
     post_md=request.form.get('post',"")
     bid=int(request.form.get("book",0))
     nsfw=request.form.get("nsfw",False)
-    patreon_threshold=int(request.form.get('patreon_threshold',0))
+    try:
+        patreon_threshold=int(request.form.get('patreon_threshold',0))
+    except:
+        patreon_threshold=0
 
     honeypot=request.form.get('subtitle',"")
     if honeypot:
