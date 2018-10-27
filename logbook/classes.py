@@ -11,8 +11,8 @@ import requests
 #Sanitization object used throughout module
 tags=bleach.sanitizer.ALLOWED_TAGS+['p', 'h1','h2','h3','h4','h5','h6','hr','br','table','tr','th','td','del','thead','tbody','tfoot','pre','div','span','img', 'sup','sub']
 attrs=bleach.sanitizer.ALLOWED_ATTRIBUTES
-attrs['*']=["class","style"]
-attrs['img']=["height","width","alt","src", "title"]
+attrs['*']=["class","style", "title"]
+attrs['img']=["height","width","alt","src"]
 styles=['white-space',"border","border-radius","text-align","align", "float","margin","padding"]
 Cleaner=bleach.sanitizer.Cleaner(tags=tags, attributes=attrs, styles=styles)
 
