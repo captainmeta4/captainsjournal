@@ -351,7 +351,7 @@ class Story():
                 x=requests.get(url, headers=header, params=params)
                 if x.status_code!=200:
                     #if token has expired, refresh it and try again
-                    self.author.refresh_patreon_tokens()
+                    self.author.update_patreon_token()
                     header={"Authorization":"Bearer {}".format(self.author.patreon_token)}
                     x=requests.get(url, headers=header, params=params)
                 
