@@ -80,7 +80,7 @@ class User():
 
     def update_patreon_token(self):
 
-        url="www.patreon.com/api/oauth2/token"
+        url="https://www.patreon.com/api/oauth2/token"
         params={"grant_type":"refresh_token",
                 "refresh_token":self.patreon_refresh_token,
                 "client_id":os.environ.get("patreon_id"),
