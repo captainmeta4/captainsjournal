@@ -12,6 +12,7 @@ Patreon: {% if v.patreon %}{{ v.patreon }} | <form style="display:inline-block" 
 
 <form action="/api/settings" method="post">
 <hr>
+Captain's Logbook supports the use of Google Analytics by authors to collect anonymized viewing statistics about their works.
 Google Analytics tracking code: <input type="text" name="analytics" value="{{ v.google_analytics }}" style="width:100px"><br><br>
 <input type="checkbox" name="over18" id="over18" {% if v.over18 %}checked{% endif %}><label for="over18">I am over 18 and willing to see mature content</label><br><br>
 <input type="submit" value="Save">
