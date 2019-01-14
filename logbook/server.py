@@ -334,8 +334,9 @@ def storypage(sid, v=None):
         s=Story(sid, load_author=True)
     except KeyError:
         abort(404)
-     
-    return s.render_storypage(v=v, over18=request.cookies.get("over_18", False))
+    over18=request.cookies.get("over_18", False)
+    print(over18)
+    return s.render_storypage(v=v, over18=over18)
 
 @app.route("/b/<bid>")
 @auth_desired
