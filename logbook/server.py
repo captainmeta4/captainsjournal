@@ -704,6 +704,6 @@ def api_set_nsfw():
     else:
         resp=make_response(redirect("/"))
     
-    resp.set_cookie("over_18", True, 3600)
+    resp.set_cookie("over_18", True, max_age=3600)
     
     return resp
