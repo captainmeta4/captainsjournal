@@ -116,6 +116,7 @@
 {% elif s.nsfw %}
 	<hr>
 	<p>You need to be over 18 years old to read this.</p>
-        <p><a href="/api/set_nsfw?over18=true&redirect={{ s.id }}">I am over 18 and willing to view mature content</a></p>
+        <p><a href="/api/set_nsfw?over18=true&redirect={{ s.id }}">I am over 18 and willing to view mature content.</a></p>
+        <p>(You can sign in with reddit to save this setting.)</p>
 {% endif %}
 {% endblock %}
