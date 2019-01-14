@@ -335,7 +335,7 @@ def storypage(sid, v=None):
     except KeyError:
         abort(404)
         
-    over_18 = request.cookie.get("over_18", False)
+    over_18 = request.cookies.get("over_18", False)
     return s.render_storypage(v=v, over18override=over_18)
 
 @app.route("/b/<bid>")
