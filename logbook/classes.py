@@ -330,9 +330,8 @@ class Story():
         db.commit()
 
     def render_storypage(self, over18=False, v=None):
-	
-	over18=bool(over18)
-	print(over18)
+        over18=bool(over18)
+        print(over18)
 
         cent_string=str(self.patreon_threshold).rjust(3,'0')
         d=str(self.patreon_threshold)[0:-2]
