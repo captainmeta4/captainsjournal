@@ -17,7 +17,7 @@
     },
     "domain": {
       "value":"captainlogbook-staging-pr-6.herokuapp.com"
-    }
+    },
     "PAPERTRAIL_API_TOKEN": {
       "required": true
     },
