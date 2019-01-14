@@ -329,7 +329,7 @@ class Story():
         c.execute("UPDATE Stories SET book_id=%s WHERE id=%s", (bid, self.id))
         db.commit()
 
-    def render_storypage(self, v=None):
+    def render_storypage(self, over18=False, v=None):
 
         cent_string=str(self.patreon_threshold).rjust(3,'0')
         d=str(self.patreon_threshold)[0:-2]
@@ -368,9 +368,8 @@ class Story():
             
         else:
             pledge_cents=0
-        
-        print(pledge_cents)
-        return render_template('storypage.html', s=self, v=v, d=d, c=c, pledge_cents=pledge_cents, pledge_valid=pledge_valid)
+
+        return render_template('storypage.html', v=v, d=d, c=c, pledge_cents=pledge_cents, pledge_valid=pledge_valid, over18=over18, s=self)
 
     def ban(self):
 

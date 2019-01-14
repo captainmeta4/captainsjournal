@@ -334,8 +334,8 @@ def storypage(sid, v=None):
         s=Story(sid, load_author=True)
     except KeyError:
         abort(404)
-
-    return s.render_storypage(v=v)
+    over18=request.cookies.get("over_18", False)
+    return s.render_storypage(v=v, over18=over18)
 
 @app.route("/b/<bid>")
 @auth_desired
@@ -691,4 +691,19 @@ def logout(q,v):
 
     resp = make_response(redirect('/'))
     resp.set_cookie(COOKIE, value="", domain=DOMAIN)
+    return resp
+
+@app.route("/api/set_nsfw", methods=["GET"])
+def api_set_nsfw():
+    
+    x=request.values.get("over_18", False)
+    sid=request.values.get("redirect", None)
+    
+    if sid:
+        resp=make_response(redirect("/s/{}".format(sid)))
+    else:
+        resp=make_response(redirect("/"))
+    
+    resp.set_cookie("over_18", value="True", max_age=3600)
+    
     return resp

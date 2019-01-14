@@ -91,7 +91,7 @@
 {% if s.nsfw %}<b><span class="red">[This story includes mature content.]</span></b><br>{% endif %}
 {% if s.patreon_threshold %}<b><span class="green">[For Patrons of {{ s.author.name }} only. Threshold: ${{ d }}.{{ c }}]</span></b>{% endif %}</p>
 {% endif %}
-{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or not s.nsfw) and ((pledge_cents>=s.patreon_threshold and pledge_valid) or not s.author.patreon_id)) %}
+{% if (v.admin or v.id==s.author_id) or (not s.banned and not s.deleted and (v.over18 or over18 or not s.nsfw) and ((pledge_cents>=s.patreon_threshold and pledge_valid) or not s.author.patreon_id)) %}
 	<hr>
 	{% if s.pre %}
 		<p><b>Author's Note:</b></p>
@@ -115,6 +115,8 @@
 	<p>This content is only for patrons of {{ s.author.name }} with a pledge of at least ${{ d }}.{{ c }}. To access this content, you need to make a pledge to {{ s.author.name }} and link your Patreon account in <a href="/settings">settings</a>.</p>
 {% elif s.nsfw %}
 	<hr>
-	<p>You need to sign in with reddit and be <a href="/settings">over 18 years old</a> to read this.</p>
+	<p>You need to be over 18 years old to read this.</p>
+        <p><a href="/api/set_nsfw?over18=true&redirect={{ s.id }}">I am over 18 and willing to view mature content.</a></p>
+        <p>(You can sign in with reddit to save this setting.)</p>
 {% endif %}
 {% endblock %}
