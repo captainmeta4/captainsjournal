@@ -32,7 +32,7 @@ c.execute("PREPARE SetReddit(int, text, text) AS UPDATE Stories SET reddit=$2, s
 #for books
 c.execute("PREPARE MakeBook(text, int, text, text) AS INSERT INTO Books (name, author_id, description, description_raw, timestamp) VALUES ($1, $2, $3, $4, 'NOW') RETURNING *")
 c.execute("PREPARE GetBookById(int) AS SELECT * FROM Books WHERE id=$1")
-c.execute("PREPARE GetBooksByAuthorId(int) AS SELECT * FROM Books WHERE author_id=$1")
+c.execute("PREPARE GetBooksByAuthorId(int) AS SELECT * FROM Books WHERE author_id=$1 ORDER BY id ASC")
 c.execute("PREPARE EditBook(text, text, text, int) AS UPDATE Books SET name=$1, description=$2, description_raw=$3, edited='NOW' WHERE id=$4")
 c.execute("PREPARE BanBook(int, boolean) AS UPDATE Books SET banned=$2 WHERE id=$1")
 c.execute("PREPARE DeleteBook(int, boolean) AS UPDATE Books SET deleted=$2 WHERE id=$1")
